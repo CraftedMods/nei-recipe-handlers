@@ -9,6 +9,6 @@ If you want to setup a development environment, you'll need the following depend
 
 The mod was created with the MinecraftForge version "1.7.10-10.13.4.1614".
 ## Download
-There aren't any official builds, because this mod is only used as a container by CraftedMods/nei-lotr
+There aren't any official builds, because this mod is only used as a container by https://github.com/CraftedMods/nei-lotr
 
 
