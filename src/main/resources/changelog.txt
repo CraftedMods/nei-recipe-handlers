@@ -1,0 +1,5 @@
+===Changelog for NEI Recipe Handlers===
+Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
+
+#Alpha 1.0.0:
+ + Initial release

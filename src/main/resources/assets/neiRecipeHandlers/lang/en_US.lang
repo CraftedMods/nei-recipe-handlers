@@ -1,0 +1,10 @@
+﻿neiRecipeHandlers.config.gui.title=Configuration of NEI Recipe Handlers
+
+neiRecipeHandlers.versionChecker.version.alpha=Alpha
+neiRecipeHandlers.versionChecker.version.beta=Beta
+neiRecipeHandlers.versionChecker.version.full=
+neiRecipeHandlers.versionChecker.notification.chat=Found7new7version:7for Minecraft
+neiRecipeHandlers.versionChecker.notification.changelog=Click this link to open/the changelog
+neiRecipeHandlers.versionChecker.notification.newVersion=Click this link to open/the download page of the new version
+
+neiRecipeHandlers.integration.name=NEI Recipe Handlers Integration

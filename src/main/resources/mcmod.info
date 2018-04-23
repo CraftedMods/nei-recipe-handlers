@@ -1,0 +1,16 @@
+[{	
+    "modid" : "neiRecipeHandlers",	
+    "name" : "NEI Recipe Handlers",	
+    "description" : "This Mod adds an extended recipe handler API for NEI",	
+    "version" : "Alpha 1.0.0",	
+    "mcversion": "1.7.10",
+    "url" : "https://github.com/CraftedMods/nei-recipe-handlers",	
+    "updateUrl" : "",	
+    "authorList" : ["Crafted_Mods (a.k.a. The_Ranger_Malvegil or just Malvegil)"],	
+    "credits" : "ChickenBones (NEI), the Forge, FML and MCP guys, Mojang (Minecraft), Luke Hutchison (FastClasspathScanner)",	
+    "logoFile" : "",	
+    "screenshots" : [],	
+    "dependencies" : [],	
+    "requiredMods" : ["Forge","NotEnoughItems"],	
+    "parent" : ""
+}]
