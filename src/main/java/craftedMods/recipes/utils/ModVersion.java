@@ -2,6 +2,7 @@ package craftedMods.recipes.utils;
 
 import java.net.*;
 
+import craftedMods.recipes.NEIRecipeHandlers;
 import net.minecraft.event.*;
 import net.minecraft.event.ClickEvent.Action;
 import net.minecraft.util.*;
@@ -56,29 +57,25 @@ public class ModVersion implements Comparable<ModVersion> {
 	}
 
 	public IChatComponent getFormattedChatText() {
-		String text = StatCollector.translateToLocal("neiRecipeHandlers.versionChecker.notification.chat");
-		String[] parts = text.split("7");
-		String text1 = parts[0];
-		String text2 = parts[1];
-		String text3 = parts[2];
-		String text4 = parts[3];
-
-		ChatComponentText chat1 = (ChatComponentText) new ChatComponentText("[NEI Recipe Handlers]: ")
+		IChatComponent part1 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part1", NEIRecipeHandlers.MODNAME)
 				.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN));
-		ChatComponentText chat2 = (ChatComponentText) new ChatComponentText(text1 + " ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
-		ChatComponentText chat3 = (ChatComponentText) new ChatComponentText(text2).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.BLUE)
-				.setUnderlined(true).setChatClickEvent(new ClickEvent(Action.OPEN_URL, "https://goo.gl/EkxFlC"))
-				.setChatHoverEvent(new HoverEvent(net.minecraft.event.HoverEvent.Action.SHOW_TEXT,
-						new ChatComponentText(StatCollector.translateToLocal("neiRecipeHandlers.versionChecker.notification.changelog").replace("/", "\n")))));
-		ChatComponentText chat4 = (ChatComponentText) new ChatComponentText(" " + text3 + " ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
-		ChatComponentText chat5 = (ChatComponentText) new ChatComponentText(this.state.toString() + " " + this.version).setChatStyle(new ChatStyle()
-				.setColor(EnumChatFormatting.YELLOW).setUnderlined(true).setChatClickEvent(new ClickEvent(Action.OPEN_URL, this.url))
-				.setChatHoverEvent(new HoverEvent(net.minecraft.event.HoverEvent.Action.SHOW_TEXT,
-						new ChatComponentText(StatCollector.translateToLocal("neiRecipeHandlers.versionChecker.notification.newVersion").replace("/", "\n")))));
-		ChatComponentText chat6 = (ChatComponentText) new ChatComponentText(" " + text4 + " ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
-		ChatComponentText chat7 = (ChatComponentText) new ChatComponentText(this.mcVersion).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
+		IChatComponent part2 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part2")
+				.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
+		IChatComponent part3 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part3",
+				this.state.toString() + " " + this.version).setChatStyle(
+						new ChatStyle().setColor(EnumChatFormatting.YELLOW).setUnderlined(true).setChatClickEvent(new ClickEvent(Action.OPEN_URL, this.url))
+								.setChatHoverEvent(new HoverEvent(net.minecraft.event.HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+										(StatCollector.translateToLocalFormatted("neiRecipeHandlers.versionChecker.notification.chat.version.tooltip"))))));
+		IChatComponent part4 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part4")
+				.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
+		IChatComponent part5 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part5").setChatStyle(new ChatStyle()
+				.setColor(EnumChatFormatting.BLUE).setUnderlined(true).setChatClickEvent(new ClickEvent(Action.OPEN_URL, "https://goo.gl/EkxFlC"))
+				.setChatHoverEvent(new HoverEvent(net.minecraft.event.HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+						StatCollector.translateToLocalFormatted("neiRecipeHandlers.versionChecker.notification.chat.changelog.tooltip")))));
+		IChatComponent part6 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part6")
+				.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
 
-		return chat1.appendSibling(chat2).appendSibling(chat3).appendSibling(chat4).appendSibling(chat5).appendSibling(chat6).appendSibling(chat7);
+		return part1.appendSibling(part2).appendSibling(part3).appendSibling(part4).appendSibling(part5).appendSibling(part6);
 	}
 
 	@Override
