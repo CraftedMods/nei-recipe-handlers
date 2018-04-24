@@ -1,5 +1,5 @@
 # NEI Recipe Handlers
-The mod adds an extended recipe handler API for NEI.
+The mod adds an extended recipe handler API for NotEnoughItems.
 ## Dependencies
 If you want to setup a development environment, you'll need the following dependencies:
 - [CodeChickenCore-1.7.10-1.0.7.47-dev.jar](http://chickenbones.net/filedownloader/download.html?fn=Q29kZUNoaWNrZW5Db3JlLzEuNy4xMC0xLjAuNy40Ny9Db2RlQ2hpY2tlbkNvcmUtMS43LjEwLTEuMC43LjQ3LWRldi5qYXI=)
