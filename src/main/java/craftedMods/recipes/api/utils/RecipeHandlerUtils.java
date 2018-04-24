@@ -40,4 +40,6 @@ public interface RecipeHandlerUtils {
 
 	public ItemStackSet getFuels();
 
+	public void removeNativeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException;
+
 }

@@ -60,7 +60,7 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 
 	@Override
 	public void forceRecipeCacheRefresh() {
-		NEIRecipeHandlers.mod.getNeiConfig().refreshCache();
+		NEIRecipeHandlers.mod.getNEIIntegrationManager().refreshCache();
 	}
 
 	@Override
@@ -86,6 +86,11 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 				}
 		}
 		return ItemStackSet.create(this.fuels);
+	}
+
+	@Override
+	public void removeNativeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException {
+		NEIRecipeHandlers.mod.getNEIIntegrationManager().removeRecipeHandler(recipeHandlerClass);
 	}
 
 }

@@ -60,7 +60,7 @@ public class NEIRecipeHandlers {
 		return this.versionChecker;
 	}
 
-	public NEIIntegrationManager getNeiConfig() {
+	public NEIIntegrationManager getNEIIntegrationManager() {
 		return this.neiConfig;
 	}
 

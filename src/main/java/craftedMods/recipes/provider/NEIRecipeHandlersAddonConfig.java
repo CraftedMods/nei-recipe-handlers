@@ -18,7 +18,7 @@ public class NEIRecipeHandlersAddonConfig implements IConfigureNEI {
 
 	@Override
 	public void loadConfig() {
-		NEIRecipeHandlers.mod.getNeiConfig().load();
+		NEIRecipeHandlers.mod.getNEIIntegrationManager().load();
 	}
 
 }

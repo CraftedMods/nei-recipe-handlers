@@ -23,6 +23,8 @@ public class NEIIntegrationManager {
 	private Collection<ItemHidingHandler> itemHidingHandlers = new ArrayList<>();
 	private Collection<ItemOverrideHandler> itemOverrideHandlers = new ArrayList<>();
 
+	private Collection<Class<?>> recipeHandlersToRemove = new HashSet<>();
+
 	public NEIIntegrationManager(NEIRecipeHandlersConfiguration config, Logger logger) {
 		this.config = config;
 		this.logger = logger;
@@ -94,6 +96,14 @@ public class NEIIntegrationManager {
 		});
 	}
 
+	public void removeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException {
+		Class<?> loadedClass = Class.forName(recipeHandlerClass);
+		if (!IUsageHandler.class.isAssignableFrom(loadedClass) && !ICraftingHandler.class.isAssignableFrom(loadedClass)) throw new IllegalArgumentException(
+				String.format("The provided class \"%s\" is not an instance of ICraftingHandler or IUsageHandler", loadedClass.getName()));
+		this.recipeHandlersToRemove.add(loadedClass);
+	}
+
+	@SuppressWarnings("unchecked")
 	public void load() {
 		if (!this.config.isDisabled()) {
 
@@ -102,8 +112,12 @@ public class NEIIntegrationManager {
 			// Remove recipe handlers
 			if (this.config.isBrewingRecipeHandlerDisabled()) this.removeCraftingAndUsageHandler(BrewingRecipeHandler.class);
 
-			this.removeCraftingAndUsageHandler(ShapedRecipeHandler.class);
-			this.removeCraftingAndUsageHandler(ShapelessRecipeHandler.class);
+			for (Class<?> recipeHandlerToRemove : this.recipeHandlersToRemove) {
+				if (IUsageHandler.class.isAssignableFrom(recipeHandlerToRemove))
+					this.removeUsageHandler((Class<? extends IUsageHandler>) recipeHandlerToRemove);
+				if (ICraftingHandler.class.isAssignableFrom(recipeHandlerToRemove))
+					this.removeCraftingHandler((Class<? extends ICraftingHandler>) recipeHandlerToRemove);
+			}
 
 			// Load registered handlers
 			this.recipeHandlerManager.getRecipeHandlers().forEach((unlocalizedName, handler) -> this.loadHandler(new PluginRecipeHandler<>(handler)));
@@ -133,17 +147,21 @@ public class NEIIntegrationManager {
 	}
 
 	private void removeCraftingHandler(Class<? extends ICraftingHandler> handlerClass) {
-		this.removeHandler(handlerClass, GuiCraftingRecipe.craftinghandlers);
+		this.removeHandler(handlerClass, GuiCraftingRecipe.craftinghandlers, false);
 	}
 
 	private void removeUsageHandler(Class<? extends IUsageHandler> handlerClass) {
-		this.removeHandler(handlerClass, GuiUsageRecipe.usagehandlers);
+		this.removeHandler(handlerClass, GuiUsageRecipe.usagehandlers, true);
 	}
 
-	private <T> void removeHandler(Class<? extends T> handlerClass, List<T> handlerList) {
+	private <T> void removeHandler(Class<? extends T> handlerClass, List<T> handlerList, boolean isUsageHandler) {
 		for (int i = 0; i < handlerList.size(); i++) {
 			T handler = handlerList.get(i);
-			if (handler.getClass() == handlerClass) handlerList.remove(i);
+			if (handler.getClass() == handlerClass) {
+				handlerList.remove(i);
+				this.logger.debug(String.format("Removed the %s recipe handler \"%s\" of class \"%s\"", isUsageHandler ? "usage" : "crafting", handler,
+						handlerClass.getName()));
+			}
 		}
 	}
 
