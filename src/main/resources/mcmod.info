@@ -1,5 +1,5 @@
 [{	
-    "modid" : "neiRecipeHandlers",	
+    "modid" : "neirecipehandlers",	
     "name" : "NEI Recipe Handlers",	
     "description" : "This Mod adds an extended recipe handler API for NEI",	
     "version" : "Alpha 1.0.0",	
