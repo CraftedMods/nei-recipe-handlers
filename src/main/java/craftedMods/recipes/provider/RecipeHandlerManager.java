@@ -34,9 +34,6 @@ public class RecipeHandlerManager {
 	public static final String RECIPE_HANDLER_HEADER_TAG_KEY = "header";
 	public static final String RECIPE_HANDLER_CONTENT_TAG_KEY = "content";
 
-	private RecipeHandlerResourcePack recipeHandlerResources;
-	private Collection<RecipeHandlerFactory> recipeHandlerFactories = new ArrayList<>();
-
 	public RecipeHandlerManager(Configuration config, Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
 		this.config = config;
 		this.discoveredClasses = discoveredClasses;
@@ -77,7 +74,6 @@ public class RecipeHandlerManager {
 						RecipeHandlerFactory factoryInstance = factory.newInstance();
 						for (RecipeHandler<?> handler : factoryInstance.getRecipeHandlers())
 							this.registerRecipeHandler(handler);
-						this.recipeHandlerFactories.add(factoryInstance);
 					} else NEIRecipeHandlers.mod.getLogger().info("The recipe handler factory\"" + factory.getName() + "\" was disabled by the author.");
 				} catch (Exception e) {
 					NEIRecipeHandlers.mod.getLogger().error("Couldn't create the recipe handlers supplied by the factory \"" + factory.getName() + "\"", e);
@@ -121,24 +117,7 @@ public class RecipeHandlerManager {
 				NEIRecipeHandlers.mod.getLogger().error("Couldn't load recipe handler \"" + handler.getUnlocalizedName() + "\"", e);
 			}
 		}
-		this.registerResources();
 		this.config.save();
-	}
-
-	private void registerResources() {
-		Collection<RecipeHandler<?>> handlersToRegister = new ArrayList<>();
-		this.recipeHandlers.values().forEach(handler -> {
-			if (handler.getResources() != null && !handler.getResources().isEmpty()) handlersToRegister.add(handler);
-			NEIRecipeHandlers.mod.getLogger().debug(String.format("The recipe handler \"%s\" registered %d resources", handler.getUnlocalizedName(),
-					handler.getResources() == null ? 0 : handler.getResources().size()));
-		});
-		this.recipeHandlerResources = new RecipeHandlerResourcePack(handlersToRegister);
-		for (RecipeHandlerFactory factory : this.recipeHandlerFactories) {
-			if (factory.getResources() != null && !factory.getResources().isEmpty()) this.recipeHandlerResources.addResources(factory.getResources());
-			NEIRecipeHandlers.mod.getLogger().debug(String.format("The recipe handler \"%s\" registered %d resources", factory.getClass().getName(),
-					factory.getResources() == null ? 0 : factory.getResources().size()));
-		}
-		NEIRecipeHandlersUtils.registerDefaultResourcePack(this.recipeHandlerResources);
 	}
 
 	@SuppressWarnings("unchecked")

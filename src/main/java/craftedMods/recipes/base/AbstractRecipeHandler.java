@@ -85,11 +85,6 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 	}
 
 	@Override
-	public Map<ResourceLocation, Supplier<InputStream>> getResources() {
-		return this.loadedResources;
-	}
-
-	@Override
 	public void onUpdate(int cycleticks) {}
 
 	@Override

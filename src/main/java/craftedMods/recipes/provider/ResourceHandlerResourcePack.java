@@ -6,17 +6,17 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import craftedMods.recipes.NEIRecipeHandlers;
-import craftedMods.recipes.api.RecipeHandler;
+import craftedMods.recipes.api.*;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.data.*;
 import net.minecraft.util.ResourceLocation;
 
-public class RecipeHandlerResourcePack implements IResourcePack {
+public class ResourceHandlerResourcePack implements IResourcePack {
 
 	private final Map<ResourceLocation, Supplier<InputStream>> resources = new HashMap<>();
 
-	public RecipeHandlerResourcePack(Collection<RecipeHandler<?>> handlers) {
-		for (RecipeHandler<?> handler : handlers) {
+	public ResourceHandlerResourcePack(Collection<ResourceHandler> handlers) {
+		for (ResourceHandler handler : handlers) {
 			Map<ResourceLocation, Supplier<InputStream>> resources = handler.getResources();
 			if (resources != null) this.resources.putAll(resources);
 		}
@@ -53,7 +53,7 @@ public class RecipeHandlerResourcePack implements IResourcePack {
 
 	@Override
 	public String getPackName() {
-		return NEIRecipeHandlers.MODNAME + " Recipe Handler Resources";
+		return NEIRecipeHandlers.MODNAME + " Resource Handler Resources";
 	}
 
 }

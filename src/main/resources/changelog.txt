@@ -1,7 +1,10 @@
 ===Changelog for NEI Recipe Handlers===
 Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
-#Alpha 2.0.0
+#Alpha 2.0.0:
+ + Added resource handler support
+ 
+ - Removed the resource loading functions from RecipeHandler and RecipeHandlerFactory
 
 #Alpha 1.0.0:
  + Initial release

@@ -1,14 +1,11 @@
 package craftedMods.recipes.api;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * The recipe handler implementation needs - to be discovered - a default constructor.
@@ -122,8 +119,6 @@ public interface RecipeHandler<T extends Recipe> {
 	 * @return
 	 */
 	public List<RecipeItemSlot> getSlotsForRecipeItems(T recipe, EnumRecipeItemRole role);
-
-	public Map<ResourceLocation, Supplier<InputStream>> getResources();
 
 	public <V extends RecipeHandlerRenderer<W, T>, W extends RecipeHandler<T>> V getRenderer();
 

@@ -1,7 +1,9 @@
 package craftedMods.recipes.provider;
 
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Logger;
 
@@ -9,8 +11,10 @@ import codechicken.nei.api.API;
 import codechicken.nei.recipe.*;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.*;
+import craftedMods.recipes.utils.NEIRecipeHandlersUtils;
 import craftedMods.utils.ClassDiscoverer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class NEIIntegrationManager {
 
@@ -25,6 +29,8 @@ public class NEIIntegrationManager {
 
 	private Collection<Class<?>> recipeHandlersToRemove = new HashSet<>();
 
+	private ResourceHandlerResourcePack recipeHandlerResourcePack;
+
 	public NEIIntegrationManager(NEIRecipeHandlersConfiguration config, Logger logger) {
 		this.config = config;
 		this.logger = logger;
@@ -36,6 +42,7 @@ public class NEIIntegrationManager {
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, RecipeHandlerFactory.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ItemHidingHandler.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ItemOverrideHandler.class);
+		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ResourceHandler.class);
 		this.discoverer.discoverClassesAsync();
 	}
 
@@ -46,15 +53,18 @@ public class NEIIntegrationManager {
 			Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses = this.discoverer
 					.getDiscoveredClasses(this.config.getClassDiscovererThreadTimeout());
 
+			this.setupResourceHandlerHandlerResourcePack(discoveredClasses);
+
 			this.recipeHandlerManager = new RecipeHandlerManager(this.config.getConfigFile(), discoveredClasses);
 
 			this.recipeHandlerManager.init(useCachedRecipes);
 
 			NEIRecipeHandlers.mod.getLogger().info("Enable item hiding handlers: " + this.config.isHideTechnicalBlocks());
 
-			if (this.config.isHideTechnicalBlocks()) this.discoverItemHidingHandlers(discoveredClasses);
+			if (this.config.isHideTechnicalBlocks())
+				NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemHidingHandler.class, this.itemHidingHandlers);
 
-			this.discoverItemOverrideHandlers(discoveredClasses);
+			NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemOverrideHandler.class, this.itemOverrideHandlers);
 
 			this.logger.info("Initialized NEI configuration within " + (System.currentTimeMillis() - start) + " ms");
 		} catch (Exception e) {
@@ -62,38 +72,20 @@ public class NEIIntegrationManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void discoverItemHidingHandlers(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
-		Set<Class<?>> itemHidingHandlers = discoveredClasses.get(RegisteredHandler.class).get(ItemHidingHandler.class);
-		NEIRecipeHandlers.mod.getLogger().info("Found " + itemHidingHandlers.size() + " item hiding handlers in classpath");
-		itemHidingHandlers.forEach(clazz -> {
-			try {
-				Class<? extends ItemHidingHandler> handler = (Class<? extends ItemHidingHandler>) clazz;
-				if (handler.getAnnotation(RegisteredHandler.class).isEnabled()) {
-					this.itemHidingHandlers.add(handler.newInstance());
-					NEIRecipeHandlers.mod.getLogger().debug("Successfully registered item hiding handler \"" + handler.getName() + "\"");
-				} else NEIRecipeHandlers.mod.getLogger().info("The item hiding handler \"" + handler.getName() + "\" was disabled by the author.");
-			} catch (Exception e) {
-				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
-			}
-		});
-	}
-
-	@SuppressWarnings("unchecked")
-	private void discoverItemOverrideHandlers(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
-		Set<Class<?>> itemHOverrideHandlers = discoveredClasses.get(RegisteredHandler.class).get(ItemOverrideHandler.class);
-		NEIRecipeHandlers.mod.getLogger().info("Found " + itemHOverrideHandlers.size() + " item override handlers in classpath");
-		itemHOverrideHandlers.forEach(clazz -> {
-			try {
-				Class<? extends ItemOverrideHandler> handler = (Class<? extends ItemOverrideHandler>) clazz;
-				if (handler.getAnnotation(RegisteredHandler.class).isEnabled()) {
-					this.itemOverrideHandlers.add(handler.newInstance());
-					NEIRecipeHandlers.mod.getLogger().debug("Successfully registered item override handler \"" + handler.getName() + "\"");
-				} else NEIRecipeHandlers.mod.getLogger().info("The item override handler \"" + handler.getName() + "\" was disabled by the author.");
-			} catch (Exception e) {
-				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
-			}
-		});
+	private void setupResourceHandlerHandlerResourcePack(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
+		Collection<ResourceHandler> handlersToRegister = new ArrayList<>();
+		NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ResourceHandler.class, handlersToRegister);
+		Iterator<ResourceHandler> handlersToRegisterIterator = handlersToRegister.iterator();
+		while (handlersToRegisterIterator.hasNext()) {
+			ResourceHandler handler = handlersToRegisterIterator.next();
+			Map<ResourceLocation, Supplier<InputStream>> resources = handler.getResources();
+			int resourceCount = resources == null ? 0 : resources.size();
+			this.logger.debug(String.format("The resource handler \"%s\" registered %d resources", handler.getClass().getName(), resourceCount));
+			if (resourceCount <= 0) handlersToRegisterIterator.remove();
+		}
+		this.recipeHandlerResourcePack = new ResourceHandlerResourcePack(handlersToRegister);
+		NEIRecipeHandlersUtils.registerDefaultResourcePack(recipeHandlerResourcePack);
+		this.logger.info("Registered the resource handler resource pack");
 	}
 
 	public void removeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException {

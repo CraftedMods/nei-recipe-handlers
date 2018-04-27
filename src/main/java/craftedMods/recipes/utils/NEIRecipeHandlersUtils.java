@@ -1,9 +1,11 @@
 package craftedMods.recipes.utils;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 import codechicken.nei.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.*;
 import craftedMods.recipes.api.utils.ItemStackSet;
 import craftedMods.recipes.base.RecipeItemSlotImpl;
@@ -96,6 +98,27 @@ public class NEIRecipeHandlersUtils {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static boolean registerDefaultResourcePack(IResourcePack pack) {
 		return ((List) ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "defaultResourcePacks", "field_110449_ao")).add(pack);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> void discoverRegisteredHandlers(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses, Class<T> handlerClass,
+			Collection<T> handlerInstanceCollection) {
+		Set<Class<?>> discoveredHandlers = discoveredClasses.get(RegisteredHandler.class).get(handlerClass);
+		NEIRecipeHandlers.mod.getLogger()
+				.info(String.format("Found %d handlers of type \"%s\" in the classpath", discoveredHandlers.size(), handlerClass.getSimpleName()));
+		discoveredHandlers.forEach(clazz -> {
+			try {
+				Class<T> handler = (Class<T>) clazz;
+				if (handler.getAnnotation(RegisteredHandler.class).isEnabled()) {
+					handlerInstanceCollection.add(handler.newInstance());
+					NEIRecipeHandlers.mod.getLogger()
+							.debug(String.format("Successfully registered the handler \"%s\" of type \"%s\"", handler.getName(), handlerClass.getSimpleName()));
+				} else NEIRecipeHandlers.mod.getLogger()
+						.info(String.format("The handler \"%s\" of type \"%s\" was disabled by the author", handler.getName(), handlerClass.getSimpleName()));
+			} catch (Exception e) {
+				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
+			}
+		});
 	}
 
 }
