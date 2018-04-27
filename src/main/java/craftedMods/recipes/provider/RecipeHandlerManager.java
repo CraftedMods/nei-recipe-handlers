@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -52,36 +53,12 @@ public class RecipeHandlerManager {
 
 	@SuppressWarnings("unchecked")
 	private void discoverRecipeHandlersInClasspath() {
-		Set<Class<?>> recipeHandlers = this.discoveredClasses.get(RegisteredHandler.class).get(RecipeHandler.class);
-		NEIRecipeHandlers.mod.getLogger().info("Found " + recipeHandlers.size() + " recipe handlers in classpath");
-		recipeHandlers.forEach(clazz -> {
-			try {
-				Class<? extends RecipeHandler<?>> handler = (Class<? extends RecipeHandler<?>>) clazz;
-				if (handler.getAnnotation(RegisteredHandler.class).isEnabled()) this.registerRecipeHandler(handler.newInstance());
-				else NEIRecipeHandlers.mod.getLogger().info("The recipe handler \"" + handler.getName() + "\" was disabled by the author.");
-			} catch (Exception e) {
-				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
-			}
-		});
-
-		Set<Class<?>> recipeHandlerFactories = this.discoveredClasses.get(RegisteredHandler.class).get(RecipeHandlerFactory.class);
-		NEIRecipeHandlers.mod.getLogger().info("Found " + recipeHandlerFactories.size() + " recipe handler factories in classpath");
-		recipeHandlerFactories.forEach(clazz -> {
-			try {
-				Class<? extends RecipeHandlerFactory> factory = (Class<? extends RecipeHandlerFactory>) clazz;
-				try {
-					if (factory.getAnnotation(RegisteredHandler.class).isEnabled()) {
-						RecipeHandlerFactory factoryInstance = factory.newInstance();
-						for (RecipeHandler<?> handler : factoryInstance.getRecipeHandlers())
-							this.registerRecipeHandler(handler);
-					} else NEIRecipeHandlers.mod.getLogger().info("The recipe handler factory\"" + factory.getName() + "\" was disabled by the author.");
-				} catch (Exception e) {
-					NEIRecipeHandlers.mod.getLogger().error("Couldn't create the recipe handlers supplied by the factory \"" + factory.getName() + "\"", e);
-				}
-			} catch (Exception e) {
-				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
-			}
-		});
+		Collection<RecipeHandler<?>> recipeHandlers = new ArrayList<>();
+		recipeHandlers.addAll(
+				(Collection<RecipeHandler<?>>) (Collection<?>) NEIRecipeHandlersUtils.discoverRegisteredHandlers(this.discoveredClasses, RecipeHandler.class));
+		recipeHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(this.discoveredClasses, RecipeHandlerFactory.class).stream()
+				.map(factory -> factory.getRecipeHandlers()).flatMap(Collection::stream).collect(Collectors.toList()));
+		recipeHandlers.forEach(this::registerRecipeHandler);
 	}
 
 	private void registerRecipeHandler(RecipeHandler<?> instance) {
