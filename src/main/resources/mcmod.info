@@ -2,7 +2,7 @@
     "modid" : "neirecipehandlers",	
     "name" : "NEI Recipe Handlers",	
     "description" : "This Mod adds an extended recipe handler API for NEI",	
-    "version" : "Alpha 1.0.0",	
+    "version" : "Alpha 2.0.0",	
     "mcversion": "1.7.10",
     "url" : "https://github.com/CraftedMods/nei-recipe-handlers",	
     "updateUrl" : "",	
