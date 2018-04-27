@@ -101,8 +101,9 @@ public class NEIRecipeHandlersUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> void discoverRegisteredHandlers(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses, Class<T> handlerClass,
-			Collection<T> handlerInstanceCollection) {
+	public static <T> Collection<T> discoverRegisteredHandlers(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses,
+			Class<T> handlerClass) {
+		Collection<T> handlerInstanceCollection = new ArrayList<>();
 		Set<Class<?>> discoveredHandlers = discoveredClasses.get(RegisteredHandler.class).get(handlerClass);
 		NEIRecipeHandlers.mod.getLogger()
 				.info(String.format("Found %d handlers of type \"%s\" in the classpath", discoveredHandlers.size(), handlerClass.getSimpleName()));
@@ -119,6 +120,7 @@ public class NEIRecipeHandlersUtils {
 				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
 			}
 		});
+		return handlerInstanceCollection;
 	}
 
 }

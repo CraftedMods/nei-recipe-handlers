@@ -62,9 +62,9 @@ public class NEIIntegrationManager {
 			NEIRecipeHandlers.mod.getLogger().info("Enable item hiding handlers: " + this.config.isHideTechnicalBlocks());
 
 			if (this.config.isHideTechnicalBlocks())
-				NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemHidingHandler.class, this.itemHidingHandlers);
+				this.itemHidingHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemHidingHandler.class));
 
-			NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemOverrideHandler.class, this.itemOverrideHandlers);
+			this.itemOverrideHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemOverrideHandler.class));
 
 			this.logger.info("Initialized NEI configuration within " + (System.currentTimeMillis() - start) + " ms");
 		} catch (Exception e) {
@@ -73,8 +73,8 @@ public class NEIIntegrationManager {
 	}
 
 	private void setupResourceHandlerHandlerResourcePack(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
-		Collection<ResourceHandler> handlersToRegister = new ArrayList<>();
-		NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ResourceHandler.class, handlersToRegister);
+		Collection<ResourceHandler> handlersToRegister = new ArrayList<>(
+				NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ResourceHandler.class));
 		Iterator<ResourceHandler> handlersToRegisterIterator = handlersToRegister.iterator();
 		while (handlersToRegisterIterator.hasNext()) {
 			ResourceHandler handler = handlersToRegisterIterator.next();
