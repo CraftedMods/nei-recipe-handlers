@@ -113,7 +113,7 @@ public class NEIRecipeHandlersUtils {
 				if (handler.getAnnotation(RegisteredHandler.class).isEnabled()) {
 					handlerInstanceCollection.add(handler.newInstance());
 					NEIRecipeHandlers.mod.getLogger()
-							.debug(String.format("Successfully registered the handler \"%s\" of type \"%s\"", handler.getName(), handlerClass.getSimpleName()));
+							.debug(String.format("Registered the handler \"%s\" of type \"%s\"", handler.getName(), handlerClass.getSimpleName()));
 				} else NEIRecipeHandlers.mod.getLogger()
 						.info(String.format("The handler \"%s\" of type \"%s\" was disabled by the author", handler.getName(), handlerClass.getSimpleName()));
 			} catch (Exception e) {
