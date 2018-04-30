@@ -24,5 +24,7 @@ public interface RecipeHandlerCacheManager<T extends Recipe> {
 
 	// Cache is validated after writing
 	public void writeRecipesToCache(NBTTagCompound cacheHeaderTag, NBTTagCompound cacheContentTag);
+	
+	public String getVersion();
 
 }

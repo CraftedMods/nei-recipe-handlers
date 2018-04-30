@@ -125,8 +125,6 @@ public interface RecipeHandler<T extends Recipe> {
 	// Can be null
 	public RecipeHandlerCacheManager<T> getRecipeHandlerCacheManager();
 
-	public String getVersion();
-
 	public RecipeHandlerCraftingHelper<T> getCraftingHelper();
 
 }

@@ -92,11 +92,6 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 	}
 
 	@Override
-	public String getVersion() {
-		return "1.0";
-	}
-
-	@Override
 	public int getRecipesPerPage() {
 		return 2;
 	}

@@ -5,6 +5,8 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
  + Added resource handler support
  + Added version checker support
  
+ * Moved the function getVersion from RecipeHandler to RecipeHandlerCacheManager
+ 
  - Removed the resource loading functions from RecipeHandler and RecipeHandlerFactory
  - Removed a version checker related function from RecipeHandler
 
