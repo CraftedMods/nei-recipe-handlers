@@ -14,6 +14,10 @@ import net.minecraft.util.*;
  * A default implementation of some aspects of the RecipeHandler interface. Normally you should
  * extend this class if you want to create a new recipe handler instead of implementing the
  * interface directly.
+ * 
+ * @author CraftedMods
+ * @param <T>
+ *            The recipe type
  */
 public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeHandler<T> {
 

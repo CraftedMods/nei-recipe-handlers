@@ -6,6 +6,11 @@ import craftedMods.recipes.api.*;
 import net.minecraft.item.crafting.*;
 import net.minecraftforge.oredict.*;
 
+/**
+ * A basic recipe handler for 3x3 crafting grids.
+ * 
+ * @author CraftedMods
+ */
 public abstract class CraftingGridRecipeHandler extends AbstractRecipeHandler<AbstractRecipe> {
 
 	protected final Collection<IRecipe> recipes = new ArrayList<>();
@@ -62,6 +67,15 @@ public abstract class CraftingGridRecipeHandler extends AbstractRecipeHandler<Ab
 		return ret;
 	}
 
+	/**
+	 * Invoked if a recipe type was found which couldn'd be processed.</br>
+	 * The recipe can be processed in child classes which can add it to the "container".
+	 * 
+	 * @param recipe
+	 *            The "undefined" recipe instance
+	 * @param container
+	 *            The list to which the processed recipe could be added
+	 */
 	protected void undefinedRecipeTypeFound(IRecipe recipe, Collection<AbstractRecipe> container) {
 		if (this.logUndefinedRecipeTypes) {
 			this.logger

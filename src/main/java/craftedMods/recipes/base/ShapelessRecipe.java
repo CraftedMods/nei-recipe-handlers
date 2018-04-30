@@ -7,6 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+/**
+ * A recipe containing the ingredients in no special order.
+ * 
+ * @author CraftedMods
+ */
 public class ShapelessRecipe extends AbstractRecipe {
 
 	public ShapelessRecipe(ShapelessOreRecipe recipe) {

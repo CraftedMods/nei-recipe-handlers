@@ -5,6 +5,11 @@ import java.util.Collection;
 import craftedMods.recipes.api.utils.RecipeHandlerUtils;
 import net.minecraft.item.ItemStack;
 
+/**
+ * A recipe containing all fuel items as stacks with the role "OTHER".
+ * 
+ * @author CraftedMods
+ */
 public class FurnanceRecipe extends ShapelessRecipe {
 
 	public FurnanceRecipe(Collection<ItemStack> ingredients, ItemStack result) {

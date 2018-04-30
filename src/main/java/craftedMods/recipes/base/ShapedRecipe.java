@@ -6,6 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+/**
+ * A recipe containing the ingredients in a special order.
+ * 
+ * @author CraftedMods
+ */
 public class ShapedRecipe extends AbstractRecipe {
 
 	private final int width;
@@ -32,10 +37,16 @@ public class ShapedRecipe extends AbstractRecipe {
 		this.results.add(this.createItemStackSet(result));
 	}
 
+	/**
+	 * @return The recipe width
+	 */
 	public int getWidth() {
 		return this.width;
 	}
 
+	/**
+	 * @return The recipe height
+	 */
 	public int getHeight() {
 		return this.height;
 	}

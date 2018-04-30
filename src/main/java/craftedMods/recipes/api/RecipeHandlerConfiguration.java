@@ -2,10 +2,24 @@ package craftedMods.recipes.api;
 
 import java.util.regex.Pattern;
 
+/**
+ * The recipe handler configuration allows a recipe handler to load and store configuration data in
+ * the configuration file of the provider. Each recipe handler gets it's own entry in there.
+ * 
+ * @author CraftedMods
+ */
 public interface RecipeHandlerConfiguration {
 
+	/**
+	 * Reloads the configuration data from the file
+	 */
 	public void reload();
 
+	/**
+	 * If false, the recipe handler was disabled via the configuration file, if true, not
+	 * 
+	 * @return Whether the recipe handler is enabled
+	 */
 	public boolean isEnabled();
 
 	public default String getString(String name, String defaultValue, String comment) {

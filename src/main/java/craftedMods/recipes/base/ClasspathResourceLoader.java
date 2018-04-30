@@ -6,6 +6,11 @@ import java.util.function.Supplier;
 
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * A resource loader implementation which loads the resources from the classpath
+ * 
+ * @author CraftedMods
+ */
 public class ClasspathResourceLoader implements RecipeHandlerResourceLoader {
 
 	private Set<ResourceLocation> resourceLocations = new HashSet<>();
