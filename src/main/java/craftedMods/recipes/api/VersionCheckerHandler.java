@@ -10,6 +10,8 @@ public interface VersionCheckerHandler {
 
 	public SemanticVersion getCurrentVersion();// If null, no version checks will be made
 
-	public default void onVersionCheck(SemanticVersion remoteVersion) {};// A callback if the version check succeeded
+	public default void onVersionCheck(SemanticVersion remoteVersion) {};// A callback if the
+																			// version check
+																			// succeeded
 
 }

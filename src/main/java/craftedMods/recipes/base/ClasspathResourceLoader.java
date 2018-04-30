@@ -19,9 +19,11 @@ public class ClasspathResourceLoader implements RecipeHandlerResourceLoader {
 	public Map<ResourceLocation, Supplier<InputStream>> loadResources() {
 		Map<ResourceLocation, Supplier<InputStream>> ret = new HashMap<>();
 		this.resourceLocations.forEach(location -> {
-			if (this.getClass().getResource("/" + location.getResourcePath()) != null) ret.put(location, () -> {
-				return this.getClass().getResourceAsStream("/" + location.getResourcePath());
-			});
+			if (this.getClass().getResource("/" + location.getResourcePath()) != null) {
+				ret.put(location, () -> {
+					return this.getClass().getResourceAsStream("/" + location.getResourcePath());
+				});
+			}
 		});
 		return ret;
 	}

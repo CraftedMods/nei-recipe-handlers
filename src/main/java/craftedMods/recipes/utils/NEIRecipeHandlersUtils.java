@@ -29,8 +29,11 @@ public class NEIRecipeHandlersUtils {
 		for (ItemStack stack : stacks)
 			if (stack != null && stack.getItem() != null) {
 				List<ItemStack> perms = ItemList.itemMap.get(stack.getItem());
-				if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE && perms != null && !perms.isEmpty()) permutations.addAll(perms);
-				else permutations.add(stack);
+				if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE && perms != null && !perms.isEmpty()) {
+					permutations.addAll(perms);
+				} else {
+					permutations.add(stack);
+				}
 			}
 		return permutations;
 	}
@@ -65,9 +68,12 @@ public class NEIRecipeHandlersUtils {
 		String[] cats = unlocalizedName.split("\\.");
 		if (cats.length > 1) {
 			categories = new String[cats.length - 1];
-			for (int i = 0; i < cats.length - 1; i++)
+			for (int i = 0; i < cats.length - 1; i++) {
 				categories[i] = cats[i];
-		} else categories = new String[] {};
+			}
+		} else {
+			categories = new String[] {};
+		}
 		return categories;
 	}
 
@@ -77,7 +83,9 @@ public class NEIRecipeHandlersUtils {
 			NBTTagList list = compound.getTagList(tagName, 10);
 			for (int i = 0; i < list.tagCount(); i++) {
 				ItemStack stack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(i));
-				if (stack != null) ret.add(stack);
+				if (stack != null) {
+					ret.add(stack);
+				}
 			}
 		}
 		return ret;
@@ -95,8 +103,9 @@ public class NEIRecipeHandlersUtils {
 
 	public static List<RecipeItemSlot> offset(List<RecipeItemSlot> slotsList, int xOffset, int yOffset) {
 		List<RecipeItemSlot> ret = new ArrayList<>();
-		for (RecipeItemSlot slot : slotsList)
+		for (RecipeItemSlot slot : slotsList) {
 			ret.add(slot == null ? null : new RecipeItemSlotImpl(slot.getX() + xOffset, slot.getY() + yOffset));
+		}
 		return ret;
 	}
 
@@ -119,8 +128,10 @@ public class NEIRecipeHandlersUtils {
 					handlerInstanceCollection.add(handler.newInstance());
 					NEIRecipeHandlers.mod.getLogger()
 							.debug(String.format("Registered the handler \"%s\" of type \"%s\"", handler.getName(), handlerClass.getSimpleName()));
-				} else NEIRecipeHandlers.mod.getLogger()
-						.info(String.format("The handler \"%s\" of type \"%s\" was disabled by the author", handler.getName(), handlerClass.getSimpleName()));
+				} else {
+					NEIRecipeHandlers.mod.getLogger().info(
+							String.format("The handler \"%s\" of type \"%s\" was disabled by the author", handler.getName(), handlerClass.getSimpleName()));
+				}
 			} catch (Exception e) {
 				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
 			}

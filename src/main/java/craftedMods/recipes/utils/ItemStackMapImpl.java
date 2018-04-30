@@ -39,8 +39,9 @@ public class ItemStackMapImpl<V> implements ItemStackMap<V> {
 	@Override
 	public Set<ItemStack> keySet() {
 		Set<ItemStack> ret = new HashSet<>();
-		for (ItemStackWrapper key : this.innerMap.keySet())
+		for (ItemStackWrapper key : this.innerMap.keySet()) {
 			ret.add(key.toItemStack());
+		}
 		return ret;
 	}
 

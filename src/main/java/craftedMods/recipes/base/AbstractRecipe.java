@@ -42,13 +42,19 @@ public abstract class AbstractRecipe implements Recipe {
 	}
 
 	protected void addAll(Collection<ItemStack> src, List<ItemStackSet> dest) {
-		if (src != null) for (ItemStack stack : src)
-			this.add(stack, dest);
+		if (src != null) {
+			for (ItemStack stack : src) {
+				this.add(stack, dest);
+			}
+		}
 	}
 
 	protected void addAll(ItemStack[] src, List<ItemStackSet> dest) {
-		if (src != null) for (ItemStack stack : src)
-			this.add(stack, dest);
+		if (src != null) {
+			for (ItemStack stack : src) {
+				this.add(stack, dest);
+			}
+		}
 	}
 
 	protected void add(ItemStack stack, List<ItemStackSet> dest) {
@@ -62,16 +68,20 @@ public abstract class AbstractRecipe implements Recipe {
 	@Override
 	public boolean produces(ItemStack result) {
 		for (ItemStackSet permutations : this.results)
-			if (permutations != null) for (ItemStack permutation : permutations)
-				if (RecipeHandlerUtils.getInstance().areStacksSameTypeForCrafting(permutation, result)) return true;
+			if (permutations != null) {
+				for (ItemStack permutation : permutations)
+					if (RecipeHandlerUtils.getInstance().areStacksSameTypeForCrafting(permutation, result)) return true;
+			}
 		return false;
 	}
 
 	@Override
 	public boolean consumes(ItemStack ingredient) {
 		for (ItemStackSet permutations : this.ingredients)
-			if (permutations != null) for (ItemStack permutation : permutations)
-				if (RecipeHandlerUtils.getInstance().areStacksSameTypeForCrafting(permutation, ingredient)) return true;
+			if (permutations != null) {
+				for (ItemStack permutation : permutations)
+					if (RecipeHandlerUtils.getInstance().areStacksSameTypeForCrafting(permutation, ingredient)) return true;
+			}
 		return false;
 	}
 
@@ -99,7 +109,9 @@ public abstract class AbstractRecipe implements Recipe {
 		ListIterator<ItemStackSet> permutationsIterator = stacks.listIterator();
 		while (permutationsIterator.hasNext()) {
 			ItemStackSet permutations = permutationsIterator.next();
-			if (permutations != null) permutationsIterator.set(RecipeHandlerUtils.getInstance().generatePermutations(permutations));
+			if (permutations != null) {
+				permutationsIterator.set(RecipeHandlerUtils.getInstance().generatePermutations(permutations));
+			}
 		}
 	}
 

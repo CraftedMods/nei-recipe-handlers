@@ -19,7 +19,9 @@ public class ShapelessRecipe extends AbstractRecipe {
 
 	public ShapelessRecipe(Collection<?> ingredients, ItemStack result) {
 		for (Object ingredient : ingredients)
-			if (ingredient != null) this.ingredients.add(this.createItemStackSet(RecipeHandlerUtils.getInstance().extractRecipeItems(ingredient)));
+			if (ingredient != null) {
+				this.ingredients.add(this.createItemStackSet(RecipeHandlerUtils.getInstance().extractRecipeItems(ingredient)));
+			}
 		this.add(result, this.results);
 	}
 

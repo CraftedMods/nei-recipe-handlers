@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import craftedMods.recipes.NEIRecipeHandlers;
-import craftedMods.recipes.api.*;
+import craftedMods.recipes.api.ResourceHandler;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.data.*;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +18,9 @@ public class ResourceHandlerResourcePack implements IResourcePack {
 	public ResourceHandlerResourcePack(Collection<ResourceHandler> handlers) {
 		for (ResourceHandler handler : handlers) {
 			Map<ResourceLocation, Supplier<InputStream>> resources = handler.getResources();
-			if (resources != null) this.resources.putAll(resources);
+			if (resources != null) {
+				this.resources.putAll(resources);
+			}
 		}
 	}
 

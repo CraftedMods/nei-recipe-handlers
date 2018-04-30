@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import net.minecraft.util.ResourceLocation;
 
 public interface ResourceHandler {
-	
+
 	public Map<ResourceLocation, Supplier<InputStream>> getResources();
 
 }

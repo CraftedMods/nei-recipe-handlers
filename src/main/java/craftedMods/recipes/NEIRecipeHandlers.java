@@ -123,13 +123,17 @@ public class NEIRecipeHandlers {
 
 	@EventHandler
 	public void onPostInit(FMLPostInitializationEvent event) {
-		if (!this.config.isDisabled()) try {
-			// Load the NEI item list and wait until it's loaded
-			ItemList.loadItems.restart();
-			Thread thread = ReflectionHelper.getPrivateValue(RestartableTask.class, ItemList.loadItems, "thread");
-			if (thread != null) thread.join();
-		} catch (Exception e) {
-			this.logger.fatal("Couldn't load the NEI item list - the mod cannot be started", e);
+		if (!this.config.isDisabled()) {
+			try {
+				// Load the NEI item list and wait until it's loaded
+				ItemList.loadItems.restart();
+				Thread thread = ReflectionHelper.getPrivateValue(RestartableTask.class, ItemList.loadItems, "thread");
+				if (thread != null) {
+					thread.join();
+				}
+			} catch (Exception e) {
+				this.logger.fatal("Couldn't load the NEI item list - the mod cannot be started", e);
+			}
 		}
 
 		this.neiIntegrationManager.init(this.checkItemCache());
@@ -149,12 +153,16 @@ public class NEIRecipeHandlers {
 				this.logger.warn("The item cache couldn't be loaded: ", e);
 			}
 			canCacheBeUsed = !recreateItemList;
-			if (recreateItemList) this.logger.info("The item cache has to be (re)created");
-			if (recreateItemList) try (FileOutputStream out = new FileOutputStream(this.itemCache)) {
-				CompressedStreamTools.writeCompressed(currentItemListTag, out);
-				this.logger.info("Wrote the item cache to the filesystem");
-			} catch (Exception e) {
-				this.logger.error("Couldn't write the item cache to the filesystem: ", e);
+			if (recreateItemList) {
+				this.logger.info("The item cache has to be (re)created");
+			}
+			if (recreateItemList) {
+				try (FileOutputStream out = new FileOutputStream(this.itemCache)) {
+					CompressedStreamTools.writeCompressed(currentItemListTag, out);
+					this.logger.info("Wrote the item cache to the filesystem");
+				} catch (Exception e) {
+					this.logger.error("Couldn't write the item cache to the filesystem: ", e);
+				}
 			}
 		}
 		return canCacheBeUsed;
@@ -162,7 +170,9 @@ public class NEIRecipeHandlers {
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.modID.equals(NEIRecipeHandlers.MODID)) this.config.update();
+		if (event.modID.equals(NEIRecipeHandlers.MODID)) {
+			this.config.update();
+		}
 	}
 
 	@SubscribeEvent

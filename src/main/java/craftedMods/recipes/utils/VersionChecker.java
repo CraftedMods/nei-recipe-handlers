@@ -33,15 +33,17 @@ public class VersionChecker {
 	}
 
 	private boolean ping() {
-		if (this.versionFileURL != null) try {
-			URLConnection conn = new URL(this.versionFileURL).openConnection();
-			conn.setConnectTimeout(2000);
-			conn.connect();
-			return true;
-		} catch (MalformedURLException e) {
-			NEIRecipeHandlers.mod.getLogger().error(String.format("The URL of the version file \"%s\" isn't valid", this.versionFileURL));
-		} catch (IOException e) {
-			NEIRecipeHandlers.mod.getLogger().error(String.format("Cannot connect to the version file \"%s\"", this.versionFileURL.toString()), e);
+		if (this.versionFileURL != null) {
+			try {
+				URLConnection conn = new URL(this.versionFileURL).openConnection();
+				conn.setConnectTimeout(2000);
+				conn.connect();
+				return true;
+			} catch (MalformedURLException e) {
+				NEIRecipeHandlers.mod.getLogger().error(String.format("The URL of the version file \"%s\" isn't valid", this.versionFileURL));
+			} catch (IOException e) {
+				NEIRecipeHandlers.mod.getLogger().error(String.format("Cannot connect to the version file \"%s\"", this.versionFileURL.toString()), e);
+			}
 		}
 		return false;
 	}
@@ -72,8 +74,12 @@ public class VersionChecker {
 			String[] parts = versionString.split("\\|");
 
 			remoteVersion = SemanticVersion.of(parts[0]);
-			if (parts.length >= 1 && !parts[1].trim().isEmpty()) downloadURL = new URL(parts[1]);
-			if (parts.length >= 2 && !parts[2].trim().isEmpty()) changelogURL = new URL(parts[2]);
+			if (parts.length >= 1 && !parts[1].trim().isEmpty()) {
+				downloadURL = new URL(parts[1]);
+			}
+			if (parts.length >= 2 && !parts[2].trim().isEmpty()) {
+				changelogURL = new URL(parts[2]);
+			}
 
 			return new RemoteVersion(remoteVersion, downloadURL, changelogURL);
 		}

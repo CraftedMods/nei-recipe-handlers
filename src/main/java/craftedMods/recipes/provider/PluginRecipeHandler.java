@@ -46,12 +46,16 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
-		if (outputId.equals("item")) this.loadCraftingRecipes((ItemStack) results[0]);
+		if (outputId.equals("item")) {
+			this.loadCraftingRecipes((ItemStack) results[0]);
+		}
 	}
 
 	@Override
 	public void loadUsageRecipes(String inputId, Object... ingredients) {
-		if (inputId.equals("item")) this.loadUsageRecipes((ItemStack) ingredients[0]);
+		if (inputId.equals("item")) {
+			this.loadUsageRecipes((ItemStack) ingredients[0]);
+		}
 	}
 
 	@Override
@@ -71,33 +75,42 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 	}
 
 	private void handleRecipe(ItemStack stack, boolean isUsage, boolean isDynamic, Collection<? extends Recipe> recipes) {
-		if (recipes != null) for (Recipe recipe : recipes)
-			if (isDynamic || (isUsage ? recipe.consumes(stack) : recipe.produces(stack))) {
-				PluginCachedRecipe pluginRecipe = new PluginCachedRecipe(recipe);// TODO: Is dynamic is false
-				if (isUsage ? pluginRecipe.contains(pluginRecipe.ingredients, stack) && recipe.getIngredientReplacement(stack) != null
-						: pluginRecipe.contains(pluginRecipe.others, stack) && recipe.getResultReplacement(stack) != null)
-					pluginRecipe.setIngredientPermutation(isUsage ? pluginRecipe.ingredients : pluginRecipe.others,
-							isUsage ? recipe.getIngredientReplacement(stack) : recipe.getResultReplacement(stack));
-				this.recipes.put(pluginRecipe, recipe);
-				this.arecipes.add(pluginRecipe);
-			}
+		if (recipes != null) {
+			for (Recipe recipe : recipes)
+				if (isDynamic || (isUsage ? recipe.consumes(stack) : recipe.produces(stack))) {
+					PluginCachedRecipe pluginRecipe = new PluginCachedRecipe(recipe);// TODO: Is
+																						// dynamic
+																						// is false
+					if (isUsage ? pluginRecipe.contains(pluginRecipe.ingredients, stack) && recipe.getIngredientReplacement(stack) != null
+							: pluginRecipe.contains(pluginRecipe.others, stack) && recipe.getResultReplacement(stack) != null) {
+						pluginRecipe.setIngredientPermutation(isUsage ? pluginRecipe.ingredients : pluginRecipe.others,
+								isUsage ? recipe.getIngredientReplacement(stack) : recipe.getResultReplacement(stack));
+					}
+					this.recipes.put(pluginRecipe, recipe);
+					this.arecipes.add(pluginRecipe);
+				}
+		}
 	}
 
 	@Override
 	public void drawBackground(int recipeIndex) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if (this.innerHandler.getRenderer() != null)
+		if (this.innerHandler.getRenderer() != null) {
 			this.innerHandler.getRenderer().renderBackground(this.innerHandler, this.getRecipe(recipeIndex), this.cycleticks);
-		else super.drawBackground(recipeIndex);
+		} else {
+			super.drawBackground(recipeIndex);
+		}
 	}
 
 	@Override
 	public void drawForeground(int recipeIndex) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		if (this.innerHandler.getRenderer() != null)
+		if (this.innerHandler.getRenderer() != null) {
 			this.innerHandler.getRenderer().renderForeground(this.innerHandler, this.getRecipe(recipeIndex), this.cycleticks);
-		else super.drawForeground(recipeIndex);
+		} else {
+			super.drawForeground(recipeIndex);
+		}
 	}
 
 	@Override
@@ -165,8 +178,9 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 		@Override
 		public ArrayList<PositionedStack> positionStacks(ArrayList<PositionedStack> ingredients) {
 			ArrayList<PositionedStack> ret = new ArrayList<>();
-			for (PositionedStack stack : ingredients)
+			for (PositionedStack stack : ingredients) {
 				ret.add(new PositionedStack(stack.items, stack.relx + this.offsetX, stack.rely + this.offsetY, false));
+			}
 			return ret;
 		}
 
@@ -234,13 +248,17 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 
 		@Override
 		public List<PositionedStack> getIngredients() {
-			if (this.isDynamic && PluginRecipeHandler.this.cycleticks % 20 == 0) this.initIngreds();
+			if (this.isDynamic && PluginRecipeHandler.this.cycleticks % 20 == 0) {
+				this.initIngreds();
+			}
 			return this.getCycledIngredients(PluginRecipeHandler.this.cycleticks / 20, this.ingredients);
 		}
 
 		@Override
 		public List<PositionedStack> getOtherStacks() {
-			if (this.isDynamic && PluginRecipeHandler.this.cycleticks % 20 == 0) this.initOthers();
+			if (this.isDynamic && PluginRecipeHandler.this.cycleticks % 20 == 0) {
+				this.initOthers();
+			}
 			return this.getCycledIngredients(PluginRecipeHandler.this.cycleticks / 20, this.others);
 		}
 

@@ -36,7 +36,9 @@ public class NEIRecipeHandlersConfiguration {
 		this.disabled = this.configFile.getBoolean("Disable NEI integration", Configuration.CATEGORY_GENERAL, this.disabled,
 				"If you want to disable NEI integration without removing the mod from your mods folder, you can do it by setting this property to true. This does not disable the version checker.");
 
-		if (this.configFile.hasChanged()) this.configFile.save();
+		if (this.configFile.hasChanged()) {
+			this.configFile.save();
+		}
 	}
 
 	public Configuration getConfigFile() {

@@ -23,11 +23,12 @@ public class ShapedRecipe extends AbstractRecipe {
 	public ShapedRecipe(int width, int height, Object[] ingredients, ItemStack result) {
 		this.width = width;
 		this.height = height;
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Object ingred = ingredients[y * width + x];
 				this.ingredients.add(ingred != null ? this.createItemStackSet(RecipeHandlerUtils.getInstance().extractRecipeItems(ingred)) : null);
 			}
+		}
 		this.results.add(this.createItemStackSet(result));
 	}
 

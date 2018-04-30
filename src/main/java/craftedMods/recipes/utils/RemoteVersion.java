@@ -23,7 +23,7 @@ public class RemoteVersion {
 	public URL getDownloadURL() {
 		return this.downloadURL;
 	}
-	
+
 	public URL getChangelogURL() {
 		return this.changelogURL;
 	}

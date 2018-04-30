@@ -82,7 +82,9 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 			for (ItemStack item : RecipeHandlerUtils.getInstance().getItemList())
 				if (!excludedfuels.contains(item.getItem())) {
 					int burnTime = net.minecraft.tileentity.TileEntityFurnace.getItemBurnTime(item);
-					if (burnTime > 0) this.fuels.add(item.copy());
+					if (burnTime > 0) {
+						this.fuels.add(item.copy());
+					}
 				}
 		}
 		return ItemStackSet.create(this.fuels);

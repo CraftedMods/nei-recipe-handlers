@@ -65,21 +65,21 @@ public class NEIIntegrationManager {
 
 			NEIRecipeHandlers.mod.getLogger().info("Enable item hiding handlers: " + this.config.isHideTechnicalBlocks());
 
-			if (this.config.isHideTechnicalBlocks())
+			if (this.config.isHideTechnicalBlocks()) {
 				this.itemHidingHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemHidingHandler.class));
+			}
 
 			this.itemOverrideHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemOverrideHandler.class));
 			if (this.config.isUseVersionChecker()) {
 				Collection<VersionCheckerHandler> versionCheckerHandlers = new ArrayList<>(
 						NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, VersionCheckerHandler.class));
-				for (VersionCheckerHandler handler : versionCheckerHandlers) {
+				for (VersionCheckerHandler handler : versionCheckerHandlers)
 					if (handler.getCurrentVersion() == null || handler.getVersionFileURL() == null || !handler.getVersionFileURL().trim().isEmpty()) {
 						VersionChecker checker = new VersionChecker(handler.getVersionFileURL(), handler.getCurrentVersion());
-						if (NEIRecipeHandlersUtils.doVersionCheck(handler.getLocalizedHandlerName(), checker, logger)) {
+						if (NEIRecipeHandlersUtils.doVersionCheck(handler.getLocalizedHandlerName(), checker, this.logger)) {
 							this.versionCheckers.put(handler, checker);
 						}
 					}
-				}
 			}
 
 			this.logger.info("Initialized NEI configuration within " + (System.currentTimeMillis() - start) + " ms");
@@ -97,10 +97,12 @@ public class NEIIntegrationManager {
 			Map<ResourceLocation, Supplier<InputStream>> resources = handler.getResources();
 			int resourceCount = resources == null ? 0 : resources.size();
 			this.logger.debug(String.format("The resource handler \"%s\" registered %d resources", handler.getClass().getName(), resourceCount));
-			if (resourceCount <= 0) handlersToRegisterIterator.remove();
+			if (resourceCount <= 0) {
+				handlersToRegisterIterator.remove();
+			}
 		}
 		this.recipeHandlerResourcePack = new ResourceHandlerResourcePack(handlersToRegister);
-		NEIRecipeHandlersUtils.registerDefaultResourcePack(recipeHandlerResourcePack);
+		NEIRecipeHandlersUtils.registerDefaultResourcePack(this.recipeHandlerResourcePack);
 		this.logger.info("Registered the resource handler resource pack");
 	}
 
@@ -118,20 +120,26 @@ public class NEIIntegrationManager {
 			long start = System.currentTimeMillis();
 
 			// Remove recipe handlers
-			if (this.config.isBrewingRecipeHandlerDisabled()) this.removeCraftingAndUsageHandler(BrewingRecipeHandler.class);
+			if (this.config.isBrewingRecipeHandlerDisabled()) {
+				this.removeCraftingAndUsageHandler(BrewingRecipeHandler.class);
+			}
 
 			for (Class<?> recipeHandlerToRemove : this.recipeHandlersToRemove) {
-				if (IUsageHandler.class.isAssignableFrom(recipeHandlerToRemove))
+				if (IUsageHandler.class.isAssignableFrom(recipeHandlerToRemove)) {
 					this.removeUsageHandler((Class<? extends IUsageHandler>) recipeHandlerToRemove);
-				if (ICraftingHandler.class.isAssignableFrom(recipeHandlerToRemove))
+				}
+				if (ICraftingHandler.class.isAssignableFrom(recipeHandlerToRemove)) {
 					this.removeCraftingHandler((Class<? extends ICraftingHandler>) recipeHandlerToRemove);
+				}
 			}
 
 			// Load registered handlers
 			this.recipeHandlerManager.getRecipeHandlers().forEach((unlocalizedName, handler) -> this.loadHandler(new PluginRecipeHandler<>(handler)));
 
 			// Item hiding
-			if (this.config.isHideTechnicalBlocks()) this.registerHiddenItems();
+			if (this.config.isHideTechnicalBlocks()) {
+				this.registerHiddenItems();
+			}
 
 			// Override names
 			this.registerItemOverrides();

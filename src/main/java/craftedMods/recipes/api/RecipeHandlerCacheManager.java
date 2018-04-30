@@ -9,7 +9,8 @@ public interface RecipeHandlerCacheManager<T extends Recipe> {
 	public boolean isCacheEnabled();
 
 	/**
-	 * Returns whether the cache is valid. Must return false if invalidateCache was called and true if validateCache was called.
+	 * Returns whether the cache is valid. Must return false if invalidateCache was called and true
+	 * if validateCache was called.
 	 * 
 	 * @param cacheHeaderTag
 	 * @return
@@ -24,7 +25,7 @@ public interface RecipeHandlerCacheManager<T extends Recipe> {
 
 	// Cache is validated after writing
 	public void writeRecipesToCache(NBTTagCompound cacheHeaderTag, NBTTagCompound cacheContentTag);
-	
+
 	public String getVersion();
 
 }

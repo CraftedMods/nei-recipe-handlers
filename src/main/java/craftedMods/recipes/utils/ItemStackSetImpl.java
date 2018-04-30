@@ -17,8 +17,9 @@ public class ItemStackSetImpl extends AbstractSet<ItemStack> implements ItemStac
 
 	public ItemStackSetImpl(boolean isNBTSensitive, ItemStack... stacks) {
 		this.isNBTSensitive = isNBTSensitive;
-		for (ItemStack stack : stacks)
+		for (ItemStack stack : stacks) {
 			this.add(stack);
+		}
 	}
 
 	public ItemStackSetImpl(Collection<? extends ItemStack> stacks) {
@@ -55,7 +56,9 @@ public class ItemStackSetImpl extends AbstractSet<ItemStack> implements ItemStac
 		ItemStackWrapper wrapper = new ItemStackWrapper(stack, this.isNBTSensitive);
 		if (!this.innerList.contains(wrapper)) {
 			ret = this.innerList.add(wrapper);
-			if (ret) this.stacksList.add(stack);
+			if (ret) {
+				this.stacksList.add(stack);
+			}
 		}
 		return ret;
 	}

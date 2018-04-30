@@ -46,7 +46,9 @@ public class ItemStackWrapper {
 		result = prime * result + (this.item == null ? 0 : this.item.hashCode());
 		result = prime * result + this.damage;
 		result = prime * result + (this.isNBTSensitive ? 1231 : 1237);
-		if (this.isNBTSensitive) result = prime * result + (this.compound == null ? 0 : this.compound.hashCode());
+		if (this.isNBTSensitive) {
+			result = prime * result + (this.compound == null ? 0 : this.compound.hashCode());
+		}
 		return result;
 	}
 
