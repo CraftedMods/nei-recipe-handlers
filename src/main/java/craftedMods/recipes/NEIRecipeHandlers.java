@@ -13,7 +13,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import craftedMods.recipes.provider.*;
-import craftedMods.recipes.utils.*;
+import craftedMods.recipes.utils.NEIRecipeHandlersUtils;
+import craftedMods.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,13 +27,12 @@ public class NEIRecipeHandlers {
 	public static NEIRecipeHandlers mod = new NEIRecipeHandlers();
 
 	private NEIRecipeHandlersConfiguration config;
-	private MCVersionChecker versionChecker;
 
 	public static final String MODID = "neirecipehandlers";
 	public static final String MODNAME = "NEI Recipe Handlers";
-	public static final String VERSION = "2.0.0-alpha";
+	public static final String VERSION = "2.0.0-ALPHA";
 
-	public static final String DEFAULT_VERSION_FILE_URL = "https://dl.dropboxusercontent.com/s/gyz1oq7vyz753y5/version.txt";
+	public static final SemanticVersion SEMANTIC_VERSION = new SemanticVersion(EnumVersionState.ALPHA, 2, 0, 0);
 
 	public static final String MOD_DIR_NAME = "neiRecipeHandlers";
 	public static final String ITEM_CACHE_FILE_NAME = "itemCache.dat";
@@ -40,7 +40,7 @@ public class NEIRecipeHandlers {
 
 	private Logger logger;
 
-	private NEIIntegrationManager neiConfig;
+	private NEIIntegrationManager neiIntegrationManager;
 
 	private File modDir;
 	private File itemCache;
@@ -56,12 +56,8 @@ public class NEIRecipeHandlers {
 		return this.logger;
 	}
 
-	public MCVersionChecker getVersionChecker() {
-		return this.versionChecker;
-	}
-
 	public NEIIntegrationManager getNEIIntegrationManager() {
-		return this.neiConfig;
+		return this.neiIntegrationManager;
 	}
 
 	public File getRecipeCache() {
@@ -111,24 +107,11 @@ public class NEIRecipeHandlers {
 			throw e;
 		}
 
-		try {
-			this.versionChecker = new MCVersionChecker(NEIRecipeHandlers.DEFAULT_VERSION_FILE_URL);
-
-			this.logger.debug("Version check enabled: " + this.config.isUseVersionChecker());
-
-			if (this.config.isUseVersionChecker()) {
-				this.logger.debug("Starting version check...");
-				this.versionChecker.checkVersion();
-				this.logger.info("Version check was successful; new version available: " + this.versionChecker.isNewVersionAvaible());
-			}
-
-		} catch (Exception e) {
-			this.logger.error("Version check failed: ", e);
-		}
+		this.logger.debug("Version checker enabled: " + this.config.isUseVersionChecker());
 
 		if (!this.config.isDisabled()) {
-			this.neiConfig = new NEIIntegrationManager(this.config, this.logger);
-			this.neiConfig.preInit();
+			this.neiIntegrationManager = new NEIIntegrationManager(this.config, this.logger);
+			this.neiIntegrationManager.preInit();
 		}
 
 		MinecraftForge.EVENT_BUS.register(this);
@@ -145,10 +128,11 @@ public class NEIRecipeHandlers {
 			ItemList.loadItems.restart();
 			Thread thread = ReflectionHelper.getPrivateValue(RestartableTask.class, ItemList.loadItems, "thread");
 			if (thread != null) thread.join();
-			this.neiConfig.init(this.checkItemCache());
 		} catch (Exception e) {
 			this.logger.fatal("Couldn't load the NEI item list - the mod cannot be started", e);
 		}
+
+		this.neiIntegrationManager.init(this.checkItemCache());
 	}
 
 	private boolean checkItemCache() {
@@ -189,8 +173,7 @@ public class NEIRecipeHandlers {
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event) {
 		if (this.worldLoaded && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer != null) {
-			if (this.config.isUseVersionChecker() && this.versionChecker.isNewVersionAvaible()) if (this.versionChecker.getNewestVersion() != null)
-				Minecraft.getMinecraft().thePlayer.addChatComponentMessage(this.versionChecker.getNewestVersion().getFormattedChatText());
+			this.neiIntegrationManager.onWorlLoad();
 			this.worldLoaded = false;
 		}
 	}

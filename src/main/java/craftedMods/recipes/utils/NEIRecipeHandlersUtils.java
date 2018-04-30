@@ -3,6 +3,8 @@ package craftedMods.recipes.utils;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import org.apache.logging.log4j.Logger;
+
 import codechicken.nei.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import craftedMods.recipes.NEIRecipeHandlers;
@@ -12,8 +14,11 @@ import craftedMods.recipes.base.RecipeItemSlotImpl;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.event.*;
+import net.minecraft.event.ClickEvent.Action;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
+import net.minecraft.util.*;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -121,6 +126,54 @@ public class NEIRecipeHandlersUtils {
 			}
 		});
 		return handlerInstanceCollection;
+	}
+
+	public static IChatComponent getVersionNotificationChatText(String handlerName, RemoteVersion version) {
+		IChatComponent part1 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part1", handlerName)
+				.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GREEN));
+		IChatComponent part2 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part2")
+				.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
+		IChatComponent part3 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part3",
+				version.getRemoteVersion().toString())
+						.setChatStyle(
+								version.getDownloadURL() != null
+										? new ChatStyle().setColor(EnumChatFormatting.YELLOW).setUnderlined(true)
+												.setChatClickEvent(new ClickEvent(Action.OPEN_URL, version.getDownloadURL().toString()))
+												.setChatHoverEvent(new HoverEvent(net.minecraft.event.HoverEvent.Action.SHOW_TEXT,
+														new ChatComponentText(StatCollector.translateToLocalFormatted(
+																"neiRecipeHandlers.versionChecker.notification.chat.version.tooltip"))))
+										: new ChatStyle().setColor(EnumChatFormatting.YELLOW));
+		part1.appendSibling(part2).appendSibling(part3);
+		if (version.getChangelogURL() != null) {
+			IChatComponent part4 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part4")
+					.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
+			IChatComponent part5 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part5")
+					.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.BLUE).setUnderlined(true)
+							.setChatClickEvent(new ClickEvent(Action.OPEN_URL, version.getChangelogURL().toString()))
+							.setChatHoverEvent(new HoverEvent(net.minecraft.event.HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+									StatCollector.translateToLocalFormatted("neiRecipeHandlers.versionChecker.notification.chat.changelog.tooltip")))));
+			IChatComponent part6 = new ChatComponentTranslation("neiRecipeHandlers.versionChecker.notification.chat.part6")
+					.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.WHITE));
+			part1.appendSibling(part4).appendSibling(part5).appendSibling(part6);
+		}
+
+		return part1;
+	}
+
+	public static boolean doVersionCheck(String handlerName, VersionChecker versionChecker, Logger logger) {
+		boolean ret = false;
+		try {
+			logger.debug(String.format("Starting version check for %s...", handlerName));
+			versionChecker.checkVersion();
+			if (versionChecker.getRemoteVersion() != null) {
+				logger.info(String.format("Found a remote version for %s: %s (%s version)", handlerName,
+						versionChecker.getRemoteVersion().getRemoteVersion().toString(), versionChecker.isNewVersionAvailable() ? "new" : "current"));
+				ret = true;
+			}
+		} catch (Exception e) {
+			logger.error(String.format("Version check failed for %s", handlerName), e);
+		}
+		return ret;
 	}
 
 }

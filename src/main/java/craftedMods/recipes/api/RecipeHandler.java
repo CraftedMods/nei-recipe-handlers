@@ -1,6 +1,5 @@
 package craftedMods.recipes.api;
 
-import java.net.URL;
 import java.util.*;
 
 import org.apache.logging.log4j.Logger;
@@ -102,14 +101,6 @@ public interface RecipeHandler<T extends Recipe> {
 	 * @return a set of one complicated static recipe or null if no recipe matches
 	 */
 	public T loadComplicatedStaticRecipe(ItemStack... stacks);
-
-	/**
-	 * Returns the URL of a file containing the current released version of the recipe handler. This will be used for an internal version checker, which notifies the user about new versions of the recipe handler. An internet connection is needed for
-	 * this. If the URL is null, no version checks will be made.
-	 *
-	 * @return An URL to a file containing informations about the current version of the recipe handler or null.
-	 */
-	public URL getVersionCheckerURL();
 
 	/**
 	 * Slots may be null //TODO: Doc!

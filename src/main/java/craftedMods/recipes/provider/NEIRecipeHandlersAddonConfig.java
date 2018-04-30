@@ -13,7 +13,7 @@ public class NEIRecipeHandlersAddonConfig implements IConfigureNEI {
 
 	@Override
 	public String getVersion() {
-		return NEIRecipeHandlers.mod.getVersionChecker().getCurrentVersion().getState().toString() + " " + NEIRecipeHandlers.VERSION;
+		return NEIRecipeHandlers.SEMANTIC_VERSION.toString();
 	}
 
 	@Override

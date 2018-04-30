@@ -1,7 +1,6 @@
 package craftedMods.recipes.base;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -89,11 +88,6 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 
 	@Override
 	public RecipeHandlerCacheManager<T> getRecipeHandlerCacheManager() {
-		return null;
-	}
-
-	@Override
-	public URL getVersionCheckerURL() {
 		return null;
 	}
 

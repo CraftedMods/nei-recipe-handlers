@@ -11,8 +11,9 @@ import codechicken.nei.api.API;
 import codechicken.nei.recipe.*;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.*;
-import craftedMods.recipes.utils.NEIRecipeHandlersUtils;
+import craftedMods.recipes.utils.*;
 import craftedMods.utils.ClassDiscoverer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,6 +27,8 @@ public class NEIIntegrationManager {
 
 	private Collection<ItemHidingHandler> itemHidingHandlers = new ArrayList<>();
 	private Collection<ItemOverrideHandler> itemOverrideHandlers = new ArrayList<>();
+
+	private Map<VersionCheckerHandler, VersionChecker> versionCheckers = new HashMap<>();
 
 	private Collection<Class<?>> recipeHandlersToRemove = new HashSet<>();
 
@@ -43,6 +46,7 @@ public class NEIIntegrationManager {
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ItemHidingHandler.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ItemOverrideHandler.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ResourceHandler.class);
+		this.discoverer.registerClassToDiscover(RegisteredHandler.class, VersionCheckerHandler.class);
 		this.discoverer.discoverClassesAsync();
 	}
 
@@ -65,6 +69,18 @@ public class NEIIntegrationManager {
 				this.itemHidingHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemHidingHandler.class));
 
 			this.itemOverrideHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemOverrideHandler.class));
+			if (this.config.isUseVersionChecker()) {
+				Collection<VersionCheckerHandler> versionCheckerHandlers = new ArrayList<>(
+						NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, VersionCheckerHandler.class));
+				for (VersionCheckerHandler handler : versionCheckerHandlers) {
+					if (handler.getCurrentVersion() == null || handler.getVersionFileURL() == null || !handler.getVersionFileURL().trim().isEmpty()) {
+						VersionChecker checker = new VersionChecker(handler.getVersionFileURL(), handler.getCurrentVersion());
+						if (NEIRecipeHandlersUtils.doVersionCheck(handler.getLocalizedHandlerName(), checker, logger)) {
+							this.versionCheckers.put(handler, checker);
+						}
+					}
+				}
+			}
 
 			this.logger.info("Initialized NEI configuration within " + (System.currentTimeMillis() - start) + " ms");
 		} catch (Exception e) {
@@ -121,6 +137,17 @@ public class NEIIntegrationManager {
 			this.registerItemOverrides();
 
 			this.logger.info("Loaded NEI configuration for within " + (System.currentTimeMillis() - start) + " ms");
+		}
+	}
+
+	public void onWorlLoad() {
+		if (this.config.isUseVersionChecker()) {
+			this.versionCheckers.forEach((handler, checker) -> {
+				if (checker.isNewVersionAvailable()) {
+					Minecraft.getMinecraft().thePlayer.addChatComponentMessage(
+							NEIRecipeHandlersUtils.getVersionNotificationChatText(handler.getLocalizedHandlerName(), checker.getRemoteVersion()));
+				}
+			});
 		}
 	}
 

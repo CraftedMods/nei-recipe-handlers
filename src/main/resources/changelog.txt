@@ -3,8 +3,10 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
 #2.0.0-ALPHA:
  + Added resource handler support
+ + Added version checker support
  
  - Removed the resource loading functions from RecipeHandler and RecipeHandlerFactory
+ - Removed a version checker related function from RecipeHandler
 
 #1.0.0-ALPHA:
  + Initial release
