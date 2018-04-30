@@ -78,6 +78,7 @@ public class NEIIntegrationManager {
 						VersionChecker checker = new VersionChecker(handler.getVersionFileURL(), handler.getCurrentVersion());
 						if (NEIRecipeHandlersUtils.doVersionCheck(handler.getLocalizedHandlerName(), checker, this.logger)) {
 							this.versionCheckers.put(handler, checker);
+							handler.onVersionCheck(checker.getRemoteVersion().getRemoteVersion());
 						}
 					}
 			}
