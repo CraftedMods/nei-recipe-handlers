@@ -1,0 +1,1 @@
+2.0.0-ALPHA||https://github.com/CraftedMods/nei-recipe-handlers/blob/master/src/main/resources/changelog.txt
