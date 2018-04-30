@@ -116,7 +116,7 @@ public class RecipeHandlerManager {
 							for (RecipeHandler<?> handler : this.recipeHandlers.values())
 								if (handler.getUnlocalizedName().equals(key)) {
 									wasHandlerFound = true;
-									RecipeHandlerCacheManager<?> cache = handler.getRecipeHandlerCacheManager();
+									RecipeHandlerCacheManager<?> cache = handler.getCacheManager();
 									if (cache != null && cache.isCacheEnabled()) {
 										NBTTagCompound headerTag = handlerTag.getCompoundTag(RecipeHandlerManager.RECIPE_HANDLER_HEADER_TAG_KEY);
 										if (cache.isCacheValid(headerTag)) {
@@ -269,8 +269,8 @@ public class RecipeHandlerManager {
 				cacheRootTag.setString(RecipeHandlerManager.NEI_RECIPE_HANDLERS_VERSION_TAG_KEY, NEIRecipeHandlers.VERSION);
 				for (RecipeHandler<?> handler : this.recipeHandlers.values()) {
 					try {
-						if (handler.getRecipeHandlerCacheManager() != null) {
-							RecipeHandlerCacheManager<?> cache = handler.getRecipeHandlerCacheManager();
+						if (handler.getCacheManager() != null) {
+							RecipeHandlerCacheManager<?> cache = handler.getCacheManager();
 							if (cache.isCacheEnabled()) {
 								NBTTagCompound handlerTag = new NBTTagCompound();
 								NBTTagCompound headerTag = new NBTTagCompound();

@@ -173,7 +173,7 @@ public interface RecipeHandler<T extends Recipe> {
 	 * 
 	 * @return A cache manager instance
 	 */
-	public RecipeHandlerCacheManager<T> getRecipeHandlerCacheManager();
+	public RecipeHandlerCacheManager<T> getCacheManager();
 
 	/**
 	 * Returns the crafting helper. NEI has a feature which allows the user to automatically move

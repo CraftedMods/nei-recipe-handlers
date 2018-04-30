@@ -93,7 +93,7 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 	public void onUpdate(int cycleticks) {}
 
 	@Override
-	public RecipeHandlerCacheManager<T> getRecipeHandlerCacheManager() {
+	public RecipeHandlerCacheManager<T> getCacheManager() {
 		return null;
 	}
 
