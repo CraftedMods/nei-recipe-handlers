@@ -48,7 +48,7 @@ public class NEIRecipeHandlers {
 	public static final String MODNAME = "NEI Recipe Handlers";
 	public static final String VERSION = "2.0.0-ALPHA";
 
-	public static final SemanticVersion SEMANTIC_VERSION = new SemanticVersion(EnumVersionState.ALPHA, 2, 0, 0);
+	public static final SemanticVersion SEMANTIC_VERSION = SemanticVersion.of(VERSION);
 
 	public static final String MOD_DIR_NAME = "neiRecipeHandlers";
 	public static final String ITEM_CACHE_FILE_NAME = "itemCache.dat";
