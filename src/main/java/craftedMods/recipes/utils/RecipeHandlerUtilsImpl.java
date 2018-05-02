@@ -111,4 +111,14 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 		NEIRecipeHandlers.mod.getNEIIntegrationManager().removeRecipeHandler(recipeHandlerClass);
 	}
 
+	@Override
+	public void writeItemStackToNBT(ItemStack stack, NBTTagCompound compound) {
+		NEIRecipeHandlersUtils.writeItemStackToNBT(stack, compound);
+	}
+
+	@Override
+	public ItemStack readItemStackFromNBT(NBTTagCompound compound) {
+		return NEIRecipeHandlersUtils.readItemStackFromNBT(compound);
+	}
+
 }

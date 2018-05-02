@@ -163,4 +163,26 @@ public interface RecipeHandlerUtils {
 	 */
 	public void removeNativeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException;
 
+	/**
+	 * Writes an item stack to the specified compound.</br>
+	 * Instead of the item name it's registry name will be saved - this allows more compatibility.
+	 * 
+	 * @param stack
+	 *            The item stack to save
+	 * @param compound
+	 *            The compound
+	 */
+	public void writeItemStackToNBT(ItemStack stack, NBTTagCompound compound);
+
+	/**
+	 * Reads an item stack from the specified compound.</br>
+	 * The stack has to be saved with
+	 * {@link craftedMods.recipes.api.utils.RecipeHandlerUtils#writeItemStackToNBT(ItemStack, NBTTagCompound)}.</br>
+	 * Returns null of no stack could be loaded.
+	 * 
+	 * @param compound The compound which contains the saved stack data
+	 * @return The loaded item stack or null
+	 */
+	public ItemStack readItemStackFromNBT(NBTTagCompound compound);
+
 }

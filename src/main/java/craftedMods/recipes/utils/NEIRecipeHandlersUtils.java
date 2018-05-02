@@ -98,7 +98,7 @@ public class NEIRecipeHandlersUtils {
 		if (compound.hasKey(tagName)) {
 			NBTTagList list = compound.getTagList(tagName, 10);
 			for (int i = 0; i < list.tagCount(); i++) {
-				ItemStack stack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(i));
+				ItemStack stack = readItemStackFromNBT(list.getCompoundTagAt(i));
 				if (stack != null) {
 					ret.add(stack);
 				}
@@ -111,7 +111,7 @@ public class NEIRecipeHandlersUtils {
 		NBTTagList list = new NBTTagList();
 		for (ItemStack stack : stacks) {
 			NBTTagCompound stackTag = new NBTTagCompound();
-			stack.writeToNBT(stackTag);
+			writeItemStackToNBT(stack, stackTag);
 			list.appendTag(stackTag);
 		}
 		compound.setTag(tagName, list);
@@ -199,6 +199,27 @@ public class NEIRecipeHandlersUtils {
 			}
 		} catch (Exception e) {
 			logger.error(String.format("Version check failed for %s", handlerName), e);
+		}
+		return ret;
+	}
+
+	public static void writeItemStackToNBT(ItemStack stack, NBTTagCompound compound) {
+		compound.setString("Identifier", Item.itemRegistry.getNameForObject(stack.getItem()));
+		compound.setInteger("Count", stack.stackSize);
+		compound.setInteger("Damage", stack.getItemDamage());
+		if (stack.getTagCompound() != null) compound.setTag("Tag", stack.getTagCompound());
+	}
+
+	public static ItemStack readItemStackFromNBT(NBTTagCompound compound) {
+		ItemStack ret = null;
+		Item item = (Item) Item.itemRegistry.getObject(compound.getString("Identifier"));
+		if (item != null) {
+			int stackSize = compound.getInteger("Count");
+			int itemDamage = compound.getInteger("Damage");
+			if (itemDamage < 0) itemDamage = 0;
+			NBTTagCompound tag = compound.hasKey("Tag", 10) ? compound.getCompoundTag("Tag") : null;
+			ret = new ItemStack(item, stackSize, itemDamage);
+			if (tag != null) ret.setTagCompound(tag);
 		}
 		return ret;
 	}
