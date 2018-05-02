@@ -21,7 +21,8 @@ import craftedMods.utils.SemanticVersion;
 /**
  * A handler which allows version checks.</br>
  * The internal version checker of the provider uses the data supplied by this handler to display
- * the user a message if a new version of this recipe handler unit is available. </br>
+ * the user a message if a new version of this recipe handler unit (usually it's a good choice to use 
+ * one version checker for several logically connected recipe handlers) is available. </br>
  * To be loaded, the handler needs to be annotated with
  * {@link craftedMods.recipes.api.RegisteredHandler}
  * 
@@ -41,7 +42,7 @@ public interface VersionCheckerHandler {
 	 * It consists of up to three columns separated by a '|'. The first column contains a semantic
 	 * version string of the current available version. The second column contains the download URL
 	 * of this version and the third the changelog URL. The last two columns are optional.</br>
-	 * If null or empty, no version checks will be made
+	 * If null or empty, no version checks will be made.
 	 * 
 	 * @return A URL to the version file
 	 */

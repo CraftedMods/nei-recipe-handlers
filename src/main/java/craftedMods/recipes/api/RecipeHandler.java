@@ -126,7 +126,7 @@ public interface RecipeHandler<T extends Recipe> {
 
 	/**
 	 * Loads a static recipe that needs a combination of item stacks, to example an alloy forge
-	 * recipe. Something like this is necessary if a mod doesn't provide an IRecipe instance but a
+	 * recipe. Something like this is necessary if a Mod doesn't provide an IRecipe instance but a
 	 * function like canSmelt(ItemStack ingredient, ItemStack alloyItem) that determines the recipe
 	 * dynamically. A collection of all possible item combinations has to be created which will be
 	 * sent to this function, which returns a cached recipe if the input matches with a "recipe".

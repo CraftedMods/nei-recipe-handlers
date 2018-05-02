@@ -31,7 +31,7 @@ import net.minecraft.item.ItemStack;
 public interface ItemHidingHandler {
 
 	/**
-	 * A collection of item stack which will be hidden in NEI.
+	 * A collection of item stacks which will be hidden in NEI.
 	 * 
 	 * @return The items stacks
 	 */

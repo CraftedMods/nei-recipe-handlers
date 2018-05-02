@@ -22,9 +22,9 @@ import craftedMods.recipes.utils.ItemStackSetImpl;
 import net.minecraft.item.ItemStack;
 
 /**
- * ItemStack hasn't an equals and hashCode implementation which means that it won't work well with
- * sets. A ItemStackSet is a set where ItemStacks can be used - just like with a normal set. But
- * instead of normal sets this will work well with ItemStacks.
+ * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with
+ * sets. A ItemStackSet is a set which contains ItemStacks - it can be used just like a normal set. But
+ * instead of a normal sets it will work well with ItemStacks.
  * 
  * @author CraftedMods
  * @param <V>

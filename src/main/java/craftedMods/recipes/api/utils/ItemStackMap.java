@@ -22,9 +22,9 @@ import craftedMods.recipes.utils.ItemStackMapImpl;
 import net.minecraft.item.ItemStack;
 
 /**
- * ItemStack hasn't an equals and hashCode implementation which means that it won't work well with
- * maps. A ItemStackMap is a map where ItemStacks can be used as keys - just like a normal map. But
- * instead of normal maps this will work well with ItemStacks.
+ * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with
+ * maps. An ItemStackMap is a map where ItemStacks can be used as keys - just like with normal maps. But
+ * instead of a "normal" map this map will work well with ItemStacks.
  * 
  * @author CraftedMods
  * @param <V>

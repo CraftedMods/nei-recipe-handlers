@@ -102,7 +102,7 @@ public interface RecipeHandlerUtils {
 	public List<ItemStack> getItemList();
 
 	/**
-	 * Reads an item stack list from a tag in the specified tag with the specified name.
+	 * Reads an item stack list from a tag of the specified compound with the specified name.
 	 * 
 	 * @param compound
 	 *            The tag compound

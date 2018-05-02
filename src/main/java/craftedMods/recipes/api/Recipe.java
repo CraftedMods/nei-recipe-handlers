@@ -23,17 +23,17 @@ import net.minecraft.item.ItemStack;
 
 /**
  * A recipe contains data about the creation of new items. </br>
- * It consists of ingredient - which will be consumed - and results, which will be produced. Also
- * there can be stacks which are neither ingredient nor results - to example fuel.
+ * It consists of ingredients - which will be consumed - and results, which will be produced. Also
+ * there can be stacks which are neither ingredients nor results - to example the fuel stacks in smelting recipes.
  * 
  * @author CraftedMods
  */
 public interface Recipe {
 
 	/**
-	 * Returns a list of ingredients with their permutations by the specified role. </br>
-	 * The role whether the items are results, ingredients or some other stacks of the recipe. The
-	 * list contains a set for each ingredient. Each set contains every valid substitute for this
+	 * Returns a list of recipe items with their permutations by the specified role. </br>
+	 * The role decides whether the items are results, ingredients or some other stacks of the recipe. The
+	 * list contains a set for each ingredient. Each set contains every valid substitute (permutation) for this
 	 * ingredient - to example many recipes accept several wood types.
 	 * 
 	 * @param role

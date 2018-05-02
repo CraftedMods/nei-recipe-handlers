@@ -24,7 +24,7 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * A handler which injects resources into the provider.</br>
- * As most recipe handlers shouldn't be their own mod, this is necessary so they can use features
+ * As most recipe handlers shouldn't be their own Mod, this is necessary so they can use features
  * which require a registered resource pack (to example localized strings with StatCollector). </br>
  * To be loaded, the handler needs to be annotated with
  * {@link craftedMods.recipes.api.RegisteredHandler}

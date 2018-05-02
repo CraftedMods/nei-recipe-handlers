@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * The crafting helper coordinates the recipe overlay and the automatic placement of recipe
- * ingredients in the devices GUI.
+ * ingredients in the GUI of the supported devices (to example a Crafting Table).
  * 
  * @author CraftedMods
  * @param <T>

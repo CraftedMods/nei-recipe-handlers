@@ -37,8 +37,8 @@ public interface RecipeHandlerCacheManager<T extends Recipe> {
 
 	/**
 	 * Returns whether the cache is valid. Must return false if invalidateCache was called and true
-	 * if validateCache was called. If getVersion is not equals to the cache manager version stored
-	 * in the header, it must return false. Valid means that the data stored there can be used and
+	 * if validateCache was called directly before. If getVersion is not equals to the cache manager version stored
+	 * in the cache header, it must return false. Valid means that the data stored there can be used and
 	 * that the cache don't has to be recreated.
 	 * 
 	 * @param cacheHeaderTag
