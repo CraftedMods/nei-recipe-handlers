@@ -1,7 +1,25 @@
+/*******************************************************************************
+ * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.provider;
 
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Logger;
 
@@ -9,8 +27,11 @@ import codechicken.nei.api.API;
 import codechicken.nei.recipe.*;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.*;
+import craftedMods.recipes.utils.*;
 import craftedMods.utils.ClassDiscoverer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class NEIIntegrationManager {
 
@@ -23,7 +44,11 @@ public class NEIIntegrationManager {
 	private Collection<ItemHidingHandler> itemHidingHandlers = new ArrayList<>();
 	private Collection<ItemOverrideHandler> itemOverrideHandlers = new ArrayList<>();
 
+	private Map<VersionCheckerHandler, VersionChecker> versionCheckers = new HashMap<>();
+
 	private Collection<Class<?>> recipeHandlersToRemove = new HashSet<>();
+
+	private ResourceHandlerResourcePack recipeHandlerResourcePack;
 
 	public NEIIntegrationManager(NEIRecipeHandlersConfiguration config, Logger logger) {
 		this.config = config;
@@ -36,6 +61,8 @@ public class NEIIntegrationManager {
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, RecipeHandlerFactory.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ItemHidingHandler.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ItemOverrideHandler.class);
+		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ResourceHandler.class);
+		this.discoverer.registerClassToDiscover(RegisteredHandler.class, VersionCheckerHandler.class);
 		this.discoverer.discoverClassesAsync();
 	}
 
@@ -46,15 +73,31 @@ public class NEIIntegrationManager {
 			Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses = this.discoverer
 					.getDiscoveredClasses(this.config.getClassDiscovererThreadTimeout());
 
+			this.setupResourceHandlerHandlerResourcePack(discoveredClasses);
+
 			this.recipeHandlerManager = new RecipeHandlerManager(this.config.getConfigFile(), discoveredClasses);
 
 			this.recipeHandlerManager.init(useCachedRecipes);
 
 			NEIRecipeHandlers.mod.getLogger().info("Enable item hiding handlers: " + this.config.isHideTechnicalBlocks());
 
-			if (this.config.isHideTechnicalBlocks()) this.discoverItemHidingHandlers(discoveredClasses);
+			if (this.config.isHideTechnicalBlocks()) {
+				this.itemHidingHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemHidingHandler.class));
+			}
 
-			this.discoverItemOverrideHandlers(discoveredClasses);
+			this.itemOverrideHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemOverrideHandler.class));
+			if (this.config.isUseVersionChecker()) {
+				Collection<VersionCheckerHandler> versionCheckerHandlers = new ArrayList<>(
+						NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, VersionCheckerHandler.class));
+				for (VersionCheckerHandler handler : versionCheckerHandlers)
+					if (handler.getCurrentVersion() == null || handler.getVersionFileURL() == null || !handler.getVersionFileURL().trim().isEmpty()) {
+						VersionChecker checker = new VersionChecker(handler.getVersionFileURL(), handler.getCurrentVersion());
+						if (NEIRecipeHandlersUtils.doVersionCheck(handler.getLocalizedHandlerName(), checker, this.logger)) {
+							this.versionCheckers.put(handler, checker);
+							handler.onVersionCheck(checker.getRemoteVersion().getRemoteVersion());
+						}
+					}
+			}
 
 			this.logger.info("Initialized NEI configuration within " + (System.currentTimeMillis() - start) + " ms");
 		} catch (Exception e) {
@@ -62,38 +105,22 @@ public class NEIIntegrationManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void discoverItemHidingHandlers(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
-		Set<Class<?>> itemHidingHandlers = discoveredClasses.get(RegisteredHandler.class).get(ItemHidingHandler.class);
-		NEIRecipeHandlers.mod.getLogger().info("Found " + itemHidingHandlers.size() + " item hiding handlers in classpath");
-		itemHidingHandlers.forEach(clazz -> {
-			try {
-				Class<? extends ItemHidingHandler> handler = (Class<? extends ItemHidingHandler>) clazz;
-				if (handler.getAnnotation(RegisteredHandler.class).isEnabled()) {
-					this.itemHidingHandlers.add(handler.newInstance());
-					NEIRecipeHandlers.mod.getLogger().debug("Successfully registered item hiding handler \"" + handler.getName() + "\"");
-				} else NEIRecipeHandlers.mod.getLogger().info("The item hiding handler \"" + handler.getName() + "\" was disabled by the author.");
-			} catch (Exception e) {
-				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
+	private void setupResourceHandlerHandlerResourcePack(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
+		Collection<ResourceHandler> handlersToRegister = new ArrayList<>(
+				NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ResourceHandler.class));
+		Iterator<ResourceHandler> handlersToRegisterIterator = handlersToRegister.iterator();
+		while (handlersToRegisterIterator.hasNext()) {
+			ResourceHandler handler = handlersToRegisterIterator.next();
+			Map<ResourceLocation, Supplier<InputStream>> resources = handler.getResources();
+			int resourceCount = resources == null ? 0 : resources.size();
+			this.logger.debug(String.format("The resource handler \"%s\" registered %d resources", handler.getClass().getName(), resourceCount));
+			if (resourceCount <= 0) {
+				handlersToRegisterIterator.remove();
 			}
-		});
-	}
-
-	@SuppressWarnings("unchecked")
-	private void discoverItemOverrideHandlers(Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses) {
-		Set<Class<?>> itemHOverrideHandlers = discoveredClasses.get(RegisteredHandler.class).get(ItemOverrideHandler.class);
-		NEIRecipeHandlers.mod.getLogger().info("Found " + itemHOverrideHandlers.size() + " item override handlers in classpath");
-		itemHOverrideHandlers.forEach(clazz -> {
-			try {
-				Class<? extends ItemOverrideHandler> handler = (Class<? extends ItemOverrideHandler>) clazz;
-				if (handler.getAnnotation(RegisteredHandler.class).isEnabled()) {
-					this.itemOverrideHandlers.add(handler.newInstance());
-					NEIRecipeHandlers.mod.getLogger().debug("Successfully registered item override handler \"" + handler.getName() + "\"");
-				} else NEIRecipeHandlers.mod.getLogger().info("The item override handler \"" + handler.getName() + "\" was disabled by the author.");
-			} catch (Exception e) {
-				NEIRecipeHandlers.mod.getLogger().error("Couldn't create an instance of class \"" + clazz.getName() + "\"", e);
-			}
-		});
+		}
+		this.recipeHandlerResourcePack = new ResourceHandlerResourcePack(handlersToRegister);
+		NEIRecipeHandlersUtils.registerDefaultResourcePack(this.recipeHandlerResourcePack);
+		this.logger.info("Registered the resource handler resource pack");
 	}
 
 	public void removeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException {
@@ -110,25 +137,42 @@ public class NEIIntegrationManager {
 			long start = System.currentTimeMillis();
 
 			// Remove recipe handlers
-			if (this.config.isBrewingRecipeHandlerDisabled()) this.removeCraftingAndUsageHandler(BrewingRecipeHandler.class);
+			if (this.config.isBrewingRecipeHandlerDisabled()) {
+				this.removeCraftingAndUsageHandler(BrewingRecipeHandler.class);
+			}
 
 			for (Class<?> recipeHandlerToRemove : this.recipeHandlersToRemove) {
-				if (IUsageHandler.class.isAssignableFrom(recipeHandlerToRemove))
+				if (IUsageHandler.class.isAssignableFrom(recipeHandlerToRemove)) {
 					this.removeUsageHandler((Class<? extends IUsageHandler>) recipeHandlerToRemove);
-				if (ICraftingHandler.class.isAssignableFrom(recipeHandlerToRemove))
+				}
+				if (ICraftingHandler.class.isAssignableFrom(recipeHandlerToRemove)) {
 					this.removeCraftingHandler((Class<? extends ICraftingHandler>) recipeHandlerToRemove);
+				}
 			}
 
 			// Load registered handlers
 			this.recipeHandlerManager.getRecipeHandlers().forEach((unlocalizedName, handler) -> this.loadHandler(new PluginRecipeHandler<>(handler)));
 
 			// Item hiding
-			if (this.config.isHideTechnicalBlocks()) this.registerHiddenItems();
+			if (this.config.isHideTechnicalBlocks()) {
+				this.registerHiddenItems();
+			}
 
 			// Override names
 			this.registerItemOverrides();
 
 			this.logger.info("Loaded NEI configuration for within " + (System.currentTimeMillis() - start) + " ms");
+		}
+	}
+
+	public void onWorlLoad() {
+		if (this.config.isUseVersionChecker()) {
+			this.versionCheckers.forEach((handler, checker) -> {
+				if (checker.isNewVersionAvailable()) {
+					Minecraft.getMinecraft().thePlayer.addChatComponentMessage(
+							NEIRecipeHandlersUtils.getVersionNotificationChatText(handler.getLocalizedHandlerName(), checker.getRemoteVersion()));
+				}
+			});
 		}
 	}
 

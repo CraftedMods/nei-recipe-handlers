@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.utils;
 
 import java.lang.annotation.Annotation;
@@ -25,10 +41,15 @@ public class ClassDiscoverer {
 
 	public boolean registerClassToDiscover(Class<? extends Annotation> annotationClass, Class<?> interfaceClass) {
 		if (this.canRegister) {
-			if (!this.registeredClasses.containsKey(annotationClass)) this.registeredClasses.put(annotationClass, new HashSet<>());
-			if (!this.discoveredClasses.containsKey(annotationClass)) this.discoveredClasses.put(annotationClass, new HashMap<>());
-			if (!this.discoveredClasses.get(annotationClass).containsKey(interfaceClass))
+			if (!this.registeredClasses.containsKey(annotationClass)) {
+				this.registeredClasses.put(annotationClass, new HashSet<>());
+			}
+			if (!this.discoveredClasses.containsKey(annotationClass)) {
+				this.discoveredClasses.put(annotationClass, new HashMap<>());
+			}
+			if (!this.discoveredClasses.get(annotationClass).containsKey(interfaceClass)) {
 				this.discoveredClasses.get(annotationClass).put(interfaceClass, new HashSet<>());
+			}
 			return this.registeredClasses.get(annotationClass).add(interfaceClass);
 		}
 		return false;
@@ -39,17 +60,20 @@ public class ClassDiscoverer {
 		this.discovererThread = new Thread(() -> {
 			long start = System.currentTimeMillis();
 			FastClasspathScanner scanner = new FastClasspathScanner();
-			for (Class<? extends Annotation> annotationClass : this.registeredClasses.keySet())
+			for (Class<? extends Annotation> annotationClass : this.registeredClasses.keySet()) {
 				scanner.matchClassesWithAnnotation(annotationClass, clazz -> {
 					try {
 						Class<?> loadedClass = Loader.instance().getModClassLoader().loadClass(clazz.getName());
 						for (Class<?> interfaceClass : this.registeredClasses.get(annotationClass))
-							if (interfaceClass.isAssignableFrom(loadedClass)) this.discoveredClasses.get(annotationClass).get(interfaceClass).add(loadedClass);
+							if (interfaceClass.isAssignableFrom(loadedClass)) {
+								this.discoveredClasses.get(annotationClass).get(interfaceClass).add(loadedClass);
+							}
 
 					} catch (Exception e) {
 						this.logger.error("Couldn't load class \"" + clazz.getName() + "\"", e);
 					}
 				});
+			}
 			scanner.scan(Runtime.getRuntime().availableProcessors());
 			this.logger.info("Scanned the classpath in " + (System.currentTimeMillis() - start) + " milliseconds");
 		});

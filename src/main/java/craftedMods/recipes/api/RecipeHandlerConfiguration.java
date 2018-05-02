@@ -1,11 +1,41 @@
+/*******************************************************************************
+ * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.api;
 
 import java.util.regex.Pattern;
 
+/**
+ * The recipe handler configuration allows a recipe handler to load and store configuration data in the configuration file of the provider. Each
+ * recipe handler gets it's own entry in there.
+ * 
+ * @author CraftedMods
+ */
 public interface RecipeHandlerConfiguration {
 
+	/**
+	 * Reloads the configuration data from the file
+	 */
 	public void reload();
 
+	/**
+	 * If false, the recipe handler was disabled via the configuration file, if true, not
+	 * 
+	 * @return Whether the recipe handler is enabled
+	 */
 	public boolean isEnabled();
 
 	public default String getString(String name, String defaultValue, String comment) {

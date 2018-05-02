@@ -14,23 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package craftedMods.recipes.api;
+package craftedMods.utils;
 
-/**
- * A position on the recipe handler GUI where an item stack is rendered.
- * 
- * @author CraftedMods
- */
-public interface RecipeItemSlot {
-
-	/**
-	 * @return The x coordinate of the position
-	 */
-	public int getX();
-
-	/**
-	 * @return The y coordinate of the position
-	 */
-	public int getY();
-
+public enum EnumVersionState {
+	ALPHA, BETA, FULL;
 }

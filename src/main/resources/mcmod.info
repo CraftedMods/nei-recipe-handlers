@@ -1,8 +1,8 @@
 [{	
     "modid" : "neirecipehandlers",	
     "name" : "NEI Recipe Handlers",	
-    "description" : "This Mod adds an extended recipe handler API for NEI",	
-    "version" : "Alpha 1.0.0",	
+    "description" : "This Mod adds an extended recipe handler API for NEI. The program is licensed under the terms of the GNU General Public License 3.0 as published by the Free Software Foundation. You'll find a copy if it at 'LICENSE' at the JAR file of the Mod.",	
+    "version" : "2.0.0-ALPHA",	
     "mcversion": "1.7.10",
     "url" : "https://github.com/CraftedMods/nei-recipe-handlers",	
     "updateUrl" : "",	

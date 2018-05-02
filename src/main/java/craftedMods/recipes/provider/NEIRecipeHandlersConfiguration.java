@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.provider;
 
 import java.io.File;
@@ -23,7 +39,7 @@ public class NEIRecipeHandlersConfiguration {
 		this.hideTechnicalBlocks = this.configFile.getBoolean("Enable item hiding handlers", Configuration.CATEGORY_GENERAL, this.hideTechnicalBlocks,
 				"Item hiding handlers hide items - typically technical block items - in NEI");
 		this.useVersionChecker = this.configFile.getBoolean("Use version checker", Configuration.CATEGORY_GENERAL, this.useVersionChecker,
-				"Enables/disables the version checker of the mod. If it is disabled, you won't be notified about new available versions.");
+				"Enables/disables the version checker of the mod. If it is disabled, you won't be notified about new available versions for the mod itself and any assigned handlers.");
 		this.brewingRecipeHandlerDisabled = this.configFile.getBoolean("Disable vanilla brewing recipe handler", Configuration.CATEGORY_GENERAL,
 				this.brewingRecipeHandlerDisabled,
 				"If set to true, the vanilla brewing recipe handler will be disabled. Set this to true if you don't use the vanilla brewing system.");
@@ -36,7 +52,9 @@ public class NEIRecipeHandlersConfiguration {
 		this.disabled = this.configFile.getBoolean("Disable NEI integration", Configuration.CATEGORY_GENERAL, this.disabled,
 				"If you want to disable NEI integration without removing the mod from your mods folder, you can do it by setting this property to true. This does not disable the version checker.");
 
-		if (this.configFile.hasChanged()) this.configFile.save();
+		if (this.configFile.hasChanged()) {
+			this.configFile.save();
+		}
 	}
 
 	public Configuration getConfigFile() {

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.utils;
 
 import java.util.*;
@@ -17,8 +33,9 @@ public class ItemStackSetImpl extends AbstractSet<ItemStack> implements ItemStac
 
 	public ItemStackSetImpl(boolean isNBTSensitive, ItemStack... stacks) {
 		this.isNBTSensitive = isNBTSensitive;
-		for (ItemStack stack : stacks)
+		for (ItemStack stack : stacks) {
 			this.add(stack);
+		}
 	}
 
 	public ItemStackSetImpl(Collection<? extends ItemStack> stacks) {
@@ -55,7 +72,9 @@ public class ItemStackSetImpl extends AbstractSet<ItemStack> implements ItemStac
 		ItemStackWrapper wrapper = new ItemStackWrapper(stack, this.isNBTSensitive);
 		if (!this.innerList.contains(wrapper)) {
 			ret = this.innerList.add(wrapper);
-			if (ret) this.stacksList.add(stack);
+			if (ret) {
+				this.stacksList.add(stack);
+			}
 		}
 		return ret;
 	}

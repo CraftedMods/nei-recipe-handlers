@@ -14,23 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package craftedMods.recipes.api;
+package craftedMods.recipes.utils;
 
-/**
- * A position on the recipe handler GUI where an item stack is rendered.
- * 
- * @author CraftedMods
- */
-public interface RecipeItemSlot {
+import java.net.URL;
 
-	/**
-	 * @return The x coordinate of the position
-	 */
-	public int getX();
+import craftedMods.utils.SemanticVersion;
 
-	/**
-	 * @return The y coordinate of the position
-	 */
-	public int getY();
+public class RemoteVersion {
+
+	private final SemanticVersion remoteVersion;
+	private final URL changelogURL;
+	private final URL downloadURL;
+
+	public RemoteVersion(SemanticVersion remoteVersion, URL downloadURL, URL changelogURL) {
+		this.remoteVersion = remoteVersion;
+		this.downloadURL = downloadURL;
+		this.changelogURL = changelogURL;
+	}
+
+	public SemanticVersion getRemoteVersion() {
+		return this.remoteVersion;
+	}
+
+	public URL getDownloadURL() {
+		return this.downloadURL;
+	}
+
+	public URL getChangelogURL() {
+		return this.changelogURL;
+	}
 
 }

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.utils;
 
 import java.util.*;
@@ -82,7 +98,9 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 			for (ItemStack item : RecipeHandlerUtils.getInstance().getItemList())
 				if (!excludedfuels.contains(item.getItem())) {
 					int burnTime = net.minecraft.tileentity.TileEntityFurnace.getItemBurnTime(item);
-					if (burnTime > 0) this.fuels.add(item.copy());
+					if (burnTime > 0) {
+						this.fuels.add(item.copy());
+					}
 				}
 		}
 		return ItemStackSet.create(this.fuels);
@@ -91,6 +109,16 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 	@Override
 	public void removeNativeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException {
 		NEIRecipeHandlers.mod.getNEIIntegrationManager().removeRecipeHandler(recipeHandlerClass);
+	}
+
+	@Override
+	public void writeItemStackToNBT(ItemStack stack, NBTTagCompound compound) {
+		NEIRecipeHandlersUtils.writeItemStackToNBT(stack, compound);
+	}
+
+	@Override
+	public ItemStack readItemStackFromNBT(NBTTagCompound compound) {
+		return NEIRecipeHandlersUtils.readItemStackFromNBT(compound);
 	}
 
 }

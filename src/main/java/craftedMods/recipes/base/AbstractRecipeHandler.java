@@ -1,7 +1,22 @@
+/*******************************************************************************
+ * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.base;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -12,7 +27,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 
 /**
- * A default implementation of some aspects of the RecipeHandler interface. Normally you should extend this class if you want to create a new recipe handler instead of implementing the interface directly.
+ * A default implementation of some aspects of the RecipeHandler interface. Normally you should extend this class if you want to create a new recipe
+ * handler instead of implementing the interface directly.
+ * 
+ * @author CraftedMods
+ * @param <T> The recipe type
  */
 public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeHandler<T> {
 
@@ -85,26 +104,11 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 	}
 
 	@Override
-	public Map<ResourceLocation, Supplier<InputStream>> getResources() {
-		return this.loadedResources;
-	}
-
-	@Override
 	public void onUpdate(int cycleticks) {}
 
 	@Override
-	public RecipeHandlerCacheManager<T> getRecipeHandlerCacheManager() {
+	public RecipeHandlerCacheManager<T> getCacheManager() {
 		return null;
-	}
-
-	@Override
-	public URL getVersionCheckerURL() {
-		return null;
-	}
-
-	@Override
-	public String getVersion() {
-		return "1.0";
 	}
 
 	@Override

@@ -14,23 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package craftedMods.recipes.api;
+package craftedMods.recipes.provider;
 
-/**
- * A position on the recipe handler GUI where an item stack is rendered.
- * 
- * @author CraftedMods
- */
-public interface RecipeItemSlot {
+import craftedMods.recipes.NEIRecipeHandlers;
+import craftedMods.recipes.api.*;
+import craftedMods.utils.SemanticVersion;
 
-	/**
-	 * @return The x coordinate of the position
-	 */
-	public int getX();
+@RegisteredHandler
+public class NEIRecipeHandlersVersionCheckerHandler implements VersionCheckerHandler {
 
-	/**
-	 * @return The y coordinate of the position
-	 */
-	public int getY();
+	@Override
+	public String getLocalizedHandlerName() {
+		return NEIRecipeHandlers.MODNAME;
+	}
+
+	@Override
+	public String getVersionFileURL() {
+		return "https://raw.githubusercontent.com/CraftedMods/nei-recipe-handlers/master/version.txt";
+	}
+
+	@Override
+	public SemanticVersion getCurrentVersion() {
+		return NEIRecipeHandlers.SEMANTIC_VERSION;
+	}
 
 }

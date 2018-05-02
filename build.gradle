@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0.0-alpha"
+version = "2.0.0-ALPHA"
 group= "craftedMods.recipes" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "neiRecipeHandlers"
 
@@ -46,6 +46,10 @@ jar {
         exclude "META-INF/**"
         exclude "META-INF/*"
     }
+    
+    from('./') {
+      include 'LICENSE'
+   }
 }
 
 processResources
@@ -64,6 +68,10 @@ processResources
         
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+    
+     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
