@@ -19,10 +19,9 @@ package craftedMods.recipes.base;
 import craftedMods.recipes.api.RecipeItemSlot;
 
 /**
- * A default implementation for {@link craftedMods.recipes.api.RecipeItemSlot}. 
- * Use it unless you need a custom one.
+ * A default implementation for {@link craftedMods.recipes.api.RecipeItemSlot}. Use it unless you need a custom one.
+ * 
  * @author CraftedMods
- *
  */
 public class RecipeItemSlotImpl implements RecipeItemSlot {
 

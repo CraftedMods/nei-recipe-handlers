@@ -20,11 +20,10 @@ import craftedMods.recipes.api.*;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * A base class for a cache manager. Usually you should extend this class 
- * if you want to create a cache manager because it already fulfills a part
- * of the implementation contract.
+ * A base class for a cache manager. Usually you should extend this class if you want to create a cache manager because it already fulfills a part of
+ * the implementation contract.
+ * 
  * @author CraftedMods
- *
  * @param <T> The recipe type processed by this handler
  */
 public abstract class AbstractRecipeHandlerCacheManager<T extends Recipe> implements RecipeHandlerCacheManager<T> {

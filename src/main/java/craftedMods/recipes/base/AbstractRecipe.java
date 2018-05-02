@@ -23,10 +23,10 @@ import craftedMods.recipes.api.utils.*;
 import net.minecraft.item.ItemStack;
 
 /**
- * A base class for recipes. Usually {@link craftedMods.recipes.base.ShapedRecipe} or
- * {@link craftedMods.recipes.base.ShapelessRecipe} are better choices - unless you need custom behaviour.
+ * A base class for recipes. Usually {@link craftedMods.recipes.base.ShapedRecipe} or {@link craftedMods.recipes.base.ShapelessRecipe} are better
+ * choices - unless you need custom behaviour.
+ * 
  * @author CraftedMods
- *
  */
 public abstract class AbstractRecipe implements Recipe {
 

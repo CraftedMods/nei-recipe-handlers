@@ -22,27 +22,23 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * The cache manager allows the user to store recipes which were computed before.</br>
- * They can be loaded later. This is especially useful if recipe computations are expensive - the
- * recipes will only be computed if they have to. Saving and reusing them can save a lot of time on
- * startup. The provider will automatically recreate the cache if the saved data were deprecated or
+ * They can be loaded later. This is especially useful if recipe computations are expensive - the recipes will only be computed if they have to.
+ * Saving and reusing them can save a lot of time on startup. The provider will automatically recreate the cache if the saved data were deprecated or
  * invalid.
  * 
  * @author CraftedMods
- * @param <T>
- *            The recipe type handled by the cache manager
+ * @param <T> The recipe type handled by the cache manager
  */
 public interface RecipeHandlerCacheManager<T extends Recipe> {
 
 	public boolean isCacheEnabled();
 
 	/**
-	 * Returns whether the cache is valid. Must return false if invalidateCache was called and true
-	 * if validateCache was called directly before. If getVersion is not equals to the cache manager version stored
-	 * in the cache header, it must return false. Valid means that the data stored there can be used and
-	 * that the cache don't has to be recreated.
+	 * Returns whether the cache is valid. Must return false if invalidateCache was called and true if validateCache was called directly before. If
+	 * getVersion is not equals to the cache manager version stored in the cache header, it must return false. Valid means that the data stored there
+	 * can be used and that the cache don't has to be recreated.
 	 * 
-	 * @param cacheHeaderTag
-	 *            A tag containing the cache header data
+	 * @param cacheHeaderTag A tag containing the cache header data
 	 * @return Whether the cache is valid
 	 */
 	public boolean isCacheValid(NBTTagCompound cacheHeaderTag);
@@ -59,34 +55,28 @@ public interface RecipeHandlerCacheManager<T extends Recipe> {
 
 	/**
 	 * A callback invoked if the data should be read from the cache. </br>
-	 * Overwrite it to read data from it. The cache content tag contains the recipe data, the header
-	 * metadata. The discovered recipes will be returned.
+	 * Overwrite it to read data from it. The cache content tag contains the recipe data, the header metadata. The discovered recipes will be
+	 * returned.
 	 * 
-	 * @param cacheHeaderTag
-	 *            The cache header data
-	 * @param cacheContentTag
-	 *            The cache content data
+	 * @param cacheHeaderTag The cache header data
+	 * @param cacheContentTag The cache content data
 	 * @return A collection containing the loaded recipes
 	 */
 	public Collection<T> readRecipesFromCache(NBTTagCompound cacheHeaderTag, NBTTagCompound cacheContentTag);
 
 	/**
 	 * A callback invoked if the data should be written to the cache. </br>
-	 * Overwrite it to write data to it. The recipe data should be written to the cache content tag;
-	 * only metadata belong to the header.</br>
+	 * Overwrite it to write data to it. The recipe data should be written to the cache content tag; only metadata belong to the header.</br>
 	 * The cache will be validated after this method was called.
 	 * 
-	 * @param cacheHeaderTag
-	 *            The cache header data
-	 * @param cacheContentTag
-	 *            The cache content data
+	 * @param cacheHeaderTag The cache header data
+	 * @param cacheContentTag The cache content data
 	 */
 	public void writeRecipesToCache(NBTTagCompound cacheHeaderTag, NBTTagCompound cacheContentTag);
 
 	/**
 	 * Returns the cache manager version.</br>
-	 * Change this if the cache structure etc. changed to indicate that the cache is no longer valid
-	 * and has to be recreated.
+	 * Change this if the cache structure etc. changed to indicate that the cache is no longer valid and has to be recreated.
 	 * 
 	 * @return The cache manager version
 	 */

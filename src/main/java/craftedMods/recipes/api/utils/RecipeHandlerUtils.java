@@ -43,8 +43,7 @@ public interface RecipeHandlerUtils {
 	 * Returns a set containing all permutations of all provided stacks.</br>
 	 * Permutations are all stacks, which are equal for crafting.
 	 * 
-	 * @param stacks
-	 *            The initial stack list
+	 * @param stacks The initial stack list
 	 * @return A set containing all permutations
 	 */
 	public ItemStackSet generatePermutations(ItemStack... stacks);
@@ -53,8 +52,7 @@ public interface RecipeHandlerUtils {
 	 * Returns a set containing all permutations of all provided stacks.</br>
 	 * Permutations of a stack are all stacks, which are equal for crafting.
 	 * 
-	 * @param stacks
-	 *            The initial stack list
+	 * @param stacks The initial stack list
 	 * @return A set containing all permutations
 	 */
 	public ItemStackSet generatePermutations(Collection<ItemStack> stacks);
@@ -63,23 +61,18 @@ public interface RecipeHandlerUtils {
 	 * Returns if the stacks are of the same type.</br>
 	 * This doesn't mean that these stacks would match in a crafting recipe.
 	 * 
-	 * @param stack1
-	 *            The first stack
-	 * @param stack2
-	 *            The second stack
+	 * @param stack1 The first stack
+	 * @param stack2 The second stack
 	 * @return Whether the stacks match
 	 */
 	public boolean areStacksSameType(ItemStack stack1, ItemStack stack2);
 
 	/**
 	 * Returns whether the stacks are the same type for crafting.</br>
-	 * This means that if one stack would be specified as a recipe ingredient, the other stack could
-	 * be used as an ingredient for this recipe.
+	 * This means that if one stack would be specified as a recipe ingredient, the other stack could be used as an ingredient for this recipe.
 	 * 
-	 * @param stack1
-	 *            The first stack
-	 * @param stack2
-	 *            The second stack
+	 * @param stack1 The first stack
+	 * @param stack2 The second stack
 	 * @return Whether the stacks match
 	 */
 	public boolean areStacksSameTypeForCrafting(ItemStack stack1, ItemStack stack2);
@@ -87,8 +80,7 @@ public interface RecipeHandlerUtils {
 	/**
 	 * Returns all item stacks that the provided object contains.
 	 * 
-	 * @param container
-	 *            The object from which the stacks will be extracted
+	 * @param container The object from which the stacks will be extracted
 	 * @return The extracted stacks
 	 */
 	public ItemStack[] extractRecipeItems(Object container);
@@ -104,36 +96,27 @@ public interface RecipeHandlerUtils {
 	/**
 	 * Reads an item stack list from a tag of the specified compound with the specified name.
 	 * 
-	 * @param compound
-	 *            The tag compound
-	 * @param tagName
-	 *            The name of the tag containing the list
+	 * @param compound The tag compound
+	 * @param tagName The name of the tag containing the list
 	 * @return A collection containing the stacks
 	 */
 	public Collection<ItemStack> readItemStackListFromNBT(NBTTagCompound compound, String tagName);
 
 	/**
-	 * Writes the provided item stack list to a tag in the specified compound with the specified
-	 * name
+	 * Writes the provided item stack list to a tag in the specified compound with the specified name
 	 * 
-	 * @param compound
-	 *            The tag compound
-	 * @param tagName
-	 *            The tag under which the list will be stored
-	 * @param stacks
-	 *            The stack list
+	 * @param compound The tag compound
+	 * @param tagName The tag under which the list will be stored
+	 * @param stacks The stack list
 	 */
 	public void writeItemStackListToNBT(NBTTagCompound compound, String tagName, Collection<? extends ItemStack> stacks);
 
 	/**
 	 * Offsets the recipe item slots in the list by the provided offset
 	 * 
-	 * @param slotsList
-	 *            The original slot lost
-	 * @param xOffset
-	 *            The x offset
-	 * @param yOffset
-	 *            The y offset
+	 * @param slotsList The original slot lost
+	 * @param xOffset The x offset
+	 * @param yOffset The y offset
 	 * @return The moved item stack slots
 	 */
 	public List<RecipeItemSlot> offset(List<RecipeItemSlot> slotsList, int xOffset, int yOffset);
@@ -156,10 +139,8 @@ public interface RecipeHandlerUtils {
 	/**
 	 * Allows you to remove "native" recipe handlers from NEI.
 	 * 
-	 * @param recipeHandlerClass
-	 *            The full class name of the recipe handler to remove
-	 * @throws ClassNotFoundException
-	 *             If the provided class wasn't found
+	 * @param recipeHandlerClass The full class name of the recipe handler to remove
+	 * @throws ClassNotFoundException If the provided class wasn't found
 	 */
 	public void removeNativeRecipeHandler(String recipeHandlerClass) throws ClassNotFoundException;
 
@@ -167,17 +148,14 @@ public interface RecipeHandlerUtils {
 	 * Writes an item stack to the specified compound.</br>
 	 * Instead of the item name it's registry name will be saved - this allows more compatibility.
 	 * 
-	 * @param stack
-	 *            The item stack to save
-	 * @param compound
-	 *            The compound
+	 * @param stack The item stack to save
+	 * @param compound The compound
 	 */
 	public void writeItemStackToNBT(ItemStack stack, NBTTagCompound compound);
 
 	/**
 	 * Reads an item stack from the specified compound.</br>
-	 * The stack has to be saved with
-	 * {@link craftedMods.recipes.api.utils.RecipeHandlerUtils#writeItemStackToNBT(ItemStack, NBTTagCompound)}.</br>
+	 * The stack has to be saved with {@link craftedMods.recipes.api.utils.RecipeHandlerUtils#writeItemStackToNBT(ItemStack, NBTTagCompound)}.</br>
 	 * Returns null of no stack could be loaded.
 	 * 
 	 * @param compound The compound which contains the saved stack data

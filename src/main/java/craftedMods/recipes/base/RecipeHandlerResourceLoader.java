@@ -33,15 +33,13 @@ public interface RecipeHandlerResourceLoader {
 	/**
 	 * Registers a resource which has to be loaded.
 	 * 
-	 * @param location
-	 *            The location of the resource
+	 * @param location The location of the resource
 	 * @return Whether the resource could be registered
 	 */
 	public boolean registerResource(ResourceLocation location);
 
 	/**
-	 * Loads the resources from the environment and assigns them to the resource locations under
-	 * which they were registered.
+	 * Loads the resources from the environment and assigns them to the resource locations under which they were registered.
 	 * 
 	 * @return The loaded resources
 	 */

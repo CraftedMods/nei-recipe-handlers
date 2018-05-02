@@ -19,8 +19,8 @@ package craftedMods.recipes.api;
 import java.util.regex.Pattern;
 
 /**
- * The recipe handler configuration allows a recipe handler to load and store configuration data in
- * the configuration file of the provider. Each recipe handler gets it's own entry in there.
+ * The recipe handler configuration allows a recipe handler to load and store configuration data in the configuration file of the provider. Each
+ * recipe handler gets it's own entry in there.
  * 
  * @author CraftedMods
  */

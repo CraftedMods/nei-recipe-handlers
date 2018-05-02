@@ -87,10 +87,8 @@ public abstract class CraftingGridRecipeHandler extends AbstractRecipeHandler<Ab
 	 * Invoked if a recipe type was found which couldn'd be processed.</br>
 	 * The recipe can be processed in child classes which can add it to the "container".
 	 * 
-	 * @param recipe
-	 *            The "undefined" recipe instance
-	 * @param container
-	 *            The list to which the processed recipe could be added
+	 * @param recipe The "undefined" recipe instance
+	 * @param container The list to which the processed recipe could be added
 	 */
 	protected void undefinedRecipeTypeFound(IRecipe recipe, Collection<AbstractRecipe> container) {
 		if (this.logUndefinedRecipeTypes) {

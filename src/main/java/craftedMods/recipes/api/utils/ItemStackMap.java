@@ -22,13 +22,11 @@ import craftedMods.recipes.utils.ItemStackMapImpl;
 import net.minecraft.item.ItemStack;
 
 /**
- * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with
- * maps. An ItemStackMap is a map where ItemStacks can be used as keys - just like with normal maps. But
- * instead of a "normal" map this map will work well with ItemStacks.
+ * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with maps. An ItemStackMap is a map where
+ * ItemStacks can be used as keys - just like with normal maps. But instead of a "normal" map this map will work well with ItemStacks.
  * 
  * @author CraftedMods
- * @param <V>
- *            The value type of the map
+ * @param <V> The value type of the map
  */
 public interface ItemStackMap<V> extends Map<ItemStack, V> {
 
@@ -44,8 +42,7 @@ public interface ItemStackMap<V> extends Map<ItemStack, V> {
 	/**
 	 * Creates an item stack map which can be configured to be NBT sensitive
 	 * 
-	 * @param isNBTSensitive
-	 *            If true, the returned map will be NBT sensitive, if false, not
+	 * @param isNBTSensitive If true, the returned map will be NBT sensitive, if false, not
 	 * @return The item stack map
 	 */
 	public static <T> ItemStackMap<T> create(boolean isNBTSensitive) {

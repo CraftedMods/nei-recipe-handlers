@@ -22,21 +22,18 @@ import craftedMods.recipes.utils.ItemStackSetImpl;
 import net.minecraft.item.ItemStack;
 
 /**
- * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with
- * sets. A ItemStackSet is a set which contains ItemStacks - it can be used just like a normal set. But
- * instead of a normal sets it will work well with ItemStacks.
+ * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with sets. A ItemStackSet is a set which contains
+ * ItemStacks - it can be used just like a normal set. But instead of a normal sets it will work well with ItemStacks.
  * 
  * @author CraftedMods
- * @param <V>
- *            The value type of the map
+ * @param <V> The value type of the map
  */
 public interface ItemStackSet extends Set<ItemStack> {
 
 	/**
 	 * Returns an NBT insensitive item stack set containing the provided stacks
 	 * 
-	 * @param stacks
-	 *            The stacks to add
+	 * @param stacks The stacks to add
 	 * @return The item stack set
 	 */
 	public static ItemStackSet create(ItemStack... stacks) {
@@ -46,10 +43,8 @@ public interface ItemStackSet extends Set<ItemStack> {
 	/**
 	 * Returns an item stack set containing the provided stacks
 	 * 
-	 * @param isNBTSensitive
-	 *            If true, the set will be NBT sensitive, if false, not
-	 * @param stacks
-	 *            The stacks to add
+	 * @param isNBTSensitive If true, the set will be NBT sensitive, if false, not
+	 * @param stacks The stacks to add
 	 * @return The item stack set
 	 */
 	public static ItemStackSet create(boolean isNBTSensitive, ItemStack... stacks) {
@@ -59,8 +54,7 @@ public interface ItemStackSet extends Set<ItemStack> {
 	/**
 	 * Returns an NBT insensitive item stack set containing the provided stacks
 	 * 
-	 * @param stacks
-	 *            The stacks to add
+	 * @param stacks The stacks to add
 	 * @return The item stack set
 	 */
 	public static ItemStackSet create(Collection<? extends ItemStack> stacks) {
@@ -70,10 +64,8 @@ public interface ItemStackSet extends Set<ItemStack> {
 	/**
 	 * Returns an item stack set containing the provided stacks
 	 * 
-	 * @param isNBTSensitive
-	 *            If true, the set will be NBT sensitive, if false, not
-	 * @param stacks
-	 *            The stacks to add
+	 * @param isNBTSensitive If true, the set will be NBT sensitive, if false, not
+	 * @param stacks The stacks to add
 	 * @return The item stack set
 	 */
 	public static ItemStackSet create(boolean isNBTSensitive, Collection<? extends ItemStack> stacks) {
