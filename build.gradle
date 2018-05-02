@@ -46,6 +46,10 @@ jar {
         exclude "META-INF/**"
         exclude "META-INF/*"
     }
+    
+    from('./') {
+      include 'LICENSE'
+   }
 }
 
 processResources
@@ -64,6 +68,10 @@ processResources
         
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+    
+     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
