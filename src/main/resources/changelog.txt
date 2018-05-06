@@ -2,6 +2,7 @@
 Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
 #2.0.1-ALPHA:
+ + Updated FastClasspathScanner
 
 #2.0.0-ALPHA:
  + Added resource handler support
