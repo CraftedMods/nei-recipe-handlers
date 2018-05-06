@@ -34,7 +34,7 @@ configurations {
 }
 
 dependencies {
-    exports 'io.github.lukehutch:fast-classpath-scanner:2.4.2'
+    exports 'io.github.lukehutch:fast-classpath-scanner:2.20.0'
     configurations.compile.extendsFrom(configurations.exports)
 }
 
