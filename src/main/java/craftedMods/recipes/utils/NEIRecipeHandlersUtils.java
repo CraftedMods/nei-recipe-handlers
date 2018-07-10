@@ -32,6 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.event.*;
 import net.minecraft.event.ClickEvent.Action;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
 import net.minecraft.util.*;
@@ -67,12 +68,20 @@ public class NEIRecipeHandlersUtils {
 	}
 
 	public static ItemStack[] extractRecipeItems(Object container) {
+		ItemStack[] ret = null;
 		if (container instanceof String) {
 			List<ItemStack> stacks = OreDictionary.getOres((String) container);
-			return stacks.toArray(new ItemStack[stacks.size()]);
-		} else if (container instanceof Item) return new ItemStack[] { new ItemStack((Item) container) };
-		else if (container instanceof Block) return new ItemStack[] { new ItemStack((Block) container) };
-		else return NEIServerUtils.extractRecipeItems(container);
+			ret = stacks.toArray(new ItemStack[stacks.size()]);
+		} else if (container instanceof Item) ret = new ItemStack[] { new ItemStack((Item) container) };
+		else if (container instanceof Block) ret = new ItemStack[] { new ItemStack((Block) container) };
+		else ret = NEIServerUtils.extractRecipeItems(container);
+		if (ret != null) {
+			for (int i = 0; i < ret.length; i++) {
+				ItemStack stack = ret[i];
+				if (stack == null || stack.getItem() == null) ret[i] = new ItemStack(Blocks.fire);
+			}
+		}
+		return ret;
 	}
 
 	public static List<ItemStack> getItemList() {

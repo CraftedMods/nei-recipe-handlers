@@ -2,6 +2,7 @@
 Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
 #2.0.2-ALPHA:
+ * Fixed a crash with broken recipes
 
 #2.0.1-ALPHA:
  + Updated FastClasspathScanner
