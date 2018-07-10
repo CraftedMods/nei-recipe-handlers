@@ -46,7 +46,7 @@ public class NEIRecipeHandlers {
 
 	public static final String MODID = "neirecipehandlers";
 	public static final String MODNAME = "NEI Recipe Handlers";
-	public static final String VERSION = "2.0.1-ALPHA";
+	public static final String VERSION = "2.0.2-ALPHA";
 
 	public static final SemanticVersion SEMANTIC_VERSION = SemanticVersion.of(VERSION);
 

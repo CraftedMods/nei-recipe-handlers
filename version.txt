@@ -1,1 +1,1 @@
-2.0.1-ALPHA|http://zipansion.com/PcbX|https://github.com/CraftedMods/nei-recipe-handlers/blob/master/src/main/resources/changelog.txt
+2.0.2-ALPHA|https://github.com/CraftedMods/nei-recipe-handlers/releases|https://github.com/CraftedMods/nei-recipe-handlers/blob/master/src/main/resources/changelog.txt
