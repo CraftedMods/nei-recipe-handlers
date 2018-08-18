@@ -65,19 +65,11 @@ public class VersionChecker {
 	}
 
 	private String downloadVersionFile() throws IOException {
-		InputStream stream = new URL(this.versionFileURL).openStream();
-
-		String tmp = new String();
-		String tmp2 = new String();
-		byte[] buffer = new byte[1024];
-
-		while (stream.read(buffer) != -1) {
-			tmp = new String(buffer);
-			buffer = new byte[1024];
-			tmp2 = tmp2.concat(tmp);
+		try (InputStream stream = new URL(versionFileURL).openStream();
+				InputStreamReader bridge = new InputStreamReader(stream);
+				BufferedReader reader = new BufferedReader(bridge)) {
+			return reader.readLine();
 		}
-		tmp2.trim();
-		return tmp2;
 	}
 
 	private RemoteVersion parseVersionFile(String versionString) throws MalformedURLException {
