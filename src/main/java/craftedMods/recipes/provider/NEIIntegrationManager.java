@@ -166,7 +166,7 @@ public class NEIIntegrationManager {
 		}
 	}
 
-	public void onWorlLoad() {
+	public void onWorldLoad() {
 		if (this.config.isUseVersionChecker()) {
 			this.versionCheckers.forEach((handler, checker) -> {
 				if (checker.compareRemoteVersion() == EnumVersionComparison.NEWER) {

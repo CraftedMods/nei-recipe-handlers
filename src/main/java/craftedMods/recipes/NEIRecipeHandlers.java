@@ -199,7 +199,7 @@ public class NEIRecipeHandlers {
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event) {
 		if (this.worldLoaded && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer != null) {
-			this.neiIntegrationManager.onWorlLoad();
+			this.neiIntegrationManager.onWorldLoad();
 			this.worldLoaded = false;
 		}
 	}
