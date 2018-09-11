@@ -49,7 +49,7 @@ dependencies {
     compile 'codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev'
     compile 'codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev'
     
-    exports 'io.github.lukehutch:fast-classpath-scanner:2.20.0'
+    exports 'io.github.lukehutch:fast-classpath-scanner:2.21'
     configurations.compile.extendsFrom(configurations.exports)
 }
 

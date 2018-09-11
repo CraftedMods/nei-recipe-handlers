@@ -2,6 +2,8 @@
 Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
 #2.0.2-ALPHA:
+ + Updated FastClasspathScanner to v2.21
+
  * Fixed a crash with broken recipes
  * Improved the performance of the version checker
  * Fixed that older remote versions were described as current ones in the logs
