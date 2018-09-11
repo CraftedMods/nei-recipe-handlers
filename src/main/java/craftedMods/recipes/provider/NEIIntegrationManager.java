@@ -31,10 +31,11 @@ import craftedMods.recipes.utils.*;
 import craftedMods.recipes.utils.VersionChecker.EnumVersionComparison;
 import craftedMods.utils.ClassDiscoverer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class NEIIntegrationManager {
+public class NEIIntegrationManager implements IResourceManagerReloadListener {
 
 	private final NEIRecipeHandlersConfiguration config;
 	private final Logger logger;
@@ -50,6 +51,8 @@ public class NEIIntegrationManager {
 	private Collection<Class<?>> recipeHandlersToRemove = new HashSet<>();
 
 	private ResourceHandlerResourcePack recipeHandlerResourcePack;
+
+	private boolean wasLoaded = false;
 
 	public NEIIntegrationManager(NEIRecipeHandlersConfiguration config, Logger logger) {
 		this.config = config;
@@ -75,6 +78,14 @@ public class NEIIntegrationManager {
 					.getDiscoveredClasses(this.config.getClassDiscovererThreadTimeout());
 
 			this.setupResourceHandlerHandlerResourcePack(discoveredClasses);
+
+			if (Minecraft.getMinecraft().getResourceManager() instanceof IReloadableResourceManager) {
+				IReloadableResourceManager resourceManager = (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager();
+				resourceManager.registerReloadListener(this);
+			} else {
+				this.logger.warn(String.format("The MC resource manager doesn't implement %s. Some features of %s are therefore not available."),
+						IReloadableResourceManager.class.getName(), NEIRecipeHandlers.MODNAME);
+			}
 
 			this.recipeHandlerManager = new RecipeHandlerManager(this.config.getConfigFile(), discoveredClasses);
 
@@ -162,6 +173,8 @@ public class NEIIntegrationManager {
 			// Override names
 			this.registerItemOverrides();
 
+			wasLoaded = true;
+
 			this.logger.info("Loaded NEI configuration for within " + (System.currentTimeMillis() - start) + " ms");
 		}
 	}
@@ -179,6 +192,14 @@ public class NEIIntegrationManager {
 
 	public void refreshCache() {
 		this.recipeHandlerManager.refreshCache();
+	}
+
+	@Override
+	public void onResourceManagerReload(IResourceManager manager) {
+		if (wasLoaded) {
+			this.registerItemOverrides();
+			this.logger.info("Reloaded the item override handlers");
+		}
 	}
 
 	private void loadHandler(TemplateRecipeHandler handler) {

@@ -5,6 +5,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
  * Fixed a crash with broken recipes
  * Improved the performance of the version checker
  * Fixed that older remote versions were described as current ones in the logs
+ * Fixed that item override names weren't updated if the language was changed
 
 #2.0.1-ALPHA:
  + Updated FastClasspathScanner
