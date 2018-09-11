@@ -4,6 +4,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 #2.0.2-ALPHA:
  * Fixed a crash with broken recipes
  * Improved the performance of the version checker
+ * Fixed that older remote versions were described as current ones in the logs
 
 #2.0.1-ALPHA:
  + Updated FastClasspathScanner

@@ -34,7 +34,7 @@ public class VersionChecker {
 		this.versionFileURL = versionFileURL;
 	}
 
-	public boolean checkVersion() {
+	public EnumVersionComparison checkVersion() {
 		if (this.ping()) {
 			try {
 				this.remoteVersion = this.parseVersionFile(this.downloadVersionFile());
@@ -45,7 +45,7 @@ public class VersionChecker {
 						e);
 			}
 		}
-		return this.isNewVersionAvailable();
+		return this.compareRemoteVersion();
 	}
 
 	private boolean ping() {
@@ -98,8 +98,19 @@ public class VersionChecker {
 		return this.remoteVersion;
 	}
 
-	public boolean isNewVersionAvailable() {
-		return this.remoteVersion != null && this.localVersion.compareTo(this.remoteVersion.getRemoteVersion()) < 0;
+	public EnumVersionComparison compareRemoteVersion() {
+		int comp = this.remoteVersion != null ? this.localVersion.compareTo(this.remoteVersion.getRemoteVersion()) : 0;
+		if (comp == 0) return EnumVersionComparison.CURRENT;
+		else if (comp < 0) return EnumVersionComparison.NEWER;
+		else return EnumVersionComparison.OLDER;
+	}
+
+	public enum EnumVersionComparison {
+		CURRENT, OLDER, NEWER;
+
+		public String toDisplayString() {
+			return this.name().toLowerCase();
+		}
 	}
 
 }

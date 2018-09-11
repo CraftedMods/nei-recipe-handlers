@@ -203,7 +203,7 @@ public class NEIRecipeHandlersUtils {
 			versionChecker.checkVersion();
 			if (versionChecker.getRemoteVersion() != null) {
 				logger.info(String.format("Found a remote version for %s: %s (%s version)", handlerName,
-						versionChecker.getRemoteVersion().getRemoteVersion().toString(), versionChecker.isNewVersionAvailable() ? "new" : "current"));
+						versionChecker.getRemoteVersion().getRemoteVersion().toString(), versionChecker.compareRemoteVersion().toDisplayString()));
 				ret = true;
 			}
 		} catch (Exception e) {

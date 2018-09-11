@@ -28,6 +28,7 @@ import codechicken.nei.recipe.*;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.*;
 import craftedMods.recipes.utils.*;
+import craftedMods.recipes.utils.VersionChecker.EnumVersionComparison;
 import craftedMods.utils.ClassDiscoverer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -168,7 +169,7 @@ public class NEIIntegrationManager {
 	public void onWorlLoad() {
 		if (this.config.isUseVersionChecker()) {
 			this.versionCheckers.forEach((handler, checker) -> {
-				if (checker.isNewVersionAvailable()) {
+				if (checker.compareRemoteVersion() == EnumVersionComparison.NEWER) {
 					Minecraft.getMinecraft().thePlayer.addChatComponentMessage(
 							NEIRecipeHandlersUtils.getVersionNotificationChatText(handler.getLocalizedHandlerName(), checker.getRemoteVersion()));
 				}
