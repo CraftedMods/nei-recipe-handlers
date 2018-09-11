@@ -6,6 +6,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
  * Improved the performance of the version checker
  * Fixed that older remote versions were described as current ones in the logs
  * Fixed that item override names weren't updated if the language was changed
+ * Replaced the item cache with an environment cache, which tracks all installed mods
 
 #2.0.1-ALPHA:
  + Updated FastClasspathScanner

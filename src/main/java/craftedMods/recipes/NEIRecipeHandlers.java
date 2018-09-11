@@ -29,8 +29,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import craftedMods.recipes.provider.*;
-import craftedMods.recipes.utils.NEIRecipeHandlersUtils;
-import craftedMods.utils.*;
+import craftedMods.utils.SemanticVersion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,7 +50,7 @@ public class NEIRecipeHandlers {
 	public static final SemanticVersion SEMANTIC_VERSION = SemanticVersion.of(VERSION);
 
 	public static final String MOD_DIR_NAME = "neiRecipeHandlers";
-	public static final String ITEM_CACHE_FILE_NAME = "itemCache.dat";
+	public static final String ENVIRONMENT_CACHE_FILE_NAME = "environmentCache.dat";
 	public static final String RECIPE_CACHE_FILE_NAME = "recipeCache.dat";
 
 	private Logger logger;
@@ -59,7 +58,7 @@ public class NEIRecipeHandlers {
 	private NEIIntegrationManager neiIntegrationManager;
 
 	private File modDir;
-	private File itemCache;
+	private File environmentCache;
 	private File recipeCache;
 
 	private boolean worldLoaded = false;
@@ -100,14 +99,14 @@ public class NEIRecipeHandlers {
 		}
 
 		try {
-			this.itemCache = new File(this.modDir.getPath() + File.separator + NEIRecipeHandlers.ITEM_CACHE_FILE_NAME);
+			this.environmentCache = new File(this.modDir.getPath() + File.separator + NEIRecipeHandlers.ENVIRONMENT_CACHE_FILE_NAME);
 
-			if (!this.itemCache.exists()) {
-				this.itemCache.createNewFile();
-				this.logger.debug("Successfully created the item cache file");
+			if (!this.environmentCache.exists()) {
+				this.environmentCache.createNewFile();
+				this.logger.debug("Successfully created the environment cache file");
 			}
 		} catch (Exception e) {
-			this.logger.error("Couldn't create the item cache file: ");
+			this.logger.error("Couldn't create the environment cache file: ");
 			throw e;
 		}
 
@@ -152,34 +151,41 @@ public class NEIRecipeHandlers {
 			}
 		}
 
-		this.neiIntegrationManager.init(this.checkItemCache());
+		this.neiIntegrationManager.init(this.checkEnvironmentCache());
 	}
 
-	private boolean checkItemCache() {
+	private boolean checkEnvironmentCache() {
 		boolean canCacheBeUsed = false;
 		this.logger.info("Recipe caching enabled: " + this.config.isComplicatedStaticRecipeLoadingCacheEnabled());
+
 		if (this.config.isComplicatedStaticRecipeLoadingCacheEnabled()) {
-			NBTTagCompound currentItemListTag = new NBTTagCompound();
-			NEIRecipeHandlersUtils.writeItemStackListToNBT(currentItemListTag, "items", ItemList.items);
-			boolean recreateItemList = true;
-			try (FileInputStream in = new FileInputStream(this.itemCache)) {
+			NBTTagCompound currentEnvironmentListTag = new NBTTagCompound();
+			for (ModContainer mod : Loader.instance().getModList()) {
+				NBTTagCompound modTag = new NBTTagCompound();
+				modTag.setString("Name", mod.getName());
+				modTag.setString("Version", mod.getVersion());
+				currentEnvironmentListTag.setTag(mod.getModId(), modTag);
+			}
+
+			boolean recreateEnvironmentCache = true;
+			try (FileInputStream in = new FileInputStream(this.environmentCache)) {
 				NBTTagCompound savedItemListTag = CompressedStreamTools.readCompressed(in);
-				recreateItemList = !savedItemListTag.equals(currentItemListTag);
+				recreateEnvironmentCache = !savedItemListTag.equals(currentEnvironmentListTag);
 			} catch (Exception e) {
-				this.logger.warn("The item cache couldn't be loaded: ", e);
+				this.logger.warn("The environment cache couldn't be loaded: ", e);
 			}
-			canCacheBeUsed = !recreateItemList;
-			if (recreateItemList) {
-				this.logger.info("The item cache has to be (re)created");
-			}
-			if (recreateItemList) {
-				try (FileOutputStream out = new FileOutputStream(this.itemCache)) {
-					CompressedStreamTools.writeCompressed(currentItemListTag, out);
-					this.logger.info("Wrote the item cache to the filesystem");
+
+			if (recreateEnvironmentCache) {
+				this.logger.info("The environment cache has to be (re)created");
+				try (FileOutputStream out = new FileOutputStream(this.environmentCache)) {
+					CompressedStreamTools.writeCompressed(currentEnvironmentListTag, out);
+					this.logger.info("Wrote the environment cache to the filesystem");
 				} catch (Exception e) {
-					this.logger.error("Couldn't write the item cache to the filesystem: ", e);
+					this.logger.error("Couldn't write the environment cache to the filesystem: ", e);
 				}
 			}
+			
+			canCacheBeUsed = !recreateEnvironmentCache;
 		}
 		return canCacheBeUsed;
 	}

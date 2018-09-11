@@ -47,7 +47,6 @@ public class RecipeHandlerManager {
 
 	private static final int COMPLICATED_STATIC_RECIPE_BATCH_SIZE = 300;
 
-	public static final String NEI_RECIPE_HANDLERS_VERSION_TAG_KEY = "neiRecipeHandlersVersion";
 	public static final String RECIPE_HANDLER_HEADER_TAG_KEY = "header";
 	public static final String RECIPE_HANDLER_CONTENT_TAG_KEY = "content";
 
@@ -124,48 +123,42 @@ public class RecipeHandlerManager {
 		if (NEIRecipeHandlers.mod.getConfig().isComplicatedStaticRecipeLoadingCacheEnabled()) {
 			try (FileInputStream in = new FileInputStream(NEIRecipeHandlers.mod.getRecipeCache())) {
 				NBTTagCompound cacheRootTag = CompressedStreamTools.readCompressed(in);
-				if (cacheRootTag.getString(RecipeHandlerManager.NEI_RECIPE_HANDLERS_VERSION_TAG_KEY).equals(NEIRecipeHandlers.VERSION)) {
-					for (String key : (Set<String>) cacheRootTag.func_150296_c())
-						if (!key.equals(RecipeHandlerManager.NEI_RECIPE_HANDLERS_VERSION_TAG_KEY)) {
-							NBTTagCompound handlerTag = cacheRootTag.getCompoundTag(key);
-							boolean wasHandlerFound = false;
-							for (RecipeHandler<?> handler : this.recipeHandlers.values())
-								if (handler.getUnlocalizedName().equals(key)) {
-									wasHandlerFound = true;
-									RecipeHandlerCacheManager<?> cache = handler.getCacheManager();
-									if (cache != null && cache.isCacheEnabled()) {
-										NBTTagCompound headerTag = handlerTag.getCompoundTag(RecipeHandlerManager.RECIPE_HANDLER_HEADER_TAG_KEY);
-										if (cache.isCacheValid(headerTag)) {
-											Collection<? extends Recipe> readRecipes = cache.readRecipesFromCache(headerTag,
-													handlerTag.getCompoundTag(RecipeHandlerManager.RECIPE_HANDLER_CONTENT_TAG_KEY));
-											if (readRecipes != null && !readRecipes.isEmpty()) {
-												if (!cachedRecipes.containsKey(handler)) {
-													cachedRecipes.put(handler, new ArrayList<>());
-												}
-												cachedRecipes.get(handler).addAll(readRecipes);
-												NEIRecipeHandlers.mod.getLogger().info("The recipe handler \"" + handler.getUnlocalizedName() + "\" loaded "
-														+ readRecipes.size() + " recipes from the cache");
-											} else {
-												NEIRecipeHandlers.mod.getLogger()
-														.info("The recipe handler \"" + handler.getUnlocalizedName() + "\" loaded no recipes from the cache");
-											}
-										} else {
-											NEIRecipeHandlers.mod.getLogger()
-													.info("The cache of the recipe handler \"" + key + "\" is not valid, the discovered data won't be used");
+				for (String key : (Set<String>) cacheRootTag.func_150296_c()) {
+					NBTTagCompound handlerTag = cacheRootTag.getCompoundTag(key);
+					boolean wasHandlerFound = false;
+					for (RecipeHandler<?> handler : this.recipeHandlers.values())
+						if (handler.getUnlocalizedName().equals(key)) {
+							wasHandlerFound = true;
+							RecipeHandlerCacheManager<?> cache = handler.getCacheManager();
+							if (cache != null && cache.isCacheEnabled()) {
+								NBTTagCompound headerTag = handlerTag.getCompoundTag(RecipeHandlerManager.RECIPE_HANDLER_HEADER_TAG_KEY);
+								if (cache.isCacheValid(headerTag)) {
+									Collection<? extends Recipe> readRecipes = cache.readRecipesFromCache(headerTag,
+											handlerTag.getCompoundTag(RecipeHandlerManager.RECIPE_HANDLER_CONTENT_TAG_KEY));
+									if (readRecipes != null && !readRecipes.isEmpty()) {
+										if (!cachedRecipes.containsKey(handler)) {
+											cachedRecipes.put(handler, new ArrayList<>());
 										}
+										cachedRecipes.get(handler).addAll(readRecipes);
+										NEIRecipeHandlers.mod.getLogger().info("The recipe handler \"" + handler.getUnlocalizedName() + "\" loaded "
+												+ readRecipes.size() + " recipes from the cache");
 									} else {
 										NEIRecipeHandlers.mod.getLogger()
-												.debug("The recipe handler \"" + key + "\" doesn't support caching (the discovered cache data won't be used)");
+												.info("The recipe handler \"" + handler.getUnlocalizedName() + "\" loaded no recipes from the cache");
 									}
+								} else {
+									NEIRecipeHandlers.mod.getLogger()
+											.info("The cache of the recipe handler \"" + key + "\" is not valid, the discovered data won't be used");
 								}
-							if (!wasHandlerFound) {
+							} else {
 								NEIRecipeHandlers.mod.getLogger()
-										.debug("A cache entry \"" + key + "\" was found with no corresponding recipe handler, it'll be ignored");
+										.debug("The recipe handler \"" + key + "\" doesn't support caching (the discovered cache data won't be used)");
 							}
 						}
-				} else {
-					NEIRecipeHandlers.mod.getLogger()
-							.info("The cache was created with another version of the mod than the current installed one - it will be recreated");
+					if (!wasHandlerFound) {
+						NEIRecipeHandlers.mod.getLogger()
+								.debug("A cache entry \"" + key + "\" was found with no corresponding recipe handler, it'll be ignored");
+					}
 				}
 			} catch (Exception e) {
 				NEIRecipeHandlers.mod.getLogger().error("Couldn't load the static recipes from the cache: ", e);
@@ -282,7 +275,6 @@ public class RecipeHandlerManager {
 		if (NEIRecipeHandlers.mod.getConfig().isComplicatedStaticRecipeLoadingCacheEnabled()) {
 			try (FileOutputStream out = new FileOutputStream(NEIRecipeHandlers.mod.getRecipeCache())) {
 				NBTTagCompound cacheRootTag = new NBTTagCompound();
-				cacheRootTag.setString(RecipeHandlerManager.NEI_RECIPE_HANDLERS_VERSION_TAG_KEY, NEIRecipeHandlers.VERSION);
 				for (RecipeHandler<?> handler : this.recipeHandlers.values()) {
 					try {
 						if (handler.getCacheManager() != null) {
