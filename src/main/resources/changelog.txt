@@ -1,6 +1,8 @@
 ===Changelog for NEI Recipe Handlers===
 Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
+#1.0.0-BETA:
+
 #2.0.2-ALPHA:
  + Updated FastClasspathScanner to v2.21
 
