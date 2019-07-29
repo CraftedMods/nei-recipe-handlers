@@ -3,6 +3,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
 #1.0.0-BETA:
  + Added an "isNEIGuiOpen" function
+ + Added information about the loaded recipe handler units to the modlist description
 
 #2.0.2-ALPHA:
  + Updated FastClasspathScanner to v2.21

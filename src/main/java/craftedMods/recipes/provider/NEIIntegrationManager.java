@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 import codechicken.nei.api.API;
 import codechicken.nei.recipe.*;
+import cpw.mods.fml.common.*;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.*;
 import craftedMods.recipes.utils.*;
@@ -33,7 +34,7 @@ import craftedMods.utils.ClassDiscoverer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 
 public class NEIIntegrationManager implements IResourceManagerReloadListener {
 
@@ -98,9 +99,23 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 			}
 
 			this.itemOverrideHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, ItemOverrideHandler.class));
+
+			Collection<VersionCheckerHandler> versionCheckerHandlers = new ArrayList<>(
+					NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, VersionCheckerHandler.class));
+			
+			// Add the handler names and versions to the modlist description
+			StringBuilder newModDescriptionBuilder = new StringBuilder(EnumChatFormatting.DARK_GREEN + "\n\nLoaded modules: ");
+			ModMetadata neiRecipeHandlersMetadata = FMLCommonHandler.instance().findContainerFor(NEIRecipeHandlers.mod).getMetadata();
+			if (versionCheckerHandlers.isEmpty()) newModDescriptionBuilder.append(EnumChatFormatting.RED + "None");
+			newModDescriptionBuilder.append("\n");
+			for (VersionCheckerHandler handler : versionCheckerHandlers) {
+				newModDescriptionBuilder.append(
+						String.format("%s\n - %s (%s)", EnumChatFormatting.GREEN, handler.getLocalizedHandlerName(), handler.getCurrentVersion().toString()));
+			}
+			neiRecipeHandlersMetadata.description = neiRecipeHandlersMetadata.description.concat(newModDescriptionBuilder.toString());
+
+			// Do the version checks
 			if (this.config.isUseVersionChecker()) {
-				Collection<VersionCheckerHandler> versionCheckerHandlers = new ArrayList<>(
-						NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, VersionCheckerHandler.class));
 				for (VersionCheckerHandler handler : versionCheckerHandlers)
 					if (handler.getCurrentVersion() == null || handler.getVersionFileURL() == null || !handler.getVersionFileURL().trim().isEmpty()) {
 						VersionChecker checker = new VersionChecker(handler.getVersionFileURL(), handler.getCurrentVersion());
