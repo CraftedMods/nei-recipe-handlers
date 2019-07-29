@@ -163,4 +163,11 @@ public interface RecipeHandlerUtils {
 	 */
 	public ItemStack readItemStackFromNBT(NBTTagCompound compound);
 
+	/**
+	 * Returns true, if the NEI GUI is currently opened.
+	 * 
+	 * @return Whether the NEI GUI is currently opened
+	 */
+	public boolean isNEIGuiOpen();
+
 }

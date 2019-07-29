@@ -18,9 +18,14 @@ package craftedMods.recipes.utils;
 
 import java.util.*;
 
+import codechicken.nei.NEIClientConfig;
+import codechicken.nei.guihook.GuiContainerManager;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.RecipeItemSlot;
 import craftedMods.recipes.api.utils.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
@@ -119,6 +124,14 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 	@Override
 	public ItemStack readItemStackFromNBT(NBTTagCompound compound) {
 		return NEIRecipeHandlersUtils.readItemStackFromNBT(compound);
+	}
+
+	@Override
+	public boolean isNEIGuiOpen() {
+		return NEIClientConfig.isEnabled() && !NEIClientConfig.isHidden() && GuiContainerManager.getManager() != null
+				&& (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative
+						? ((GuiContainerCreative) Minecraft.getMinecraft().currentScreen).func_147056_g() == CreativeTabs.tabInventory.getTabIndex()
+						: true);
 	}
 
 }
