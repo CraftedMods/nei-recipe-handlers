@@ -33,6 +33,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 
 	private List<ItemStack> fuels;
+	private Boolean hasMineTweaker = null;
 
 	@Override
 	public ItemStackSet generatePermutations(ItemStack... stacks) {
@@ -132,6 +133,19 @@ public class RecipeHandlerUtilsImpl implements RecipeHandlerUtils {
 				&& (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative
 						? ((GuiContainerCreative) Minecraft.getMinecraft().currentScreen).func_147056_g() == CreativeTabs.tabInventory.getTabIndex()
 						: true);
+	}
+
+	@Override
+	public boolean hasMineTweaker() {
+		if (this.hasMineTweaker == null) {
+			try {
+				Class.forName("minetweaker.MineTweakerAPI");
+				this.hasMineTweaker = Boolean.TRUE;
+			} catch (Exception e) {
+				this.hasMineTweaker = Boolean.FALSE;
+			}
+		}
+		return this.hasMineTweaker;
 	}
 
 }

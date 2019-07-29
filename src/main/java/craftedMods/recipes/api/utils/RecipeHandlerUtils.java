@@ -170,4 +170,11 @@ public interface RecipeHandlerUtils {
 	 */
 	public boolean isNEIGuiOpen();
 
+	/**
+	 * Returns true if MineTweaker/CraftTweaker are present.
+	 * 
+	 * @return Whether MineTweaker/CraftTweaker are present
+	 */
+	public boolean hasMineTweaker();
+
 }
