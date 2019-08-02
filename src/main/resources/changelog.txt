@@ -7,6 +7,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
  + Added MineTweaker/CraftTweaker support
  
  * Fixed that disabling recipe handlers via the configuration didn't work sometimes
+ * Fixed an exception when the complicated static recipe loading iteration depth was 0
 
 #2.0.2-ALPHA:
  + Updated FastClasspathScanner to v2.21

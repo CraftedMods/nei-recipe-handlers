@@ -177,25 +177,27 @@ public class RecipeHandlerManager {
 			NEIRecipeHandlers.mod.getLogger().warn("The static recipe iteration depth (" + maxItemIterationDepth
 					+ ") is very high (yes, three is high because itemCount^iterationDepth iterations are required) which can delay the startup of MC.");
 		}
-		Map<RecipeHandler<?>, Collection<Recipe>> complicatedStaticRecipes = new HashMap<>();
-		for (RecipeHandler<?> handler : this.recipeHandlers.values())
-			if (handler.getComplicatedStaticRecipeDepth() > 0) {
-				complicatedStaticRecipes.put(handler, new ArrayList<>(150));
+		if (maxItemIterationDepth != 0) { // Only load complicated static recipes if required
+			Map<RecipeHandler<?>, Collection<Recipe>> complicatedStaticRecipes = new HashMap<>();
+			for (RecipeHandler<?> handler : this.recipeHandlers.values())
+				if (handler.getComplicatedStaticRecipeDepth() > 0) {
+					complicatedStaticRecipes.put(handler, new ArrayList<>(150));
+				}
+			this.loadComplicatedStaticRecipes(maxItemIterationDepth, complicatedStaticRecipes);
+			try {
+				this.complicatedStaticRecipeLoadingThreadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		this.loadComplicatedStaticRecipes(maxItemIterationDepth, complicatedStaticRecipes);
-		try {
-			this.complicatedStaticRecipeLoadingThreadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			complicatedStaticRecipes.forEach((handler, recipes) -> {
+				if (!staticRecipes.containsKey(handler)) {
+					staticRecipes.put(handler, new ArrayList<>());
+				}
+				if (recipes != null && !recipes.isEmpty()) {
+					staticRecipes.get(handler).addAll(recipes);
+				}
+			});
 		}
-		complicatedStaticRecipes.forEach((handler, recipes) -> {
-			if (!staticRecipes.containsKey(handler)) {
-				staticRecipes.put(handler, new ArrayList<>());
-			}
-			if (recipes != null && !recipes.isEmpty()) {
-				staticRecipes.get(handler).addAll(recipes);
-			}
-		});
 		staticRecipes.forEach((handler, recipes) -> {
 			this.postLoadHandler((RecipeHandler<Recipe>) handler, recipes);
 		});
