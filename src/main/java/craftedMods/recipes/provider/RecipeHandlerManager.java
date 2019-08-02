@@ -98,7 +98,7 @@ public class RecipeHandlerManager {
 				StringBuilder parentCategory = new StringBuilder();
 				for (String category : NEIRecipeHandlersUtils.getRecipeHandlerCategories(handler.getUnlocalizedName())) {
 					parentCategory.append(category);
-					categoryDisabled = this.config.getBoolean("Disable all recipe handlers in this category",
+					categoryDisabled = categoryDisabled || this.config.getBoolean("Disable all recipe handlers in this category",
 							RecipeHandlerConfigurationImpl.RECIPEHANDLER_CATEGORY + "." + parentCategory.toString(), false,
 							"If set to true, all recipe handlers in this category and all subcategories will be disabled");
 					parentCategory.append(".");
