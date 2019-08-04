@@ -131,4 +131,9 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 		return null;
 	}
 
+	@Override
+	public RecipeHandlerRecipeViewer<T> getRecipeViewer() {
+		return null;
+	}
+
 }

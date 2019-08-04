@@ -6,6 +6,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
  + Added information about the loaded recipe handler units to the modlist description
  + Added MineTweaker/CraftTweaker support
  + Added a recipe handler for the vanilla crafting table which can be modified by plugins
+ + Added support for a button which show all recipes of the specified handler
  
  * Fixed that disabling recipe handlers via the configuration didn't work sometimes
  * Fixed an exception when the complicated static recipe loading iteration depth was 0

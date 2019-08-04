@@ -36,6 +36,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+import net.minecraftforge.common.MinecraftForge;
 
 public class NEIIntegrationManager implements IResourceManagerReloadListener {
 
@@ -222,9 +223,13 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 		}
 	}
 
-	private void loadHandler(TemplateRecipeHandler handler) {
+	private void loadHandler(PluginRecipeHandler<?, ?> handler) {
 		GuiCraftingRecipe.craftinghandlers.add(handler);
 		GuiUsageRecipe.usagehandlers.add(handler);
+
+		new RecipeHandlerEventHandler(handler.getInnerHandler()); // The handler registers itself to the event bus
+
+		NEIRecipeHandlersTransferRectManager.registerHandler(handler.getInnerHandler());
 	}
 
 	private <T extends ICraftingHandler & IUsageHandler> void removeCraftingAndUsageHandler(Class<T> handlerClass) {
@@ -271,6 +276,17 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 						+ (overrides == null ? 0 : overrides.size()) + " items");
 			}
 		}
+	}
+
+	public class RecipeHandlerEventHandler {
+
+		// private final RecipeHandler<?> handler;
+
+		public RecipeHandlerEventHandler(RecipeHandler<?> handler) {
+			// this.handler = handler;
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+
 	}
 
 }

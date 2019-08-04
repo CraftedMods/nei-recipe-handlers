@@ -35,8 +35,11 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 
 	private Map<CachedRecipe, Recipe> recipes = new HashMap<>();
 
+	private final String VIEW_ALL_RECIPES_IDENTIFIER;
+
 	public PluginRecipeHandler(RecipeHandler<U> innerHandler) {
 		this.innerHandler = innerHandler;
+		this.VIEW_ALL_RECIPES_IDENTIFIER = NEIRecipeHandlersTransferRectManager.getViewAllRecipedIdentifier(this.innerHandler);
 	}
 
 	@Override
@@ -56,14 +59,11 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 	}
 
 	@Override
-	public void loadTransferRects() {
-		// super.loadTransferRects();//TODO better integration of transfer rects
-	}
-
-	@Override
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId.equals("item")) {
 			this.loadCraftingRecipes((ItemStack) results[0]);
+		} else if (outputId.equals(this.VIEW_ALL_RECIPES_IDENTIFIER)) {
+			this.loadAllRecipes();
 		}
 	}
 
@@ -71,6 +71,8 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 	public void loadUsageRecipes(String inputId, Object... ingredients) {
 		if (inputId.equals("item")) {
 			this.loadUsageRecipes((ItemStack) ingredients[0]);
+		} else if (inputId.equals(this.VIEW_ALL_RECIPES_IDENTIFIER)) {
+			this.loadAllRecipes();
 		}
 	}
 
@@ -105,6 +107,20 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 					this.recipes.put(pluginRecipe, recipe);
 					this.arecipes.add(pluginRecipe);
 				}
+		}
+	}
+
+	private void loadAllRecipes() {
+		this.recipes.clear();
+		if (this.innerHandler.getRecipeViewer() != null) {
+			Collection<U> recipes = this.innerHandler.getRecipeViewer().getAllRecipes();
+			if (recipes != null) {
+				recipes.forEach(recipe -> {
+					PluginCachedRecipe cachedRecipe = new PluginCachedRecipe(recipe);
+					this.recipes.put(cachedRecipe, recipe);
+					this.arecipes.add(cachedRecipe);
+				});
+			}
 		}
 	}
 
@@ -167,6 +183,10 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 	@SuppressWarnings("unchecked")
 	private U getRecipe(int index) {
 		return (U) this.recipes.get(this.arecipes.get(index));
+	}
+
+	public RecipeHandler<U> getInnerHandler() {
+		return innerHandler;
 	}
 
 	private class OverlayHandler extends DefaultOverlayHandler {

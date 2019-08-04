@@ -65,6 +65,10 @@ jar {
     from('./') {
       include 'LICENSE'
    }
+   
+   manifest {
+        attributes 'FMLAT': 'neiRecipeHandlers_at.cfg'
+    }
 }
 
 processResources

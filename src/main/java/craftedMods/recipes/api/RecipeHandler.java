@@ -175,4 +175,11 @@ public interface RecipeHandler<T extends Recipe> {
 	 */
 	public RecipeHandlerCraftingHelper<T> getCraftingHelper();
 
+	/**
+	 * Returns the recipe viewer. It handles a button displayed at the crafting/usage GUIs of the recipe handler and eventually at the GUIs of devices
+	 * supported by that handler, showing all recipes this device supports. If null is returned, this feature won't be supported.
+	 * 
+	 * @return A recipe viewer instance
+	 */
+	public RecipeHandlerRecipeViewer<T> getRecipeViewer();
 }

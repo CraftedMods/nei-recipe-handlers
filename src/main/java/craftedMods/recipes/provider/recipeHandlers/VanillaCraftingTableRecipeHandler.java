@@ -18,6 +18,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 
 	private final Collection<VanillaCraftingTableRecipeHandlerSupport> supportHandlers = new ArrayList<>();
 	private final VanillaCraftingTableRecipeHandlerCraftingHelper craftingHelper = new VanillaCraftingTableRecipeHandlerCraftingHelper();
+	private final VanillaCraftingTableRecipeViewer recipeViewer = new VanillaCraftingTableRecipeViewer(this);
 
 	public VanillaCraftingTableRecipeHandler(Collection<VanillaCraftingTableRecipeHandlerSupport> supportHandlers) {
 		super("vanillaCrafting");
@@ -64,7 +65,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 
 	@Override
 	protected void undefinedRecipeTypeFound(IRecipe recipe, Collection<AbstractRecipe> container) {
-		for (VanillaCraftingTableRecipeHandlerSupport supportHandler : supportHandlers) {
+		for (VanillaCraftingTableRecipeHandlerSupport supportHandler : this.supportHandlers) {
 			Pair<AbstractRecipe, Boolean> result = supportHandler.undefinedRecipeTypeFound(recipe);
 			if (result != null) {
 				if (result.getRight()) return;
@@ -110,7 +111,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 
 	@Override
 	public AbstractRecipe loadComplicatedStaticRecipe(ItemStack... stacks) {
-		for (VanillaCraftingTableRecipeHandlerSupport supportHandler : supportHandlers) {
+		for (VanillaCraftingTableRecipeHandlerSupport supportHandler : this.supportHandlers) {
 			AbstractRecipe recipe = supportHandler.loadComplicatedStaticRecipe(stacks);
 			if (recipe != null) return recipe;
 		}
@@ -119,8 +120,13 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 
 	@Override
 	public int getComplicatedStaticRecipeDepth() {
-		return supportHandlers.parallelStream().map(handler -> handler.getComplicatedStaticRecipeDepth()).collect(Collectors.maxBy(Comparator.naturalOrder()))
-				.orElse(0);
+		return this.supportHandlers.parallelStream().map(handler -> handler.getComplicatedStaticRecipeDepth())
+				.collect(Collectors.maxBy(Comparator.naturalOrder())).orElse(0);
+	}
+
+	@Override
+	public RecipeHandlerRecipeViewer<AbstractRecipe> getRecipeViewer() {
+		return this.recipeViewer;
 	}
 
 	public class VanillaCraftingTableRecipeHandlerCraftingHelper extends AbstractCraftingHelper<AbstractRecipe> {
@@ -142,8 +148,8 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 
 		@Override
 		public boolean matches(ItemStack stack1, ItemStack stack2) {
-			return super.matches(stack1, stack2)
-					&& supportHandlers.parallelStream().map(handler -> handler.matches(stack1, stack2)).reduce(Boolean::logicalAnd).orElse(true);
+			return super.matches(stack1, stack2) && VanillaCraftingTableRecipeHandler.this.supportHandlers.parallelStream()
+					.map(handler -> handler.matches(stack1, stack2)).reduce(Boolean::logicalAnd).orElse(true);
 		}
 
 		private boolean isRecipe2x2(AbstractRecipe recipe) {
@@ -154,5 +160,27 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 			}
 			return ret;
 		}
+	}
+
+	public class VanillaCraftingTableRecipeViewer extends AbstractRecipeViewer<AbstractRecipe, VanillaCraftingTableRecipeHandler> {
+
+		private final Collection<Class<? extends GuiContainer>> supportedGuiClasses;
+
+		public VanillaCraftingTableRecipeViewer(VanillaCraftingTableRecipeHandler handler) {
+			super(handler);
+			this.supportedGuiClasses = new ArrayList<>(AbstractRecipeViewer.RECIPE_HANDLER_GUIS);
+			this.supportedGuiClasses.add(GuiCrafting.class);
+		}
+
+		@Override
+		public Collection<AbstractRecipe> getAllRecipes() {
+			return RecipeHandlerUtils.getInstance().hasMineTweaker() ? this.handler.loadRecipes() : this.handler.getStaticRecipes();
+		}
+
+		@Override
+		public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses() {
+			return this.supportedGuiClasses;
+		}
+
 	}
 }

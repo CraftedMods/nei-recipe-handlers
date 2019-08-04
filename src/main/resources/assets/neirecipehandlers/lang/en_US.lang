@@ -14,4 +14,6 @@ neiRecipeHandlers.versionChecker.notification.chat.part6=)
 neiRecipeHandlers.versionChecker.notification.chat.version.tooltip=Click to open the download page of the new version
 neiRecipeHandlers.versionChecker.notification.chat.changelog.tooltip=Click to show the changelog in the browser
 
+neiRecipeHandlers.recipeViewer.defaultTooltip=Show All Recipes
+
 neiRecipeHandlers.handler.vanillaCrafting.name=Vanilla Crafting
