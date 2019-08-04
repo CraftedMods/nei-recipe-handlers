@@ -28,6 +28,7 @@ import codechicken.nei.recipe.*;
 import cpw.mods.fml.common.*;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.*;
+import craftedMods.recipes.provider.recipeHandlers.VanillaCraftingTableRecipeHandler;
 import craftedMods.recipes.utils.*;
 import craftedMods.recipes.utils.VersionChecker.EnumVersionComparison;
 import craftedMods.utils.ClassDiscoverer;
@@ -68,6 +69,7 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ItemOverrideHandler.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, ResourceHandler.class);
 		this.discoverer.registerClassToDiscover(RegisteredHandler.class, VersionCheckerHandler.class);
+		this.discoverer.registerClassToDiscover(RegisteredHandler.class, VanillaCraftingTableRecipeHandlerSupport.class);
 		this.discoverer.discoverClassesAsync();
 	}
 
@@ -90,7 +92,10 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 
 			this.recipeHandlerManager = new RecipeHandlerManager(this.config.getConfigFile(), discoveredClasses);
 
-			this.recipeHandlerManager.init(useCachedRecipes);
+			VanillaCraftingTableRecipeHandler vanillaRecipeHandler = new VanillaCraftingTableRecipeHandler(
+					NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, VanillaCraftingTableRecipeHandlerSupport.class));
+
+			this.recipeHandlerManager.init(useCachedRecipes, Arrays.asList(vanillaRecipeHandler));
 
 			NEIRecipeHandlers.mod.getLogger().info("Enable item hiding handlers: " + this.config.isHideTechnicalBlocks());
 
@@ -102,7 +107,7 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 
 			Collection<VersionCheckerHandler> versionCheckerHandlers = new ArrayList<>(
 					NEIRecipeHandlersUtils.discoverRegisteredHandlers(discoveredClasses, VersionCheckerHandler.class));
-			
+
 			// Add the handler names and versions to the modlist description
 			StringBuilder newModDescriptionBuilder = new StringBuilder(EnumChatFormatting.DARK_GREEN + "\n\nLoaded modules: ");
 			ModMetadata neiRecipeHandlersMetadata = FMLCommonHandler.instance().findContainerFor(NEIRecipeHandlers.mod).getMetadata();

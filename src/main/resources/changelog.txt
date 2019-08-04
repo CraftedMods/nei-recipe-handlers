@@ -5,6 +5,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
  + Added an "isNEIGuiOpen" function
  + Added information about the loaded recipe handler units to the modlist description
  + Added MineTweaker/CraftTweaker support
+ + Added a recipe handler for the vanilla crafting table which can be modified by plugins
  
  * Fixed that disabling recipe handlers via the configuration didn't work sometimes
  * Fixed an exception when the complicated static recipe loading iteration depth was 0

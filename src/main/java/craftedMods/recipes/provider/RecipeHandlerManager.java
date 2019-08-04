@@ -55,8 +55,8 @@ public class RecipeHandlerManager {
 		this.discoveredClasses = discoveredClasses;
 	}
 
-	public void init(boolean useCache) {
-		this.discoverRecipeHandlersInClasspath();
+	public void init(boolean useCache, Collection<RecipeHandler<?>> initialHandlers) {
+		this.discoverRecipeHandlersInClasspath(initialHandlers);
 		if (!this.recipeHandlers.isEmpty()) {
 			this.loadRecipeHandlers();
 			Map<RecipeHandler<?>, Collection<Recipe>> recipes = new HashMap<>(this.recipeHandlers.size());
@@ -69,8 +69,8 @@ public class RecipeHandlerManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void discoverRecipeHandlersInClasspath() {
-		Collection<RecipeHandler<?>> recipeHandlers = new ArrayList<>();
+	private void discoverRecipeHandlersInClasspath(Collection<RecipeHandler<?>> initialHandlers) {
+		Collection<RecipeHandler<?>> recipeHandlers = new ArrayList<>(initialHandlers);
 		recipeHandlers.addAll(
 				(Collection<RecipeHandler<?>>) (Collection<?>) NEIRecipeHandlersUtils.discoverRegisteredHandlers(this.discoveredClasses, RecipeHandler.class));
 		recipeHandlers.addAll(NEIRecipeHandlersUtils.discoverRegisteredHandlers(this.discoveredClasses, RecipeHandlerFactory.class).stream()
