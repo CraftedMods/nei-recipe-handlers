@@ -21,13 +21,13 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 	private final VanillaCraftingTableRecipeViewer recipeViewer = new VanillaCraftingTableRecipeViewer(this);
 
 	public VanillaCraftingTableRecipeHandler(Collection<VanillaCraftingTableRecipeHandlerSupport> supportHandlers) {
-		super("vanillaCrafting");
+		super("vanilla.craftingTable");
 		this.supportHandlers.addAll(supportHandlers);
 	}
 
 	@Override
 	public String getDisplayName() {
-		return StatCollector.translateToLocal("neiRecipeHandlers.handler.vanillaCrafting.name");
+		return StatCollector.translateToLocal("neiRecipeHandlers.handler.vanilla.craftingTable.name");
 	}
 
 	@Override

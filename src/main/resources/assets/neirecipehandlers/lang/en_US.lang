@@ -16,4 +16,4 @@ neiRecipeHandlers.versionChecker.notification.chat.changelog.tooltip=Click to sh
 
 neiRecipeHandlers.recipeViewer.defaultTooltip=Show All Recipes
 
-neiRecipeHandlers.handler.vanillaCrafting.name=Vanilla Crafting
+neiRecipeHandlers.handler.vanilla.craftingTable.name=Vanilla Crafting
