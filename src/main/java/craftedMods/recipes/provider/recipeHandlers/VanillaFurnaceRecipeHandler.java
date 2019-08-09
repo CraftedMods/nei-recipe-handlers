@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
 @RegisteredHandler
-public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceRecipe> {
+public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnaceRecipe> {
 
 	private final VanillaFurnaceRecipeHandlerRenderer renderer = new VanillaFurnaceRecipeHandlerRenderer();
 	private final VanillaFurnaceRecipeHandlerRecipeViewer recipeViewer = new VanillaFurnaceRecipeHandlerRecipeViewer(this);
@@ -46,8 +46,8 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceR
 	}
 
 	@Override
-	public Collection<FurnanceRecipe> loadSimpleStaticRecipes() {
-		Collection<FurnanceRecipe> ret = new ArrayList<>();
+	public Collection<FurnaceRecipe> loadSimpleStaticRecipes() {
+		Collection<FurnaceRecipe> ret = new ArrayList<>();
 		if (!RecipeHandlerUtils.getInstance().hasMineTweaker()) {
 			ret.addAll(this.loadRecipes());
 		}
@@ -55,11 +55,11 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceR
 	}
 
 	@Override
-	public Collection<FurnanceRecipe> getDynamicCraftingRecipes(ItemStack result) {
-		Collection<FurnanceRecipe> ret = new ArrayList<>();
+	public Collection<FurnaceRecipe> getDynamicCraftingRecipes(ItemStack result) {
+		Collection<FurnaceRecipe> ret = new ArrayList<>();
 		if (RecipeHandlerUtils.getInstance().hasMineTweaker()) {
-			Collection<FurnanceRecipe> recipes = this.loadRecipes();
-			for (FurnanceRecipe recipe : recipes)
+			Collection<FurnaceRecipe> recipes = this.loadRecipes();
+			for (FurnaceRecipe recipe : recipes)
 				if (recipe.produces(result)) {
 					ret.add(recipe);
 				}
@@ -68,11 +68,11 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceR
 	}
 
 	@Override
-	public Collection<FurnanceRecipe> getDynamicUsageRecipes(ItemStack ingredient) {
-		Collection<FurnanceRecipe> ret = new ArrayList<>();
+	public Collection<FurnaceRecipe> getDynamicUsageRecipes(ItemStack ingredient) {
+		Collection<FurnaceRecipe> ret = new ArrayList<>();
 		if (RecipeHandlerUtils.getInstance().hasMineTweaker()) {
-			Collection<FurnanceRecipe> recipes = this.loadRecipes();
-			for (FurnanceRecipe recipe : recipes)
+			Collection<FurnaceRecipe> recipes = this.loadRecipes();
+			for (FurnaceRecipe recipe : recipes)
 				if (recipe.consumes(ingredient)) {
 					ret.add(recipe);
 				}
@@ -81,16 +81,16 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceR
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Collection<FurnanceRecipe> loadRecipes() {
-		Collection<FurnanceRecipe> ret = new ArrayList<>();
+	protected Collection<FurnaceRecipe> loadRecipes() {
+		Collection<FurnaceRecipe> ret = new ArrayList<>();
 		((Map<ItemStack, ItemStack>) FurnaceRecipes.smelting().getSmeltingList()).forEach((ingredient, result) -> {
-			ret.add(new FurnanceRecipe(ingredient, result));
+			ret.add(new FurnaceRecipe(ingredient, result));
 		});
 		return ret;
 	}
 
 	@Override
-	public List<RecipeItemSlot> getSlotsForRecipeItems(FurnanceRecipe recipe, EnumRecipeItemRole role) {
+	public List<RecipeItemSlot> getSlotsForRecipeItems(FurnaceRecipe recipe, EnumRecipeItemRole role) {
 		ArrayList<RecipeItemSlot> ret = new ArrayList<>();
 		switch (role) {
 			case INGREDIENT:
@@ -113,14 +113,14 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceR
 	}
 
 	@Override
-	public RecipeHandlerRecipeViewer<FurnanceRecipe> getRecipeViewer() {
+	public RecipeHandlerRecipeViewer<FurnaceRecipe> getRecipeViewer() {
 		return recipeViewer;
 	}
 
-	public class VanillaFurnaceRecipeHandlerRenderer implements RecipeHandlerRenderer<VanillaFurnaceRecipeHandler, FurnanceRecipe> {
+	public class VanillaFurnaceRecipeHandlerRenderer implements RecipeHandlerRenderer<VanillaFurnaceRecipeHandler, FurnaceRecipe> {
 
 		@Override
-		public void renderBackground(VanillaFurnaceRecipeHandler handler, FurnanceRecipe recipe, int cycleticks) {
+		public void renderBackground(VanillaFurnaceRecipeHandler handler, FurnaceRecipe recipe, int cycleticks) {
 			RecipeHandlerRendererUtils.getInstance().bindTexture("textures/gui/container/furnace.png");
 			RecipeHandlerRendererUtils.getInstance().drawTexturedRectangle(0, 0, 5, 11, 166, 65);
 			RecipeHandlerRendererUtils.getInstance().drawRectangle(106, 19, 26, 26, 0xFFC6C6C6);
@@ -130,13 +130,13 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceR
 		}
 
 		@Override
-		public void renderForeground(VanillaFurnaceRecipeHandler handler, FurnanceRecipe recipe, int cycleticks) {
+		public void renderForeground(VanillaFurnaceRecipeHandler handler, FurnaceRecipe recipe, int cycleticks) {
 
 		}
 
 	}
 
-	public class VanillaFurnaceRecipeHandlerRecipeViewer extends AbstractRecipeViewer<FurnanceRecipe, VanillaFurnaceRecipeHandler> {
+	public class VanillaFurnaceRecipeHandlerRecipeViewer extends AbstractRecipeViewer<FurnaceRecipe, VanillaFurnaceRecipeHandler> {
 
 		private final Collection<Class<? extends GuiContainer>> supportedGuiClasses = new ArrayList<>();
 
@@ -152,7 +152,7 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnanceR
 		}
 
 		@Override
-		public Collection<FurnanceRecipe> getAllRecipes() {
+		public Collection<FurnaceRecipe> getAllRecipes() {
 			return RecipeHandlerUtils.getInstance().hasMineTweaker() ? this.handler.loadRecipes() : this.handler.getStaticRecipes();
 		}
 

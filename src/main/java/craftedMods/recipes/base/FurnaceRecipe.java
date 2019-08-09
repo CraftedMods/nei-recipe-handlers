@@ -26,14 +26,14 @@ import net.minecraft.item.ItemStack;
  * 
  * @author CraftedMods
  */
-public class FurnanceRecipe extends ShapelessRecipe {
+public class FurnaceRecipe extends ShapelessRecipe {
 
-	public FurnanceRecipe(Collection<ItemStack> ingredients, ItemStack result) {
+	public FurnaceRecipe(Collection<ItemStack> ingredients, ItemStack result) {
 		super(ingredients, result);
 		this.addFuels();
 	}
 
-	public FurnanceRecipe(ItemStack ingredient, ItemStack result) {
+	public FurnaceRecipe(ItemStack ingredient, ItemStack result) {
 		super(ingredient, result);
 		this.addFuels();
 	}
