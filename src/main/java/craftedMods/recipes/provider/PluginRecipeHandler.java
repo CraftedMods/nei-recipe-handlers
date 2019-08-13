@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -186,7 +186,7 @@ public class PluginRecipeHandler<T extends RecipeHandler<U>, U extends Recipe> e
 	}
 
 	public RecipeHandler<U> getInnerHandler() {
-		return innerHandler;
+		return this.innerHandler;
 	}
 
 	private class OverlayHandler extends DefaultOverlayHandler {

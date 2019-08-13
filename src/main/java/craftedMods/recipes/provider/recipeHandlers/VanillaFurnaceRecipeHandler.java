@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.provider.recipeHandlers;
 
 import java.util.*;
@@ -109,12 +125,12 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnaceRe
 	@Override
 	@SuppressWarnings("unchecked")
 	public VanillaFurnaceRecipeHandlerRenderer getRenderer() {
-		return renderer;
+		return this.renderer;
 	}
 
 	@Override
 	public RecipeHandlerRecipeViewer<FurnaceRecipe> getRecipeViewer() {
-		return recipeViewer;
+		return this.recipeViewer;
 	}
 
 	public class VanillaFurnaceRecipeHandlerRenderer implements RecipeHandlerRenderer<VanillaFurnaceRecipeHandler, FurnaceRecipe> {
@@ -148,7 +164,7 @@ public class VanillaFurnaceRecipeHandler extends AbstractRecipeHandler<FurnaceRe
 
 		@Override
 		public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses() {
-			return supportedGuiClasses;
+			return this.supportedGuiClasses;
 		}
 
 		@Override

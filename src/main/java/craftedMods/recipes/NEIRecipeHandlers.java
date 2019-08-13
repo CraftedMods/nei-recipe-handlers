@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public class NEIRecipeHandlers {
 	public static final String MODNAME = "NEI Recipe Handlers";
 	public static final String VERSION = "1.0.0-BETA";
 
-	public static final SemanticVersion SEMANTIC_VERSION = SemanticVersion.of(VERSION);
+	public static final SemanticVersion SEMANTIC_VERSION = SemanticVersion.of(NEIRecipeHandlers.VERSION);
 
 	public static final String MOD_DIR_NAME = "neiRecipeHandlers";
 	public static final String ENVIRONMENT_CACHE_FILE_NAME = "environmentCache.dat";
@@ -184,7 +184,7 @@ public class NEIRecipeHandlers {
 					this.logger.error("Couldn't write the environment cache to the filesystem: ", e);
 				}
 			}
-			
+
 			canCacheBeUsed = !recreateEnvironmentCache;
 		}
 		return canCacheBeUsed;

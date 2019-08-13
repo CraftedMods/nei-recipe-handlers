@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,13 +72,19 @@ public class NEIRecipeHandlersUtils {
 		if (container instanceof String) {
 			List<ItemStack> stacks = OreDictionary.getOres((String) container);
 			ret = stacks.toArray(new ItemStack[stacks.size()]);
-		} else if (container instanceof Item) ret = new ItemStack[] { new ItemStack((Item) container) };
-		else if (container instanceof Block) ret = new ItemStack[] { new ItemStack((Block) container) };
-		else ret = NEIServerUtils.extractRecipeItems(container);
+		} else if (container instanceof Item) {
+			ret = new ItemStack[] { new ItemStack((Item) container) };
+		} else if (container instanceof Block) {
+			ret = new ItemStack[] { new ItemStack((Block) container) };
+		} else {
+			ret = NEIServerUtils.extractRecipeItems(container);
+		}
 		if (ret != null) {
 			for (int i = 0; i < ret.length; i++) {
 				ItemStack stack = ret[i];
-				if (stack == null || stack.getItem() == null) ret[i] = new ItemStack(Blocks.fire);
+				if (stack == null || stack.getItem() == null) {
+					ret[i] = new ItemStack(Blocks.fire);
+				}
 			}
 		}
 		return ret;

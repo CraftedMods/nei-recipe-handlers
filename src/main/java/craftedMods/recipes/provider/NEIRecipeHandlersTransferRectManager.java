@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.provider;
 
 import java.awt.*;
@@ -49,7 +65,7 @@ public class NEIRecipeHandlersTransferRectManager implements IContainerInputHand
 					}
 
 					NEIRecipeHandlersTransferRectManager.guiMap.get(guiClass).put(handler,
-							new TransferRect(area, getViewAllRecipedIdentifier(handler), new Object[0]));
+							new TransferRect(area, NEIRecipeHandlersTransferRectManager.getViewAllRecipedIdentifier(handler), new Object[0]));
 				}
 			}
 		}
@@ -210,7 +226,9 @@ public class NEIRecipeHandlersTransferRectManager implements IContainerInputHand
 					return null;
 				}, false);
 
-				if (ret == null) ret = currenttip;
+				if (ret == null) {
+					ret = currenttip;
+				}
 
 			} else {
 				int[] offset = RecipeInfo.getGuiOffset(gui);
@@ -265,7 +283,7 @@ public class NEIRecipeHandlersTransferRectManager implements IContainerInputHand
 
 	private <T> T executeForGuiRecipe(GuiRecipe guiContainer, RecipeHandler<?> handler,
 			Function<Triple<Integer, RecipeHandler<?>, RecipeHandler<?>>, T> toExecute, boolean innerHandlerEqualToHandler) {
-		GuiRecipe guiRecipe = (GuiRecipe) guiContainer;
+		GuiRecipe guiRecipe = guiContainer;
 		IRecipeHandler currentHandler = guiRecipe.currenthandlers.get(guiRecipe.recipetype);
 
 		if (currentHandler instanceof PluginRecipeHandler<?, ?>) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,9 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 			// Add the handler names and versions to the modlist description
 			StringBuilder newModDescriptionBuilder = new StringBuilder(EnumChatFormatting.DARK_GREEN + "\n\nLoaded modules: ");
 			ModMetadata neiRecipeHandlersMetadata = FMLCommonHandler.instance().findContainerFor(NEIRecipeHandlers.mod).getMetadata();
-			if (versionCheckerHandlers.isEmpty()) newModDescriptionBuilder.append(EnumChatFormatting.RED + "None");
+			if (versionCheckerHandlers.isEmpty()) {
+				newModDescriptionBuilder.append(EnumChatFormatting.RED + "None");
+			}
 			newModDescriptionBuilder.append("\n");
 			for (VersionCheckerHandler handler : versionCheckerHandlers) {
 				newModDescriptionBuilder.append(
@@ -194,7 +196,7 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 			// Override names
 			this.registerItemOverrides();
 
-			wasLoaded = true;
+			this.wasLoaded = true;
 
 			this.logger.info("Loaded NEI configuration for within " + (System.currentTimeMillis() - start) + " ms");
 		}
@@ -217,7 +219,7 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener {
 
 	@Override
 	public void onResourceManagerReload(IResourceManager manager) {
-		if (wasLoaded) {
+		if (this.wasLoaded) {
 			this.registerItemOverrides();
 			this.logger.info("Reloaded the item override handlers");
 		}
