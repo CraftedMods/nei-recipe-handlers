@@ -66,11 +66,11 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 	@Override
 	protected void undefinedRecipeTypeFound(IRecipe recipe, Collection<AbstractRecipe> container) {
 		for (VanillaCraftingTableRecipeHandlerSupport supportHandler : this.supportHandlers) {
-			Pair<AbstractRecipe, Boolean> result = supportHandler.undefinedRecipeTypeFound(recipe);
+			Pair<Collection<AbstractRecipe>, Boolean> result = supportHandler.undefinedRecipeTypeFound(recipe);
 			if (result != null) {
 				if (result.getRight()) return;
-				if (result.getLeft() != null) {
-					container.add(result.getLeft());
+				if (result.getLeft() != null && !result.getLeft().isEmpty()) {
+					container.addAll(result.getLeft());
 					return;
 				}
 			}
@@ -88,6 +88,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 					ret.add(recipe);
 				}
 		}
+		supportHandlers.forEach(handler -> ret.addAll(handler.getDynamicCraftingRecipes(result)));
 		return ret;
 	}
 
@@ -101,6 +102,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
 					ret.add(recipe);
 				}
 		}
+		supportHandlers.forEach(handler -> ret.addAll(handler.getDynamicUsageRecipes(ingredient)));
 		return ret;
 	}
 

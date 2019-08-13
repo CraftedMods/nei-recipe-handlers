@@ -1,5 +1,7 @@
 package craftedMods.recipes.api;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import craftedMods.recipes.base.AbstractRecipe;
@@ -15,7 +17,7 @@ import net.minecraft.item.crafting.IRecipe;
 public interface VanillaCraftingTableRecipeHandlerSupport {
 
 	/**
-	 * Invoked if a recipe type was found which couldn'd be processed. Either return the processed recipe instance or null, which means that the
+	 * Invoked if a recipe type was found which couldn'd be processed. Either return the processed recipe instance(s) or an empty collection or null, which means that the
 	 * recipe will be sent to the other handlers, which try to process it. The second argument of the pair is whether the recipe should be ignored,
 	 * meaning that it won't be sent to other handlers, but also that no message will be logged. The returned recipe instance of not relevant then.
 	 * Usually used if the recipe is computed some other way. If null is returned, the same thing happens as if the processed instance is null and the
@@ -24,7 +26,7 @@ public interface VanillaCraftingTableRecipeHandlerSupport {
 	 * @param recipe The "undefined" recipe instance
 	 * @return The processed recipe instance or null and whether the recipe should be ignored
 	 */
-	public Pair<AbstractRecipe, Boolean> undefinedRecipeTypeFound(IRecipe recipe);
+	public Pair<Collection<AbstractRecipe>, Boolean> undefinedRecipeTypeFound(IRecipe recipe);
 
 	/**
 	 * Returns the complicated static recipe depth for this support handler. The maximum of the depths of all support handlers for the vanilla
@@ -57,5 +59,19 @@ public interface VanillaCraftingTableRecipeHandlerSupport {
 	public default boolean matches(ItemStack stack1, ItemStack stack2) {
 		return true;
 	}
+	
+	/**
+	 * Invoked by the parent handler for the dynamic crafting recipes. Null mustn't be returned.
+	 * @param result The result item
+	 * @return A collection of recipes with the specified result
+	 */
+	public Collection<AbstractRecipe> getDynamicCraftingRecipes(ItemStack result);
+	
+	/**
+	 * Invoked by the parent handler for the dynamic usage recipes. Null mustn't be returned.
+	 * @param ingredient The ingredient item
+	 * @return A collection of recipes with the specified ingredient
+	 */
+	public Collection<AbstractRecipe> getDynamicUsageRecipes(ItemStack ingredient);
 
 }
