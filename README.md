@@ -10,6 +10,6 @@ If you want to setup a development environment, you'll need the following depend
 The mod was created with the MinecraftForge version "1.7.10-10.13.4.1614".  
 The dependencies were already added to build.gradle - if you're using Gradle for building, you don't need to do anything.
 ## Download
-See https://github.com/CraftedMods/nei-recipe-handlers/releases
+See [CurseForge](https://www.curseforge.com/minecraft/mc-mods/nei-recipe-handlers/files) or [Github](<https://github.com/CraftedMods/nei-recipe-handlers/releases>).
 
 
