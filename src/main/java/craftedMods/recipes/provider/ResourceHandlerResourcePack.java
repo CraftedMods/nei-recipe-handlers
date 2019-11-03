@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.recipes.api.ResourceHandler;
@@ -30,18 +31,53 @@ import net.minecraft.util.ResourceLocation;
 public class ResourceHandlerResourcePack implements IResourcePack {
 
 	private final Map<ResourceLocation, Supplier<InputStream>> resources = new HashMap<>();
+	private final Map<ResourceLocation, Collection<Supplier<InputStream>>> langFileParts = new HashMap<>();
 
 	public ResourceHandlerResourcePack(Collection<ResourceHandler> handlers) {
 		for (ResourceHandler handler : handlers) {
 			Map<ResourceLocation, Supplier<InputStream>> resources = handler.getResources();
+
 			if (resources != null) {
-				this.resources.putAll(resources);
+				for (ResourceLocation location : resources.keySet()) {
+					if (this.resources.containsKey(location)) {
+
+						// Mark streams for merging - only .lang files are supported currently
+						if (location.getResourcePath().endsWith(".lang")) {
+							if (!langFileParts.containsKey(location)) {
+								langFileParts.put(location, new ArrayList<>());
+								langFileParts.get(location).add(this.resources.get(location));
+							}
+							langFileParts.get(location).add(resources.get(location));
+						} else {
+							NEIRecipeHandlers.mod.getLogger().warn("The resource " + location.toString() + " was overridden by another resource handler");
+						}
+					} else {
+						this.resources.put(location, resources.get(location));
+					}
+				}
+
+				// Insert the merged stream
+				for (ResourceLocation location : langFileParts.keySet()) {
+					Collection<Supplier<InputStream>> parts = langFileParts.get(location);
+					Collection<Supplier<InputStream>> partsWithNewLineBetweenStreams = new ArrayList<>();
+
+					// Insert a new line separator after every stream
+					for (Supplier<InputStream> part : parts) {
+						partsWithNewLineBetweenStreams.add(part);
+						partsWithNewLineBetweenStreams.add(() -> {
+							return new ByteArrayInputStream("\n".getBytes());
+						});
+					}
+
+					Supplier<InputStream> sequencedSupplier = () -> {
+						return new SequenceInputStream(
+								Collections.enumeration(partsWithNewLineBetweenStreams.stream().map(Supplier::get).collect(Collectors.toList())));
+					};
+
+					this.resources.put(location, sequencedSupplier);
+				}
 			}
 		}
-	}
-
-	public void addResources(Map<ResourceLocation, Supplier<InputStream>> resources) {
-		this.resources.putAll(resources);
 	}
 
 	@Override

@@ -30,6 +30,21 @@ import net.minecraft.util.ResourceLocation;
 public class ClasspathResourceLoader implements RecipeHandlerResourceLoader {
 
 	private Set<ResourceLocation> resourceLocations = new HashSet<>();
+	private String prefix = "";
+
+	/**
+	 * Gets the loading path prefix - a prefix that will be appended between the root path and the resource path specified in the resource location.
+	 * This can be used for example if the actual path and the path specified via the resource location don't match.
+	 * 
+	 * @return The loading path prefix
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
 	@Override
 	public boolean registerResource(ResourceLocation location) {
@@ -40,9 +55,9 @@ public class ClasspathResourceLoader implements RecipeHandlerResourceLoader {
 	public Map<ResourceLocation, Supplier<InputStream>> loadResources() {
 		Map<ResourceLocation, Supplier<InputStream>> ret = new HashMap<>();
 		this.resourceLocations.forEach(location -> {
-			if (this.getClass().getResource("/" + location.getResourcePath()) != null) {
+			if (this.getClass().getResource("/" + prefix + location.getResourcePath()) != null) {
 				ret.put(location, () -> {
-					return this.getClass().getResourceAsStream("/" + location.getResourcePath());
+					return this.getClass().getResourceAsStream("/" + prefix + location.getResourcePath());
 				});
 			}
 		});
