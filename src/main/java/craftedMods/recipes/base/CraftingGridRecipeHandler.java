@@ -51,8 +51,13 @@ public abstract class CraftingGridRecipeHandler extends AbstractRecipeHandler<Ab
 
 	protected Collection<AbstractRecipe> loadRecipes() {
 		List<AbstractRecipe> ret = new ArrayList<>();
-		for (IRecipe recipe : this.recipes)
+
+		for (IRecipe recipe : this.recipes) {
+			boolean nullResult = recipe.getRecipeOutput() == null || recipe.getRecipeOutput().getItem() == null;
+			boolean undefinedRecipeType = false;
+
 			if (recipe instanceof ShapedOreRecipe) {
+				if (nullResult) continue;
 				ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
 				for (Object ingred : shapedOreRecipe.getInput())
 					if (ingred instanceof List<?> && ((List<?>) ingred).isEmpty()) {
@@ -64,8 +69,10 @@ public abstract class CraftingGridRecipeHandler extends AbstractRecipeHandler<Ab
 					this.logger.error("Couldn't load shaped ore recipe: ", e);
 				}
 			} else if (recipe instanceof ShapedRecipes) {
+				if (nullResult) continue;
 				ret.add(new ShapedRecipe((ShapedRecipes) recipe));
 			} else if (recipe instanceof ShapelessOreRecipe) {
+				if (nullResult) continue;
 				ShapelessOreRecipe shapelessOreRecipe = (ShapelessOreRecipe) recipe;
 				for (Object ingred : shapelessOreRecipe.getInput())
 					if (ingred instanceof List<?> && ((List<?>) ingred).isEmpty()) {
@@ -73,14 +80,31 @@ public abstract class CraftingGridRecipeHandler extends AbstractRecipeHandler<Ab
 					}
 				ret.add(new ShapelessRecipe(shapelessOreRecipe));
 			} else if (recipe instanceof ShapelessRecipes) {
+				if (nullResult) continue;
 				ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
 				if (shapelessRecipe.recipeItems != null) {
 					ret.add(new ShapelessRecipe(shapelessRecipe));
 				}
 			} else {
 				this.undefinedRecipeTypeFound(recipe, ret);
+				undefinedRecipeType = true;
 			}
+
+			if (!undefinedRecipeType && nullResult) recipeWithNullResultFound(recipe);
+		}
 		return ret;
+	}
+
+	/**
+	 * Invoked if recipes were found which have null as result item stack (of if stack.getItem() for that stack is null). Will only be invoked for
+	 * recipes which would have been processed otherwise. Can be overridden in child classes to alternate the behaviour - by default a warning message
+	 * will be logged.
+	 * 
+	 * @param recipe The recipe instance with the null result
+	 */
+	protected void recipeWithNullResultFound(IRecipe recipe) {
+		this.logger.warn("The recipe handler \"" + this.getUnlocalizedName() + "\" got a recipe (\"" + recipe.getClass()
+				+ "\") which has null as a result - it'll be ignored");
 	}
 
 	/**
