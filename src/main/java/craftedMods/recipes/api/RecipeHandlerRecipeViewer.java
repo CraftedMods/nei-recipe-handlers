@@ -49,7 +49,6 @@ public interface RecipeHandlerRecipeViewer<T extends Recipe> {
 	 * GUICraftingTable). Return null or an empty collection to support no GUI classes. Use {@link GuiRecipe} to support the button in the recipe
 	 * handler GUIs.
 	 * 
-	 * @param recipe The current displayed recipe
 	 * @return A collection of supported GUI classes
 	 */
 	public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses();

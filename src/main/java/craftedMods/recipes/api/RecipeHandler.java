@@ -28,8 +28,7 @@ import net.minecraft.item.ItemStack;
  * To be loaded, the handler needs to be annotated with {@link craftedMods.recipes.api.RegisteredHandler}
  * 
  * @author CraftedMods
- * @param <T> The recipe type the handler processes
- * @param The type of cached recipes the recipe handler produces/accepts
+ * @param <T> The type of cached recipes the recipe handler produces/accepts
  */
 public interface RecipeHandler<T extends Recipe> {
 

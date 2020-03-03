@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
  * ItemStacks - it can be used just like a normal set. But instead of a normal sets it will work well with ItemStacks.
  * 
  * @author CraftedMods
- * @param <V> The value type of the map
  */
 public interface ItemStackSet extends Set<ItemStack> {
 
