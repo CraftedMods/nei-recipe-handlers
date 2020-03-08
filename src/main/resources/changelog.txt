@@ -1,6 +1,10 @@
 ===Changelog for NEI Recipe Handlers===
 Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
 
+#1.1.0-BETA:
+ + Added extended MineTweaker/CraftTweaker support for the base crafting grid handler
+ + A list of loaded modules is now added to crash reports
+
 #1.0.2-BETA:
  * Fixed an exception ocurring if recipes with 'null' as result were loaded
 

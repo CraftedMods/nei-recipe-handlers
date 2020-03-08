@@ -1,1 +1,1 @@
-1.0.2-BETA|https://www.curseforge.com/minecraft/mc-mods/nei-recipe-handlers/files|https://github.com/CraftedMods/nei-recipe-handlers/blob/master/src/main/resources/changelog.txt
+1.1.0-BETA|https://www.curseforge.com/minecraft/mc-mods/nei-recipe-handlers/files|https://github.com/CraftedMods/nei-recipe-handlers/blob/master/src/main/resources/changelog.txt
