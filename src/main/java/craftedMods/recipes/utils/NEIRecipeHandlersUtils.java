@@ -55,13 +55,51 @@ public class NEIRecipeHandlersUtils {
 		return permutations;
 	}
 
-	public static boolean areStacksSameType(ItemStack stack1, ItemStack stack2) {
-		return NEIServerUtils.areStacksSameType(stack1, stack2);
-	}
+    public static boolean areStacksSameType (ItemStack stack1, ItemStack stack2)
+    {
+        Boolean handlerResult = null;
+        for (ItemStackComparisonHandler handler : NEIRecipeHandlers.mod.getNEIIntegrationManager ()
+            .getItemStackComparisonHandlers ())
+        {
+            Boolean result = handler.areStacksOfSameType (stack1, stack2);
+            if (result != null)
+            {
+                if (handlerResult == null)
+                {
+                    handlerResult = result;
+                }
+                else if (handlerResult != null && result != handlerResult)
+                {
+                    handlerResult = null;
+                    break;
+                }
+            }
+        }
+        return handlerResult == null ? NEIServerUtils.areStacksSameType (stack1, stack2) : handlerResult;
+    }
 
-	public static boolean areStacksSameTypeForCrafting(ItemStack stack1, ItemStack stack2) {
-		return NEIServerUtils.areStacksSameTypeCrafting(stack1, stack2);
-	}
+    public static boolean areStacksSameTypeForCrafting (ItemStack stack1, ItemStack stack2)
+    {
+        Boolean handlerResult = null;
+        for (ItemStackComparisonHandler handler : NEIRecipeHandlers.mod.getNEIIntegrationManager ()
+            .getItemStackComparisonHandlers ())
+        {
+            Boolean result = handler.areStacksOfSameTypeForCrafting (stack1, stack2);
+            if (result != null)
+            {
+                if (handlerResult == null)
+                {
+                    handlerResult = result;
+                }
+                else if (handlerResult != null && result != handlerResult)
+                {
+                    handlerResult = null;
+                    break;
+                }
+            }
+        }
+        return handlerResult == null ? NEIServerUtils.areStacksSameTypeCrafting (stack1, stack2) : handlerResult;
+    }
 
 	public static EnumRecipeItemRole createRecipeItemRole(String name) {
 		return EnumHelper.addEnum(EnumRecipeItemRole.class, name);

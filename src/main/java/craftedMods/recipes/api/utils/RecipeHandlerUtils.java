@@ -1,5 +1,9 @@
 /*******************************************************************************
+<<<<<<< Upstream, based on a15535e9694c896ed64dcb11b2598ffebd8fb5d2
  * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+=======
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
+>>>>>>> d58962b Added ItemStack comparison handlers
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +22,7 @@ package craftedMods.recipes.api.utils;
 
 import java.util.*;
 
-import craftedMods.recipes.api.RecipeItemSlot;
+import craftedMods.recipes.api.*;
 import craftedMods.recipes.utils.RecipeHandlerUtilsImpl;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,25 +61,41 @@ public interface RecipeHandlerUtils {
 	 */
 	public ItemStackSet generatePermutations(Collection<ItemStack> stacks);
 
-	/**
-	 * Returns if the stacks are of the same type.</br>
-	 * This doesn't mean that these stacks would match in a crafting recipe.
-	 * 
-	 * @param stack1 The first stack
-	 * @param stack2 The second stack
-	 * @return Whether the stacks match
-	 */
-	public boolean areStacksSameType(ItemStack stack1, ItemStack stack2);
+    /**
+     * Returns if the stacks are of the same type.</br>
+     * This doesn't mean that these stacks would or wouldn't match in a crafting
+     * recipe. Use this as a strict criterion to compare stacks for equality. The
+     * behavior of this function can be extended with handlers of the type
+     * {@link ItemStackComparisonHandler} - their results will be priorized over the
+     * default implementation. In case the handlers return conflicting (or no)
+     * results, the default implementation will be used.
+     *
+     * @param stack1
+     *            The first stack
+     * @param stack2
+     *            The second stack
+     * @return Whether the stacks match
+     */
+    public boolean areStacksSameType (ItemStack stack1, ItemStack stack2);
 
-	/**
-	 * Returns whether the stacks are the same type for crafting.</br>
-	 * This means that if one stack would be specified as a recipe ingredient, the other stack could be used as an ingredient for this recipe.
-	 * 
-	 * @param stack1 The first stack
-	 * @param stack2 The second stack
-	 * @return Whether the stacks match
-	 */
-	public boolean areStacksSameTypeForCrafting(ItemStack stack1, ItemStack stack2);
+    /**
+     * Returns whether the stacks are the same type for crafting.</br>
+     * This means that if one stack would be specified as a recipe ingredient, the
+     * other stack could be used as an ingredient for this recipe. Usually less
+     * strict than
+     * {@link RecipeHandlerUtils#areStacksSameType(ItemStack, ItemStack)}, ignoring
+     * most NBT tags. The behavior of this function can be extended with handlers of
+     * the type {@link ItemStackComparisonHandler} - their results will be priorized
+     * over the default implementation. In case the handlers return conflicting (or
+     * no) results, the default implementation will be used.
+     *
+     * @param stack1
+     *            The first stack
+     * @param stack2
+     *            The second stack
+     * @return Whether the stacks match
+     */
+    public boolean areStacksSameTypeForCrafting (ItemStack stack1, ItemStack stack2);
 
 	/**
 	 * Returns all item stacks that the provided object contains.

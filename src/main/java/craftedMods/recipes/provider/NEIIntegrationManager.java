@@ -49,6 +49,7 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
 
     private Collection<ItemHidingHandler> itemHidingHandlers = new ArrayList<> ();
     private Collection<ItemOverrideHandler> itemOverrideHandlers = new ArrayList<> ();
+    private Collection<ItemStackComparisonHandler> itemStackComarisonHandlers = new ArrayList<> ();
 
     private Map<VersionCheckerHandler, VersionChecker> versionCheckers = new HashMap<> ();
 
@@ -75,6 +76,8 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
         discoverer.registerClassToDiscover (RegisteredHandler.class, VersionCheckerHandler.class);
         discoverer.registerClassToDiscover (RegisteredHandler.class,
             VanillaCraftingTableRecipeHandlerSupport.class);
+        discoverer.registerClassToDiscover (RegisteredHandler.class,
+            ItemStackComparisonHandler.class);
         discoverer.discoverClassesAsync ();
     }
 
@@ -101,6 +104,9 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
                     "The MC resource manager doesn't implement %s. Some features of %s are therefore not available."),
                     IReloadableResourceManager.class.getName (), NEIRecipeHandlers.MODNAME);
             }
+            
+            itemStackComarisonHandlers.addAll (
+                NEIRecipeHandlersUtils.discoverRegisteredHandlers (discoveredClasses, ItemStackComparisonHandler.class));
 
             recipeHandlerManager = new RecipeHandlerManager (config.getConfigFile (), discoveredClasses);
 
@@ -311,6 +317,11 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
             registerItemOverrides ();
             logger.info ("Reloaded the item override handlers");
         }
+    }
+    
+    public Collection<ItemStackComparisonHandler> getItemStackComparisonHandlers ()
+    {
+        return itemStackComarisonHandlers;
     }
 
     private void loadHandler (PluginRecipeHandler<?, ?> handler)
