@@ -104,9 +104,10 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
                     "The MC resource manager doesn't implement %s. Some features of %s are therefore not available."),
                     IReloadableResourceManager.class.getName (), NEIRecipeHandlers.MODNAME);
             }
-            
+
             itemStackComarisonHandlers.addAll (
-                NEIRecipeHandlersUtils.discoverRegisteredHandlers (discoveredClasses, ItemStackComparisonHandler.class));
+                NEIRecipeHandlersUtils.discoverRegisteredHandlers (discoveredClasses,
+                    ItemStackComparisonHandler.class));
 
             recipeHandlerManager = new RecipeHandlerManager (config.getConfigFile (), discoveredClasses);
 
@@ -269,9 +270,18 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
                 }
             }
 
-            // Load registered handlers
-            recipeHandlerManager.getRecipeHandlers ()
-                .forEach ( (unlocalizedName, handler) -> loadHandler (new PluginRecipeHandler<> (handler)));
+            // Load registered handlers - in their specifier order
+            this.recipeHandlerManager.getRecipeHandlers ().values ().stream ()
+                .sorted (new Comparator<RecipeHandler<?>> ()
+                {
+                    @Override
+                    public int compare (RecipeHandler<?> handler1, RecipeHandler<?> handler2)
+                    {
+                        if (handler1.getOrder () != handler2.getOrder ())
+                            return handler1.getOrder () - handler2.getOrder ();
+                        return handler1.getDisplayName ().compareTo (handler2.getDisplayName ());
+                    }
+                }).forEach ( (handler) -> this.loadHandler (new PluginRecipeHandler<> (handler)));
 
             // Item hiding
             if (config.isHideTechnicalBlocks ())
@@ -318,7 +328,7 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
             logger.info ("Reloaded the item override handlers");
         }
     }
-    
+
     public Collection<ItemStackComparisonHandler> getItemStackComparisonHandlers ()
     {
         return itemStackComarisonHandlers;

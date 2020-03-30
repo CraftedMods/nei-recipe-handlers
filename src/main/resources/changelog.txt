@@ -5,6 +5,7 @@ Made by 'Crafted_Mods' or 'The_Ranger_Malvegil'
  + Added extended MineTweaker/CraftTweaker support for the base crafting grid handler
  + Added new ItemStack comparison handlers
  + A list of loaded modules is now added to crash reports
+ + Added support for ordering recipe handlers
 
 #1.0.2-BETA:
  * Fixed an exception ocurring if recipes with 'null' as result were loaded

@@ -35,17 +35,20 @@ import net.minecraft.util.*;
  */
 public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeHandler<T> {
 
-	private final String unlocalizedName;
-	protected final Collection<T> staticRecipes = new ArrayList<>();
-	private boolean areStaticRecipesLoaded = false;
-	protected Logger logger;
-	protected RecipeHandlerConfiguration config;
-	protected RecipeHandlerResourceLoader resourceLoader;
-	protected Map<ResourceLocation, Supplier<InputStream>> loadedResources = new HashMap<>();
+    private final String unlocalizedName;
+    protected final Collection<T> staticRecipes = new ArrayList<> ();
+    private boolean areStaticRecipesLoaded = false;
+    protected Logger logger;
+    protected RecipeHandlerConfiguration config;
+    protected RecipeHandlerResourceLoader resourceLoader;
+    protected Map<ResourceLocation, Supplier<InputStream>> loadedResources = new HashMap<> ();
+    
+    protected int order;
 
-	protected AbstractRecipeHandler(String unlocalizedName) {
-		this.unlocalizedName = unlocalizedName;
-	}
+    protected AbstractRecipeHandler (String unlocalizedName)
+    {
+        this.unlocalizedName = unlocalizedName;
+    }
 
 	@Override
 	public String getUnlocalizedName() {
@@ -81,12 +84,16 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 	public void onPreLoad(RecipeHandlerConfiguration config, Logger logger) {
 		this.config = config;
 		this.logger = logger;
+
+		this.order = this.config.getInt("Order", this.getDefaultOrder(), Integer.MIN_VALUE, Integer.MAX_VALUE,
+				"The order number of the recipe handler. Higher values mean that the handler will be displayed after handlers with a lower order number. Negative values are also possible.");
 	}
 
 	@Override
-	public Collection<T> loadSimpleStaticRecipes() {
-		return null;
-	}
+    public Collection<T> loadSimpleStaticRecipes ()
+    {
+        return null;
+    }
 
 	@Override
 	public T loadComplicatedStaticRecipe(ItemStack... stacks) {
@@ -134,6 +141,20 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
 	@Override
 	public RecipeHandlerRecipeViewer<T> getRecipeViewer() {
 		return null;
+	}
+
+	@Override
+	public int getOrder() {
+		return order;
+	}
+
+	/**
+	 * Returns the default order of the recipe handler.
+	 * 
+	 * @return The default order
+	 */
+	public int getDefaultOrder() {
+		return 10000;
 	}
 
 }

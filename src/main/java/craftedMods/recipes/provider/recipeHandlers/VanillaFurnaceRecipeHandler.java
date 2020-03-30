@@ -116,6 +116,12 @@ public class VanillaFurnaceRecipeHandler extends AbstractMTRecipeHandler<Furnace
         return RecipeHandlerUtils.getInstance ().hasMineTweaker ();
     }
 
+    @Override
+    public int getDefaultOrder ()
+    {
+        return 1000;
+    }
+
     public class VanillaFurnaceRecipeHandlerRenderer
         implements RecipeHandlerRenderer<VanillaFurnaceRecipeHandler, FurnaceRecipe>
     {
@@ -136,7 +142,6 @@ public class VanillaFurnaceRecipeHandler extends AbstractMTRecipeHandler<Furnace
         @Override
         public void renderForeground (VanillaFurnaceRecipeHandler handler, FurnaceRecipe recipe, int cycleticks)
         {
-
         }
 
     }

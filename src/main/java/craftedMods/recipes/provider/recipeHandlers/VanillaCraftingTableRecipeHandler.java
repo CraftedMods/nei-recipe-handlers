@@ -144,6 +144,12 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
     }
 
     @Override
+    public int getDefaultOrder ()
+    {
+        return 0;
+    }
+
+    @Override
     public RecipeHandlerRecipeViewer<AbstractRecipe> getRecipeViewer ()
     {
         return this.recipeViewer;

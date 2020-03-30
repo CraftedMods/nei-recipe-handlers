@@ -174,11 +174,25 @@ public interface RecipeHandler<T extends Recipe> {
 	 */
 	public RecipeHandlerCraftingHelper<T> getCraftingHelper();
 
-	/**
-	 * Returns the recipe viewer. It handles a button displayed at the crafting/usage GUIs of the recipe handler and eventually at the GUIs of devices
-	 * supported by that handler, showing all recipes this device supports. If null is returned, this feature won't be supported.
-	 * 
-	 * @return A recipe viewer instance
-	 */
-	public RecipeHandlerRecipeViewer<T> getRecipeViewer();
+    /**
+     * Returns the recipe viewer. It handles a button displayed at the
+     * crafting/usage GUIs of the recipe handler and eventually at the GUIs of
+     * devices supported by that handler, showing all recipes this device supports.
+     * If null is returned, this feature won't be supported.
+     *
+     * @return A recipe viewer instance
+     */
+    public RecipeHandlerRecipeViewer<T> getRecipeViewer ();
+
+    /**
+     * Returns the order of the recipe handler. A higher value means that the
+     * handler will be displayed after handlers with lower values. Recipe handlers
+     * are ordered in the NEI GUI based on their order. Recipe handlers which have
+     * the same order will be ordered alphabetically by their display names.
+     * Negative values are possible.
+     * 
+     * @return The order of the recipe handler
+     */
+    public int getOrder ();
+
 }
