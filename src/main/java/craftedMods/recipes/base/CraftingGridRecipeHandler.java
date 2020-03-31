@@ -69,12 +69,18 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
             {
                 if (nullResult)
                     continue;
+
                 ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
+
+                boolean isOreHandler = false;
                 for (Object ingred : shapedOreRecipe.getInput ())
                     if (ingred instanceof List<?> && ((List<?>) ingred).isEmpty ())
                     {
-                        continue;
+                        isOreHandler = true;
+                        break;
                     }
+                if (isOreHandler)
+                    continue;
                 try
                 {
                     ret.add (new ShapedRecipe (shapedOreRecipe));
@@ -95,11 +101,17 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
                 if (nullResult)
                     continue;
                 ShapelessOreRecipe shapelessOreRecipe = (ShapelessOreRecipe) recipe;
+
+                boolean isOreHandler = false;
                 for (Object ingred : shapelessOreRecipe.getInput ())
                     if (ingred instanceof List<?> && ((List<?>) ingred).isEmpty ())
                     {
-                        continue;
+                        isOreHandler = true;
+                        break;
                     }
+                if (isOreHandler)
+                    continue;
+
                 ret.add (new ShapelessRecipe (shapelessOreRecipe));
             }
             else if (recipe instanceof ShapelessRecipes)
@@ -121,7 +133,11 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
             if (!undefinedRecipeType && nullResult)
                 recipeWithNullResultFound (recipe);
         }
-        this.logUndefinedRecipeTypes = false; // After loading the recipes one time, don't log those again
+
+        if (isMineTweakerSupportEnabled ())
+            ret.addAll (this.staticRecipes);
+
+        logUndefinedRecipeTypes = false; // After loading the recipes one time, don't log those again
         return ret;
     }
 
