@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,118 +23,149 @@ import craftedMods.recipes.api.utils.*;
 import net.minecraft.item.ItemStack;
 
 /**
- * A base class for recipes. Usually {@link craftedMods.recipes.base.ShapedRecipe} or {@link craftedMods.recipes.base.ShapelessRecipe} are better
- * choices - unless you need custom behaviour.
- * 
+ * A base class for recipes. Usually
+ * {@link craftedMods.recipes.base.ShapedRecipe} or
+ * {@link craftedMods.recipes.base.ShapelessRecipe} are better choices - unless
+ * you need custom behaviour.
+ *
  * @author CraftedMods
  */
-public abstract class AbstractRecipe implements Recipe {
+public abstract class AbstractRecipe implements Recipe
+{
 
-	protected final List<ItemStackSet> ingredients = new ArrayList<>();
-	protected final List<ItemStackSet> results = new ArrayList<>();
-	protected final List<ItemStackSet> others = new ArrayList<>();
+    protected final List<ItemStackSet> ingredients = new ArrayList<> ();
+    protected final List<ItemStackSet> results = new ArrayList<> ();
+    protected final List<ItemStackSet> others = new ArrayList<> ();
 
-	private boolean werePermutationsGenerated = false;
+    private boolean werePermutationsGenerated = false;
 
-	protected AbstractRecipe(Collection<ItemStack> ingredients, Collection<ItemStack> results, Collection<ItemStack> otherStacks) {
-		this.addAll(ingredients, this.ingredients);
-		this.addAll(results, this.results);
-		this.addAll(otherStacks, this.others);
-		this.generatePermutations();
-	}
+    protected AbstractRecipe (Collection<ItemStack> ingredients, Collection<ItemStack> results,
+        Collection<ItemStack> otherStacks)
+    {
+        this.addAll (ingredients, this.ingredients);
+        this.addAll (results, this.results);
+        this.addAll (otherStacks, others);
+        generatePermutations ();
+    }
 
-	protected AbstractRecipe() {}
+    protected AbstractRecipe ()
+    {
+    }
 
-	public boolean werePermutationsGenerated() {
-		return this.werePermutationsGenerated;
-	}
+    public boolean werePermutationsGenerated ()
+    {
+        return werePermutationsGenerated;
+    }
 
-	@Override
-	public List<ItemStackSet> getRecipeItems(EnumRecipeItemRole role) {
-		switch (role) {
-			case INGREDIENT:
-				return this.ingredients;
-			case OTHER:
-				return this.others;
-			case RESULT:
-				return this.results;
-			default:
-				throw new IllegalArgumentException("Cannot handle the recipe item role \"" + role + "\"");
-		}
-	}
+    @Override
+    public List<ItemStackSet> getRecipeItems (EnumRecipeItemRole role)
+    {
+        switch (role)
+        {
+            case INGREDIENT:
+                return ingredients;
+            case OTHER:
+                return others;
+            case RESULT:
+                return results;
+            default:
+                throw new IllegalArgumentException ("Cannot handle the recipe item role \"" + role + "\"");
+        }
+    }
 
-	protected void addAll(Collection<ItemStack> src, List<ItemStackSet> dest) {
-		if (src != null) {
-			for (ItemStack stack : src) {
-				this.add(stack, dest);
-			}
-		}
-	}
+    protected void addAll (Collection<ItemStack> src, List<ItemStackSet> dest)
+    {
+        if (src != null)
+        {
+            for (ItemStack stack : src)
+            {
+                add (stack, dest);
+            }
+        }
+    }
 
-	protected void addAll(ItemStack[] src, List<ItemStackSet> dest) {
-		if (src != null) {
-			for (ItemStack stack : src) {
-				this.add(stack, dest);
-			}
-		}
-	}
+    protected void addAll (ItemStack[] src, List<ItemStackSet> dest)
+    {
+        if (src != null)
+        {
+            for (ItemStack stack : src)
+            {
+                add (stack, dest);
+            }
+        }
+    }
 
-	protected void add(ItemStack stack, List<ItemStackSet> dest) {
-		dest.add(this.createItemStackSet(stack));
-	}
+    protected void add (ItemStack stack, List<ItemStackSet> dest)
+    {
+        dest.add (createItemStackSet (stack));
+    }
 
-	protected ItemStackSet createItemStackSet(ItemStack... stacks) {
-		return ItemStackSet.create(stacks);
-	}
+    protected ItemStackSet createItemStackSet (ItemStack... stacks)
+    {
+        return ItemStackSet.create (stacks);
+    }
 
-	@Override
-	public boolean produces(ItemStack result) {
-		for (ItemStackSet permutations : this.results)
-			if (permutations != null) {
-				for (ItemStack permutation : permutations)
-					if (RecipeHandlerUtils.getInstance().areStacksSameTypeForCrafting(permutation, result)) return true;
-			}
-		return false;
-	}
+    @Override
+    public boolean produces (ItemStack result)
+    {
+        for (ItemStackSet permutations : results)
+            if (permutations != null)
+            {
+                for (ItemStack permutation : permutations)
+                    if (RecipeHandlerUtils.getInstance ().areStacksSameTypeForCrafting (permutation, result))
+                        return true;
+            }
+        return false;
+    }
 
-	@Override
-	public boolean consumes(ItemStack ingredient) {
-		for (ItemStackSet permutations : this.ingredients)
-			if (permutations != null) {
-				for (ItemStack permutation : permutations)
-					if (RecipeHandlerUtils.getInstance().areStacksSameTypeForCrafting(permutation, ingredient)) return true;
-			}
-		return false;
-	}
+    @Override
+    public boolean consumes (ItemStack ingredient)
+    {
+        for (ItemStackSet permutations : ingredients)
+            if (permutations != null)
+            {
+                for (ItemStack permutation : permutations)
+                    if (RecipeHandlerUtils.getInstance ().areStacksSameTypeForCrafting (permutation, ingredient))
+                        return true;
+            }
+        return false;
+    }
 
-	@Override
-	public ItemStack getIngredientReplacement(ItemStack defaultReplacement) {
-		return defaultReplacement;
-	}
+    @Override
+    public ItemStack getIngredientReplacement (ItemStack defaultReplacement)
+    {
+        return defaultReplacement;
+    }
 
-	@Override
-	public ItemStack getResultReplacement(ItemStack defaultReplacement) {
-		return null;
-	}
+    @Override
+    public ItemStack getResultReplacement (ItemStack defaultReplacement)
+    {
+        return null;
+    }
 
-	protected boolean generatePermutations() {
-		if (!this.werePermutationsGenerated) {
-			this.generatePermutationsForStacks(this.ingredients);
-			this.generatePermutationsForStacks(this.results);
-			this.generatePermutationsForStacks(this.others);
-			return this.werePermutationsGenerated = true;
-		}
-		return false;
-	}
+    protected boolean generatePermutations ()
+    {
+        if (!werePermutationsGenerated)
+        {
+            generatePermutationsForStacks (ingredients);
+            generatePermutationsForStacks (results);
+            generatePermutationsForStacks (others);
+            return werePermutationsGenerated = true;
+        }
+        return false;
+    }
 
-	protected void generatePermutationsForStacks(List<ItemStackSet> stacks) {
-		ListIterator<ItemStackSet> permutationsIterator = stacks.listIterator();
-		while (permutationsIterator.hasNext()) {
-			ItemStackSet permutations = permutationsIterator.next();
-			if (permutations != null) {
-				permutationsIterator.set(RecipeHandlerUtils.getInstance().generatePermutations(permutations));
-			}
-		}
-	}
+    protected void generatePermutationsForStacks (List<ItemStackSet> stacks)
+    {
+        ListIterator<ItemStackSet> permutationsIterator = stacks.listIterator ();
+        while (permutationsIterator.hasNext ())
+        {
+            ItemStackSet permutations = permutationsIterator.next ();
+            if (permutations != null)
+            {
+                permutationsIterator.set (RecipeHandlerUtils.getInstance ().generatePermutations (permutations));
+            }
+        }
+    }
 
 }

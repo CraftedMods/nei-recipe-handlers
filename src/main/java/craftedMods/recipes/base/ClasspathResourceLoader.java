@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,44 +24,54 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * A resource loader implementation which loads the resources from the classpath
- * 
+ *
  * @author CraftedMods
  */
-public class ClasspathResourceLoader implements RecipeHandlerResourceLoader {
+public class ClasspathResourceLoader implements RecipeHandlerResourceLoader
+{
 
-	private Set<ResourceLocation> resourceLocations = new HashSet<>();
-	private String prefix = "";
+    private Set<ResourceLocation> resourceLocations = new HashSet<> ();
+    private String prefix = "";
 
-	/**
-	 * Gets the loading path prefix - a prefix that will be appended between the root path and the resource path specified in the resource location.
-	 * This can be used for example if the actual path and the path specified via the resource location don't match.
-	 * 
-	 * @return The loading path prefix
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
+    /**
+     * Gets the loading path prefix - a prefix that will be appended between the
+     * root path and the resource path specified in the resource location. This can
+     * be used for example if the actual path and the path specified via the
+     * resource location don't match.
+     *
+     * @return The loading path prefix
+     */
+    public String getPrefix ()
+    {
+        return prefix;
+    }
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+    public void setPrefix (String prefix)
+    {
+        this.prefix = prefix;
+    }
 
-	@Override
-	public boolean registerResource(ResourceLocation location) {
-		return this.resourceLocations.add(location);
-	}
+    @Override
+    public boolean registerResource (ResourceLocation location)
+    {
+        return resourceLocations.add (location);
+    }
 
-	@Override
-	public Map<ResourceLocation, Supplier<InputStream>> loadResources() {
-		Map<ResourceLocation, Supplier<InputStream>> ret = new HashMap<>();
-		this.resourceLocations.forEach(location -> {
-			if (this.getClass().getResource("/" + prefix + location.getResourcePath()) != null) {
-				ret.put(location, () -> {
-					return this.getClass().getResourceAsStream("/" + prefix + location.getResourcePath());
-				});
-			}
-		});
-		return ret;
-	}
+    @Override
+    public Map<ResourceLocation, Supplier<InputStream>> loadResources ()
+    {
+        Map<ResourceLocation, Supplier<InputStream>> ret = new HashMap<> ();
+        resourceLocations.forEach (location ->
+        {
+            if (this.getClass ().getResource ("/" + prefix + location.getResourcePath ()) != null)
+            {
+                ret.put (location, () ->
+                {
+                    return this.getClass ().getResourceAsStream ("/" + prefix + location.getResourcePath ());
+                });
+            }
+        });
+        return ret;
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,8 +53,8 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
     public void onPreLoad (RecipeHandlerConfiguration config, Logger logger)
     {
         super.onPreLoad (config, logger);
-        this.removeRecipeHandler ("codechicken.nei.recipe.ShapedRecipeHandler");
-        this.removeRecipeHandler ("codechicken.nei.recipe.ShapelessRecipeHandler");
+        removeRecipeHandler ("codechicken.nei.recipe.ShapedRecipeHandler");
+        removeRecipeHandler ("codechicken.nei.recipe.ShapelessRecipeHandler");
     }
 
     private void removeRecipeHandler (String recipeHandlerClass)
@@ -65,14 +65,14 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
         }
         catch (Exception e)
         {
-            this.logger.error (String.format ("Couldn't remove the native recipe handler \"%s\"", recipeHandlerClass));
+            logger.error (String.format ("Couldn't remove the native recipe handler \"%s\"", recipeHandlerClass));
         }
     }
 
     @Override
     protected void undefinedRecipeTypeFound (IRecipe recipe, Collection<AbstractRecipe> container)
     {
-        for (VanillaCraftingTableRecipeHandlerSupport supportHandler : this.supportHandlers)
+        for (VanillaCraftingTableRecipeHandlerSupport supportHandler : supportHandlers)
         {
             Pair<Collection<AbstractRecipe>, Boolean> result = supportHandler.undefinedRecipeTypeFound (recipe);
             if (result != null)
@@ -95,7 +95,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
         Collection<AbstractRecipe> ret = super.getDynamicCraftingRecipes (result);
 
         // Let the support handlers add additional recipes
-        this.supportHandlers.forEach (handler -> ret.addAll (handler.getDynamicCraftingRecipes (result)));
+        supportHandlers.forEach (handler -> ret.addAll (handler.getDynamicCraftingRecipes (result)));
 
         return ret;
     }
@@ -106,7 +106,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
         Collection<AbstractRecipe> ret = super.getDynamicUsageRecipes (ingredient);
 
         // Let the support handlers add additional recipes
-        this.supportHandlers.forEach (handler -> ret.addAll (handler.getDynamicUsageRecipes (ingredient)));
+        supportHandlers.forEach (handler -> ret.addAll (handler.getDynamicUsageRecipes (ingredient)));
 
         return ret;
     }
@@ -114,14 +114,14 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
     @Override
     public RecipeHandlerCraftingHelper<AbstractRecipe> getCraftingHelper ()
     {
-        return this.craftingHelper;
+        return craftingHelper;
     }
 
     @Override
     public AbstractRecipe loadComplicatedStaticRecipe (ItemStack... stacks)
     {
         // TODO Currently no MT support
-        for (VanillaCraftingTableRecipeHandlerSupport supportHandler : this.supportHandlers)
+        for (VanillaCraftingTableRecipeHandlerSupport supportHandler : supportHandlers)
         {
             AbstractRecipe recipe = supportHandler.loadComplicatedStaticRecipe (stacks);
             if (recipe != null)
@@ -133,10 +133,10 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
     @Override
     public int getComplicatedStaticRecipeDepth ()
     {
-        return this.supportHandlers.parallelStream ().map (handler -> handler.getComplicatedStaticRecipeDepth ())
+        return supportHandlers.parallelStream ().map (handler -> handler.getComplicatedStaticRecipeDepth ())
             .collect (Collectors.maxBy (Comparator.naturalOrder ())).orElse (0);
     }
-    
+
     @Override
     protected boolean isMineTweakerSupportEnabled ()
     {
@@ -152,7 +152,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
     @Override
     public RecipeHandlerRecipeViewer<AbstractRecipe> getRecipeViewer ()
     {
-        return this.recipeViewer;
+        return recipeViewer;
     }
 
     public class VanillaCraftingTableRecipeHandlerCraftingHelper extends AbstractCraftingHelper<AbstractRecipe>
@@ -161,7 +161,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
         @Override
         public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses (AbstractRecipe recipe)
         {
-            return this.isRecipe2x2 (recipe) ? Arrays.asList (GuiInventory.class, GuiCrafting.class)
+            return isRecipe2x2 (recipe) ? Arrays.asList (GuiInventory.class, GuiCrafting.class)
                 : Arrays.asList (GuiCrafting.class);
         }
 
@@ -181,7 +181,7 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
         public boolean matches (ItemStack stack1, ItemStack stack2)
         {
             return super.matches (stack1, stack2)
-                && VanillaCraftingTableRecipeHandler.this.supportHandlers.parallelStream ()
+                && supportHandlers.parallelStream ()
                     .map (handler -> handler.matches (stack1, stack2)).reduce (Boolean::logicalAnd).orElse (true);
         }
 
@@ -206,21 +206,21 @@ public class VanillaCraftingTableRecipeHandler extends CraftingGridRecipeHandler
         public VanillaCraftingTableRecipeViewer (VanillaCraftingTableRecipeHandler handler)
         {
             super (handler);
-            this.supportedGuiClasses = new ArrayList<> (AbstractRecipeViewer.RECIPE_HANDLER_GUIS);
-            this.supportedGuiClasses.add (GuiCrafting.class);
+            supportedGuiClasses = new ArrayList<> (AbstractRecipeViewer.RECIPE_HANDLER_GUIS);
+            supportedGuiClasses.add (GuiCrafting.class);
         }
 
         @Override
         public Collection<AbstractRecipe> getAllRecipes ()
         {
-            return this.handler.isMineTweakerSupportEnabled () ? this.handler.loadRecipes ()
-                : this.handler.getStaticRecipes ();
+            return handler.isMineTweakerSupportEnabled () ? handler.loadRecipes ()
+                : handler.getStaticRecipes ();
         }
 
         @Override
         public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses ()
         {
-            return this.supportedGuiClasses;
+            return supportedGuiClasses;
         }
 
     }

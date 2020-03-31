@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,28 +20,33 @@ import java.net.URL;
 
 import craftedMods.utils.SemanticVersion;
 
-public class RemoteVersion {
+public class RemoteVersion
+{
 
-	private final SemanticVersion remoteVersion;
-	private final URL changelogURL;
-	private final URL downloadURL;
+    private final SemanticVersion remoteVersion;
+    private final URL changelogURL;
+    private final URL downloadURL;
 
-	public RemoteVersion(SemanticVersion remoteVersion, URL downloadURL, URL changelogURL) {
-		this.remoteVersion = remoteVersion;
-		this.downloadURL = downloadURL;
-		this.changelogURL = changelogURL;
-	}
+    public RemoteVersion (SemanticVersion remoteVersion, URL downloadURL, URL changelogURL)
+    {
+        this.remoteVersion = remoteVersion;
+        this.downloadURL = downloadURL;
+        this.changelogURL = changelogURL;
+    }
 
-	public SemanticVersion getRemoteVersion() {
-		return this.remoteVersion;
-	}
+    public SemanticVersion getRemoteVersion ()
+    {
+        return remoteVersion;
+    }
 
-	public URL getDownloadURL() {
-		return this.downloadURL;
-	}
+    public URL getDownloadURL ()
+    {
+        return downloadURL;
+    }
 
-	public URL getChangelogURL() {
-		return this.changelogURL;
-	}
+    public URL getChangelogURL ()
+    {
+        return changelogURL;
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,19 +18,20 @@ package craftedMods.recipes.api;
 
 /**
  * A position on the recipe handler GUI where an item stack is rendered.
- * 
+ *
  * @author CraftedMods
  */
-public interface RecipeItemSlot {
+public interface RecipeItemSlot
+{
 
-	/**
-	 * @return The x coordinate of the position
-	 */
-	public int getX();
+    /**
+     * @return The x coordinate of the position
+     */
+    public int getX ();
 
-	/**
-	 * @return The y coordinate of the position
-	 */
-	public int getY();
+    /**
+     * @return The y coordinate of the position
+     */
+    public int getY ();
 
 }

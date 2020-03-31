@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ import net.minecraftforge.oredict.*;
 
 /**
  * A basic recipe handler for 3x3 crafting grids.
- * 
+ *
  * @author CraftedMods
  */
 public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<AbstractRecipe>
@@ -56,11 +56,12 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
         super (unlocalizedName, recipesListGetter);
     }
 
+    @Override
     protected Collection<AbstractRecipe> loadRecipes ()
     {
         List<AbstractRecipe> ret = new ArrayList<> ();
 
-        for (IRecipe recipe : this.recipesListGetter.get ())
+        for (IRecipe recipe : recipesListGetter.get ())
         {
             boolean nullResult = recipe.getRecipeOutput () == null || recipe.getRecipeOutput ().getItem () == null;
             boolean undefinedRecipeType = false;
@@ -68,7 +69,9 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
             if (recipe instanceof ShapedOreRecipe)
             {
                 if (nullResult)
+                {
                     continue;
+                }
 
                 ShapedOreRecipe shapedOreRecipe = (ShapedOreRecipe) recipe;
 
@@ -80,26 +83,32 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
                         break;
                     }
                 if (isOreHandler)
+                {
                     continue;
+                }
                 try
                 {
                     ret.add (new ShapedRecipe (shapedOreRecipe));
                 }
                 catch (Exception e)
                 {
-                    this.logger.error ("Couldn't load shaped ore recipe: ", e);
+                    logger.error ("Couldn't load shaped ore recipe: ", e);
                 }
             }
             else if (recipe instanceof ShapedRecipes)
             {
                 if (nullResult)
+                {
                     continue;
+                }
                 ret.add (new ShapedRecipe ((ShapedRecipes) recipe));
             }
             else if (recipe instanceof ShapelessOreRecipe)
             {
                 if (nullResult)
+                {
                     continue;
+                }
                 ShapelessOreRecipe shapelessOreRecipe = (ShapelessOreRecipe) recipe;
 
                 boolean isOreHandler = false;
@@ -110,14 +119,18 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
                         break;
                     }
                 if (isOreHandler)
+                {
                     continue;
+                }
 
                 ret.add (new ShapelessRecipe (shapelessOreRecipe));
             }
             else if (recipe instanceof ShapelessRecipes)
             {
                 if (nullResult)
+                {
                     continue;
+                }
                 ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
                 if (shapelessRecipe.recipeItems != null)
                 {
@@ -126,16 +139,20 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
             }
             else
             {
-                this.undefinedRecipeTypeFound (recipe, ret);
+                undefinedRecipeTypeFound (recipe, ret);
                 undefinedRecipeType = true;
             }
 
             if (!undefinedRecipeType && nullResult)
+            {
                 recipeWithNullResultFound (recipe);
+            }
         }
 
         if (isMineTweakerSupportEnabled ())
-            ret.addAll (this.staticRecipes);
+        {
+            ret.addAll (staticRecipes);
+        }
 
         logUndefinedRecipeTypes = false; // After loading the recipes one time, don't log those again
         return ret;
@@ -146,14 +163,14 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
      * stack.getItem() for that stack is null). Will only be invoked for recipes
      * which would have been processed otherwise. Can be overridden in child classes
      * to alternate the behaviour - by default a warning message will be logged.
-     * 
+     *
      * @param recipe
      *            The recipe instance with the null result
      */
     protected void recipeWithNullResultFound (IRecipe recipe)
     {
-        this.logger
-            .warn ("The recipe handler \"" + this.getUnlocalizedName () + "\" got a recipe (\"" + recipe.getClass ()
+        logger
+            .warn ("The recipe handler \"" + getUnlocalizedName () + "\" got a recipe (\"" + recipe.getClass ()
                 + "\") which has null as a result - it'll be ignored");
     }
 
@@ -161,7 +178,7 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
      * Invoked if a recipe type was found which couldn'd be processed.</br>
      * The recipe can be processed in child classes which can add it to the
      * "container".
-     * 
+     *
      * @param recipe
      *            The "undefined" recipe instance
      * @param container
@@ -169,15 +186,13 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
      */
     protected void undefinedRecipeTypeFound (IRecipe recipe, Collection<AbstractRecipe> container)
     {
-        if (this.logUndefinedRecipeTypes)
+        if (logUndefinedRecipeTypes)
         {
-            this.logger
-                .warn ("The recipe handler \"" + this.getUnlocalizedName () + "\" got a recipe (\"" + recipe.getClass ()
+            logger
+                .warn ("The recipe handler \"" + getUnlocalizedName () + "\" got a recipe (\"" + recipe.getClass ()
                     + "\") which couldn't be processed");
         }
     }
-
-   
 
     @Override
     public List<RecipeItemSlot> getSlotsForRecipeItems (AbstractRecipe recipe, EnumRecipeItemRole role)
@@ -200,7 +215,7 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
                     {
                         for (int y = 0; y < shapedRecipe.getHeight (); y++)
                         {
-                            ret.add (this.createRecipeItemSlot (25 + x * 18, 6 + y * 18));
+                            ret.add (createRecipeItemSlot (25 + x * 18, 6 + y * 18));
                         }
                     }
                 }
@@ -210,13 +225,13 @@ public abstract class CraftingGridRecipeHandler extends AbstractMTRecipeHandler<
                     for (int i = 0; i < shapelessRecipe.getRecipeItems (EnumRecipeItemRole.INGREDIENT).size ()
                         && i < 9; i++)
                     {
-                        ret.add (this.createRecipeItemSlot (25 + shapelessStackorder[i][0] * 18,
+                        ret.add (createRecipeItemSlot (25 + shapelessStackorder[i][0] * 18,
                             6 + shapelessStackorder[i][1] * 18));
                     }
                 }
                 break;
             case RESULT:
-                ret.add (this.createRecipeItemSlot (119, 24));
+                ret.add (createRecipeItemSlot (119, 24));
                 break;
         }
         return ret;

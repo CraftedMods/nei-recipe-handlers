@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,26 +23,30 @@ import java.util.function.Supplier;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * A resource loader gets the input streams for the provided resource locations.</br>
+ * A resource loader gets the input streams for the provided resource
+ * locations.</br>
  * It does the "real" resource loading.
- * 
+ *
  * @author CraftedMods
  */
-public interface RecipeHandlerResourceLoader {
+public interface RecipeHandlerResourceLoader
+{
 
-	/**
-	 * Registers a resource which has to be loaded.
-	 * 
-	 * @param location The location of the resource
-	 * @return Whether the resource could be registered
-	 */
-	public boolean registerResource(ResourceLocation location);
+    /**
+     * Registers a resource which has to be loaded.
+     *
+     * @param location
+     *            The location of the resource
+     * @return Whether the resource could be registered
+     */
+    public boolean registerResource (ResourceLocation location);
 
-	/**
-	 * Loads the resources from the environment and assigns them to the resource locations under which they were registered.
-	 * 
-	 * @return The loaded resources
-	 */
-	public Map<ResourceLocation, Supplier<InputStream>> loadResources();
+    /**
+     * Loads the resources from the environment and assigns them to the resource
+     * locations under which they were registered.
+     *
+     * @return The loaded resources
+     */
+    public Map<ResourceLocation, Supplier<InputStream>> loadResources ();
 
 }

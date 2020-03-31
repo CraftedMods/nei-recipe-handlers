@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,52 +22,65 @@ import craftedMods.recipes.utils.ItemStackSetImpl;
 import net.minecraft.item.ItemStack;
 
 /**
- * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with sets. A ItemStackSet is a set which contains
- * ItemStacks - it can be used just like a normal set. But instead of a normal sets it will work well with ItemStacks.
- * 
+ * ItemStack hasn't it's own equals and hashCode implementation which means that
+ * it won't work well with sets. A ItemStackSet is a set which contains
+ * ItemStacks - it can be used just like a normal set. But instead of a normal
+ * sets it will work well with ItemStacks.
+ *
  * @author CraftedMods
  */
-public interface ItemStackSet extends Set<ItemStack> {
+public interface ItemStackSet extends Set<ItemStack>
+{
 
-	/**
-	 * Returns an NBT insensitive item stack set containing the provided stacks
-	 * 
-	 * @param stacks The stacks to add
-	 * @return The item stack set
-	 */
-	public static ItemStackSet create(ItemStack... stacks) {
-		return new ItemStackSetImpl(stacks);
-	}
+    /**
+     * Returns an NBT insensitive item stack set containing the provided stacks
+     *
+     * @param stacks
+     *            The stacks to add
+     * @return The item stack set
+     */
+    public static ItemStackSet create (ItemStack... stacks)
+    {
+        return new ItemStackSetImpl (stacks);
+    }
 
-	/**
-	 * Returns an item stack set containing the provided stacks
-	 * 
-	 * @param isNBTSensitive If true, the set will be NBT sensitive, if false, not
-	 * @param stacks The stacks to add
-	 * @return The item stack set
-	 */
-	public static ItemStackSet create(boolean isNBTSensitive, ItemStack... stacks) {
-		return new ItemStackSetImpl(isNBTSensitive, stacks);
-	}
+    /**
+     * Returns an item stack set containing the provided stacks
+     *
+     * @param isNBTSensitive
+     *            If true, the set will be NBT sensitive, if false, not
+     * @param stacks
+     *            The stacks to add
+     * @return The item stack set
+     */
+    public static ItemStackSet create (boolean isNBTSensitive, ItemStack... stacks)
+    {
+        return new ItemStackSetImpl (isNBTSensitive, stacks);
+    }
 
-	/**
-	 * Returns an NBT insensitive item stack set containing the provided stacks
-	 * 
-	 * @param stacks The stacks to add
-	 * @return The item stack set
-	 */
-	public static ItemStackSet create(Collection<? extends ItemStack> stacks) {
-		return new ItemStackSetImpl(stacks);
-	}
+    /**
+     * Returns an NBT insensitive item stack set containing the provided stacks
+     *
+     * @param stacks
+     *            The stacks to add
+     * @return The item stack set
+     */
+    public static ItemStackSet create (Collection<? extends ItemStack> stacks)
+    {
+        return new ItemStackSetImpl (stacks);
+    }
 
-	/**
-	 * Returns an item stack set containing the provided stacks
-	 * 
-	 * @param isNBTSensitive If true, the set will be NBT sensitive, if false, not
-	 * @param stacks The stacks to add
-	 * @return The item stack set
-	 */
-	public static ItemStackSet create(boolean isNBTSensitive, Collection<? extends ItemStack> stacks) {
-		return new ItemStackSetImpl(isNBTSensitive, stacks);
-	}
+    /**
+     * Returns an item stack set containing the provided stacks
+     *
+     * @param isNBTSensitive
+     *            If true, the set will be NBT sensitive, if false, not
+     * @param stacks
+     *            The stacks to add
+     * @return The item stack set
+     */
+    public static ItemStackSet create (boolean isNBTSensitive, Collection<? extends ItemStack> stacks)
+    {
+        return new ItemStackSetImpl (isNBTSensitive, stacks);
+    }
 }

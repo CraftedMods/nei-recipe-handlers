@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,43 +25,52 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
-public abstract class AbstractRecipeViewer<T extends Recipe, U extends RecipeHandler<T>> implements RecipeHandlerRecipeViewer<T> {
+public abstract class AbstractRecipeViewer<T extends Recipe, U extends RecipeHandler<T>>
+    implements RecipeHandlerRecipeViewer<T>
+{
 
-	protected final U handler;
-	public static final Collection<Class<? extends GuiContainer>> RECIPE_HANDLER_GUIS = Arrays.asList(GuiRecipe.class);
+    protected final U handler;
+    public static final Collection<Class<? extends GuiContainer>> RECIPE_HANDLER_GUIS = Arrays.asList (GuiRecipe.class);
 
-	public AbstractRecipeViewer(U handler) {
-		this.handler = handler;
-	}
+    public AbstractRecipeViewer (U handler)
+    {
+        this.handler = handler;
+    }
 
-	@Override
-	public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses() {
-		return AbstractRecipeViewer.RECIPE_HANDLER_GUIS;
-	}
+    @Override
+    public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses ()
+    {
+        return AbstractRecipeViewer.RECIPE_HANDLER_GUIS;
+    }
 
-	@Override
-	public boolean isGuiContainerSupported(GuiContainer container) {
-		return true;
-	}
+    @Override
+    public boolean isGuiContainerSupported (GuiContainer container)
+    {
+        return true;
+    }
 
-	@Override
-	public int getOffsetX(Class<? extends GuiContainer> guiClass) {
-		return 0;
-	}
+    @Override
+    public int getOffsetX (Class<? extends GuiContainer> guiClass)
+    {
+        return 0;
+    }
 
-	@Override
-	public int getOffsetY(Class<? extends GuiContainer> guiClass) {
-		return 0;
-	}
+    @Override
+    public int getOffsetY (Class<? extends GuiContainer> guiClass)
+    {
+        return 0;
+    }
 
-	@Override
-	public ItemStack getButtonIcon(Class<? extends GuiContainer> guiClass) {
-		return new ItemStack(Items.writable_book);
-	}
+    @Override
+    public ItemStack getButtonIcon (Class<? extends GuiContainer> guiClass)
+    {
+        return new ItemStack (Items.writable_book);
+    }
 
-	@Override
-	public String getButtonTooltip(Class<? extends GuiContainer> guiClass) {
-		return StatCollector.translateToLocal("neiRecipeHandlers.recipeViewer.defaultTooltip");
-	}
+    @Override
+    public String getButtonTooltip (Class<? extends GuiContainer> guiClass)
+    {
+        return StatCollector.translateToLocal ("neiRecipeHandlers.recipeViewer.defaultTooltip");
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,95 +22,129 @@ import java.net.*;
 import craftedMods.recipes.NEIRecipeHandlers;
 import craftedMods.utils.SemanticVersion;
 
-public class VersionChecker {
+public class VersionChecker
+{
 
-	private String versionFileURL;
+    private String versionFileURL;
 
-	private SemanticVersion localVersion = null;
-	private RemoteVersion remoteVersion = null;
+    private SemanticVersion localVersion = null;
+    private RemoteVersion remoteVersion = null;
 
-	public VersionChecker(String versionFileURL, SemanticVersion localVersion) throws MalformedURLException {
-		this.localVersion = localVersion;
-		this.versionFileURL = versionFileURL;
-	}
+    public VersionChecker (String versionFileURL, SemanticVersion localVersion) throws MalformedURLException
+    {
+        this.localVersion = localVersion;
+        this.versionFileURL = versionFileURL;
+    }
 
-	public EnumVersionComparison checkVersion() {
-		if (this.ping()) {
-			try {
-				this.remoteVersion = this.parseVersionFile(this.downloadVersionFile());
-			} catch (IOException e) {
-				NEIRecipeHandlers.mod.getLogger().error(String.format("Couldn't download the version file \"%s\"", this.versionFileURL.toString()), e);
-			} catch (Exception e) {
-				NEIRecipeHandlers.mod.getLogger().error(String.format("Couldn't parse the contents of the version file \"%s\"", this.versionFileURL.toString()),
-						e);
-			}
-		}
-		return this.compareRemoteVersion();
-	}
+    public EnumVersionComparison checkVersion ()
+    {
+        if (ping ())
+        {
+            try
+            {
+                remoteVersion = parseVersionFile (downloadVersionFile ());
+            }
+            catch (IOException e)
+            {
+                NEIRecipeHandlers.mod.getLogger ().error (
+                    String.format ("Couldn't download the version file \"%s\"", versionFileURL.toString ()), e);
+            }
+            catch (Exception e)
+            {
+                NEIRecipeHandlers.mod.getLogger ().error (
+                    String.format ("Couldn't parse the contents of the version file \"%s\"",
+                        versionFileURL.toString ()),
+                    e);
+            }
+        }
+        return compareRemoteVersion ();
+    }
 
-	private boolean ping() {
-		if (this.versionFileURL != null) {
-			try {
-				URLConnection conn = new URL(this.versionFileURL).openConnection();
-				conn.setConnectTimeout(2000);
-				conn.connect();
-				return true;
-			} catch (MalformedURLException e) {
-				NEIRecipeHandlers.mod.getLogger().error(String.format("The URL of the version file \"%s\" isn't valid", this.versionFileURL));
-			} catch (IOException e) {
-				NEIRecipeHandlers.mod.getLogger().error(String.format("Cannot connect to the version file \"%s\"", this.versionFileURL.toString()), e);
-			}
-		}
-		return false;
-	}
+    private boolean ping ()
+    {
+        if (versionFileURL != null)
+        {
+            try
+            {
+                URLConnection conn = new URL (versionFileURL).openConnection ();
+                conn.setConnectTimeout (2000);
+                conn.connect ();
+                return true;
+            }
+            catch (MalformedURLException e)
+            {
+                NEIRecipeHandlers.mod.getLogger ()
+                    .error (String.format ("The URL of the version file \"%s\" isn't valid", versionFileURL));
+            }
+            catch (IOException e)
+            {
+                NEIRecipeHandlers.mod.getLogger ().error (
+                    String.format ("Cannot connect to the version file \"%s\"", versionFileURL.toString ()), e);
+            }
+        }
+        return false;
+    }
 
-	private String downloadVersionFile() throws IOException {
-		try (InputStream stream = new URL(this.versionFileURL).openStream();
-				InputStreamReader bridge = new InputStreamReader(stream);
-				BufferedReader reader = new BufferedReader(bridge)) {
-			return reader.readLine();
-		}
-	}
+    private String downloadVersionFile () throws IOException
+    {
+        try (InputStream stream = new URL (versionFileURL).openStream ();
+            InputStreamReader bridge = new InputStreamReader (stream);
+            BufferedReader reader = new BufferedReader (bridge))
+        {
+            return reader.readLine ();
+        }
+    }
 
-	private RemoteVersion parseVersionFile(String versionString) throws MalformedURLException {
-		if (versionString != null) {
+    private RemoteVersion parseVersionFile (String versionString) throws MalformedURLException
+    {
+        if (versionString != null)
+        {
 
-			SemanticVersion remoteVersion = null;
-			URL downloadURL = null;
-			URL changelogURL = null;
+            SemanticVersion remoteVersion = null;
+            URL downloadURL = null;
+            URL changelogURL = null;
 
-			String[] parts = versionString.split("\\|");
+            String[] parts = versionString.split ("\\|");
 
-			remoteVersion = SemanticVersion.of(parts[0]);
-			if (parts.length >= 1 && !parts[1].trim().isEmpty()) {
-				downloadURL = new URL(parts[1]);
-			}
-			if (parts.length >= 2 && !parts[2].trim().isEmpty()) {
-				changelogURL = new URL(parts[2]);
-			}
+            remoteVersion = SemanticVersion.of (parts[0]);
+            if (parts.length >= 1 && !parts[1].trim ().isEmpty ())
+            {
+                downloadURL = new URL (parts[1]);
+            }
+            if (parts.length >= 2 && !parts[2].trim ().isEmpty ())
+            {
+                changelogURL = new URL (parts[2]);
+            }
 
-			return new RemoteVersion(remoteVersion, downloadURL, changelogURL);
-		}
-		return null;
-	}
+            return new RemoteVersion (remoteVersion, downloadURL, changelogURL);
+        }
+        return null;
+    }
 
-	public RemoteVersion getRemoteVersion() {
-		return this.remoteVersion;
-	}
+    public RemoteVersion getRemoteVersion ()
+    {
+        return remoteVersion;
+    }
 
-	public EnumVersionComparison compareRemoteVersion() {
-		int comp = this.remoteVersion != null ? this.localVersion.compareTo(this.remoteVersion.getRemoteVersion()) : 0;
-		if (comp == 0) return EnumVersionComparison.CURRENT;
-		else if (comp < 0) return EnumVersionComparison.NEWER;
-		else return EnumVersionComparison.OLDER;
-	}
+    public EnumVersionComparison compareRemoteVersion ()
+    {
+        int comp = remoteVersion != null ? localVersion.compareTo (remoteVersion.getRemoteVersion ())
+            : 0;
+        if (comp == 0)
+            return EnumVersionComparison.CURRENT;
+        else if (comp < 0)
+            return EnumVersionComparison.NEWER;
+        else return EnumVersionComparison.OLDER;
+    }
 
-	public enum EnumVersionComparison {
-		CURRENT, OLDER, NEWER;
+    public enum EnumVersionComparison
+    {
+        CURRENT, OLDER, NEWER;
 
-		public String toDisplayString() {
-			return this.name().toLowerCase();
-		}
-	}
+        public String toDisplayString ()
+        {
+            return name ().toLowerCase ();
+        }
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,72 +21,88 @@ import java.util.*;
 import craftedMods.recipes.api.utils.ItemStackSet;
 import net.minecraft.item.ItemStack;
 
-public class ItemStackSetImpl extends AbstractSet<ItemStack> implements ItemStackSet {
+public class ItemStackSetImpl extends AbstractSet<ItemStack> implements ItemStackSet
+{
 
-	private final boolean isNBTSensitive;
-	private final ArrayList<ItemStackWrapper> innerList = new ArrayList<>();
-	private final ArrayList<ItemStack> stacksList = new ArrayList<>();
+    private final boolean isNBTSensitive;
+    private final ArrayList<ItemStackWrapper> innerList = new ArrayList<> ();
+    private final ArrayList<ItemStack> stacksList = new ArrayList<> ();
 
-	public ItemStackSetImpl(ItemStack... stacks) {
-		this(false, stacks);
-	}
+    public ItemStackSetImpl (ItemStack... stacks)
+    {
+        this (false, stacks);
+    }
 
-	public ItemStackSetImpl(boolean isNBTSensitive, ItemStack... stacks) {
-		this.isNBTSensitive = isNBTSensitive;
-		for (ItemStack stack : stacks) {
-			this.add(stack);
-		}
-	}
+    public ItemStackSetImpl (boolean isNBTSensitive, ItemStack... stacks)
+    {
+        this.isNBTSensitive = isNBTSensitive;
+        for (ItemStack stack : stacks)
+        {
+            add (stack);
+        }
+    }
 
-	public ItemStackSetImpl(Collection<? extends ItemStack> stacks) {
-		this(false, stacks);
-	}
+    public ItemStackSetImpl (Collection<? extends ItemStack> stacks)
+    {
+        this (false, stacks);
+    }
 
-	public ItemStackSetImpl(boolean isNBTSensitive, Collection<? extends ItemStack> stacks) {
-		this.isNBTSensitive = isNBTSensitive;
-		this.addAll(stacks);
-	}
+    public ItemStackSetImpl (boolean isNBTSensitive, Collection<? extends ItemStack> stacks)
+    {
+        this.isNBTSensitive = isNBTSensitive;
+        addAll (stacks);
+    }
 
-	@Override
-	public Iterator<ItemStack> iterator() {
-		return this.stacksList.iterator();
-	}
+    @Override
+    public Iterator<ItemStack> iterator ()
+    {
+        return stacksList.iterator ();
+    }
 
-	@Override
-	public int size() {
-		return this.innerList.size();
-	}
+    @Override
+    public int size ()
+    {
+        return innerList.size ();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return this.innerList.isEmpty();
-	}
+    @Override
+    public boolean isEmpty ()
+    {
+        return innerList.isEmpty ();
+    }
 
-	public boolean contains(ItemStack stack) {
-		return this.innerList.contains(new ItemStackWrapper(stack, this.isNBTSensitive));
-	}
+    public boolean contains (ItemStack stack)
+    {
+        return innerList.contains (new ItemStackWrapper (stack, isNBTSensitive));
+    }
 
-	@Override
-	public boolean add(ItemStack stack) {
-		boolean ret = false;
-		ItemStackWrapper wrapper = new ItemStackWrapper(stack, this.isNBTSensitive);
-		if (!this.innerList.contains(wrapper)) {
-			ret = this.innerList.add(wrapper);
-			if (ret) {
-				this.stacksList.add(stack);
-			}
-		}
-		return ret;
-	}
+    @Override
+    public boolean add (ItemStack stack)
+    {
+        boolean ret = false;
+        ItemStackWrapper wrapper = new ItemStackWrapper (stack, isNBTSensitive);
+        if (!innerList.contains (wrapper))
+        {
+            ret = innerList.add (wrapper);
+            if (ret)
+            {
+                stacksList.add (stack);
+            }
+        }
+        return ret;
+    }
 
-	public boolean remove(ItemStack stack) {
-		return this.innerList.remove(new ItemStackWrapper(stack, this.isNBTSensitive)) && this.stacksList.remove(stack);
-	}
+    public boolean remove (ItemStack stack)
+    {
+        return innerList.remove (new ItemStackWrapper (stack, isNBTSensitive))
+            && stacksList.remove (stack);
+    }
 
-	@Override
-	public void clear() {
-		this.innerList.clear();
-		this.stacksList.clear();
-	}
+    @Override
+    public void clear ()
+    {
+        innerList.clear ();
+        stacksList.clear ();
+    }
 
 }

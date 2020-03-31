@@ -1,16 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
- *
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -271,17 +271,13 @@ public class NEIIntegrationManager implements IResourceManagerReloadListener
             }
 
             // Load registered handlers - in their specifier order
-            this.recipeHandlerManager.getRecipeHandlers ().values ().stream ()
-                .sorted (new Comparator<RecipeHandler<?>> ()
+            recipeHandlerManager.getRecipeHandlers ().values ().stream ()
+                .sorted ( (handler1, handler2) ->
                 {
-                    @Override
-                    public int compare (RecipeHandler<?> handler1, RecipeHandler<?> handler2)
-                    {
-                        if (handler1.getOrder () != handler2.getOrder ())
-                            return handler1.getOrder () - handler2.getOrder ();
-                        return handler1.getDisplayName ().compareTo (handler2.getDisplayName ());
-                    }
-                }).forEach ( (handler) -> this.loadHandler (new PluginRecipeHandler<> (handler)));
+                    if (handler1.getOrder () != handler2.getOrder ())
+                        return handler1.getOrder () - handler2.getOrder ();
+                    return handler1.getDisplayName ().compareTo (handler2.getDisplayName ());
+                }).forEach ( (handler) -> loadHandler (new PluginRecipeHandler<> (handler)));
 
             // Item hiding
             if (config.isHideTechnicalBlocks ())

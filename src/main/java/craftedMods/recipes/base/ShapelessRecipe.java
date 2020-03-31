@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,30 +25,37 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * A recipe containing the ingredients in no special order.
- * 
+ *
  * @author CraftedMods
  */
-public class ShapelessRecipe extends AbstractRecipe {
+public class ShapelessRecipe extends AbstractRecipe
+{
 
-	public ShapelessRecipe(ShapelessOreRecipe recipe) {
-		this(recipe.getInput(), recipe.getRecipeOutput());
-	}
+    public ShapelessRecipe (ShapelessOreRecipe recipe)
+    {
+        this (recipe.getInput (), recipe.getRecipeOutput ());
+    }
 
-	public ShapelessRecipe(ShapelessRecipes recipe) {
-		this(recipe.recipeItems, recipe.getRecipeOutput());
-	}
+    public ShapelessRecipe (ShapelessRecipes recipe)
+    {
+        this (recipe.recipeItems, recipe.getRecipeOutput ());
+    }
 
-	public ShapelessRecipe(Collection<?> ingredients, ItemStack result) {
-		for (Object ingredient : ingredients)
-			if (ingredient != null) {
-				this.ingredients.add(this.createItemStackSet(RecipeHandlerUtils.getInstance().extractRecipeItems(ingredient)));
-			}
-		this.add(result, this.results);
-	}
+    public ShapelessRecipe (Collection<?> ingredients, ItemStack result)
+    {
+        for (Object ingredient : ingredients)
+            if (ingredient != null)
+            {
+                this.ingredients
+                    .add (createItemStackSet (RecipeHandlerUtils.getInstance ().extractRecipeItems (ingredient)));
+            }
+        add (result, results);
+    }
 
-	public ShapelessRecipe(Object ingredient, ItemStack result) {
-		this.addAll(RecipeHandlerUtils.getInstance().extractRecipeItems(ingredient), this.ingredients);
-		this.add(result, this.results);
-	}
+    public ShapelessRecipe (Object ingredient, ItemStack result)
+    {
+        this.addAll (RecipeHandlerUtils.getInstance ().extractRecipeItems (ingredient), ingredients);
+        add (result, results);
+    }
 
 }

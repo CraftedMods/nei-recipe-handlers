@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,21 +21,25 @@ import craftedMods.recipes.api.*;
 import craftedMods.utils.SemanticVersion;
 
 @RegisteredHandler
-public class NEIRecipeHandlersVersionCheckerHandler implements VersionCheckerHandler {
+public class NEIRecipeHandlersVersionCheckerHandler implements VersionCheckerHandler
+{
 
-	@Override
-	public String getLocalizedHandlerName() {
-		return NEIRecipeHandlers.MODNAME;
-	}
+    @Override
+    public String getLocalizedHandlerName ()
+    {
+        return NEIRecipeHandlers.MODNAME;
+    }
 
-	@Override
-	public String getVersionFileURL() {
-		return "https://raw.githubusercontent.com/CraftedMods/nei-recipe-handlers/master/version.txt";
-	}
+    @Override
+    public String getVersionFileURL ()
+    {
+        return "https://raw.githubusercontent.com/CraftedMods/nei-recipe-handlers/master/version.txt";
+    }
 
-	@Override
-	public SemanticVersion getCurrentVersion() {
-		return NEIRecipeHandlers.SEMANTIC_VERSION;
-	}
+    @Override
+    public SemanticVersion getCurrentVersion ()
+    {
+        return NEIRecipeHandlers.SEMANTIC_VERSION;
+    }
 
 }

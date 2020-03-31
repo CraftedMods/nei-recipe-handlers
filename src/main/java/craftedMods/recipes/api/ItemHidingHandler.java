@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,17 +23,19 @@ import net.minecraft.item.ItemStack;
 /**
  * A handler which allows you to hide items in NEI.</br>
  * Typically items of technical blocks will be hidden. </br>
- * To be loaded, the handler needs to be annotated with {@link craftedMods.recipes.api.RegisteredHandler}
- * 
+ * To be loaded, the handler needs to be annotated with
+ * {@link craftedMods.recipes.api.RegisteredHandler}
+ *
  * @author CraftedMods
  */
-public interface ItemHidingHandler {
+public interface ItemHidingHandler
+{
 
-	/**
-	 * A collection of item stacks which will be hidden in NEI.
-	 * 
-	 * @return The items stacks
-	 */
-	public Collection<ItemStack> getHiddenStacks();
+    /**
+     * A collection of item stacks which will be hidden in NEI.
+     *
+     * @return The items stacks
+     */
+    public Collection<ItemStack> getHiddenStacks ();
 
 }

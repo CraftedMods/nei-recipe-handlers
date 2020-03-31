@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,25 @@ import codechicken.nei.api.IConfigureNEI;
 import craftedMods.recipes.NEIRecipeHandlers;
 import net.minecraft.util.StatCollector;
 
-public class NEIRecipeHandlersAddonConfig implements IConfigureNEI {
+public class NEIRecipeHandlersAddonConfig implements IConfigureNEI
+{
 
-	@Override
-	public String getName() {
-		return StatCollector.translateToLocal("neiRecipeHandlers.integration.name");
-	}
+    @Override
+    public String getName ()
+    {
+        return StatCollector.translateToLocal ("neiRecipeHandlers.integration.name");
+    }
 
-	@Override
-	public String getVersion() {
-		return NEIRecipeHandlers.SEMANTIC_VERSION.toString();
-	}
+    @Override
+    public String getVersion ()
+    {
+        return NEIRecipeHandlers.SEMANTIC_VERSION.toString ();
+    }
 
-	@Override
-	public void loadConfig() {
-		NEIRecipeHandlers.mod.getNEIIntegrationManager().load();
-	}
+    @Override
+    public void loadConfig ()
+    {
+        NEIRecipeHandlers.mod.getNEIIntegrationManager ().load ();
+    }
 
 }

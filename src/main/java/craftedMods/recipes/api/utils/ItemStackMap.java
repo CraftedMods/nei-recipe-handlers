@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,31 +22,38 @@ import craftedMods.recipes.utils.ItemStackMapImpl;
 import net.minecraft.item.ItemStack;
 
 /**
- * ItemStack hasn't it's own equals and hashCode implementation which means that it won't work well with maps. An ItemStackMap is a map where
- * ItemStacks can be used as keys - just like with normal maps. But instead of a "normal" map this map will work well with ItemStacks.
- * 
+ * ItemStack hasn't it's own equals and hashCode implementation which means that
+ * it won't work well with maps. An ItemStackMap is a map where ItemStacks can
+ * be used as keys - just like with normal maps. But instead of a "normal" map
+ * this map will work well with ItemStacks.
+ *
  * @author CraftedMods
- * @param <V> The value type of the map
+ * @param <V>
+ *            The value type of the map
  */
-public interface ItemStackMap<V> extends Map<ItemStack, V> {
+public interface ItemStackMap<V> extends Map<ItemStack, V>
+{
 
-	/**
-	 * Creates a NBT insensitive item stack map
-	 * 
-	 * @return The item stack map
-	 */
-	public static <T> ItemStackMap<T> create() {
-		return new ItemStackMapImpl<>();
-	}
+    /**
+     * Creates a NBT insensitive item stack map
+     *
+     * @return The item stack map
+     */
+    public static <T> ItemStackMap<T> create ()
+    {
+        return new ItemStackMapImpl<> ();
+    }
 
-	/**
-	 * Creates an item stack map which can be configured to be NBT sensitive
-	 * 
-	 * @param isNBTSensitive If true, the returned map will be NBT sensitive, if false, not
-	 * @return The item stack map
-	 */
-	public static <T> ItemStackMap<T> create(boolean isNBTSensitive) {
-		return new ItemStackMapImpl<>(isNBTSensitive);
-	}
+    /**
+     * Creates an item stack map which can be configured to be NBT sensitive
+     *
+     * @param isNBTSensitive
+     *            If true, the returned map will be NBT sensitive, if false, not
+     * @return The item stack map
+     */
+    public static <T> ItemStackMap<T> create (boolean isNBTSensitive)
+    {
+        return new ItemStackMapImpl<> (isNBTSensitive);
+    }
 
 }

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package craftedMods.recipes.base;
 
 import java.util.*;
@@ -14,7 +30,7 @@ import net.minecraft.item.crafting.IRecipe;
  * especially means that static recipe loading won't function here - because of
  * the dynamic nature of MineTweaker, the recipe loading will have to be made
  * dynamic.
- * 
+ *
  * @author CraftedMods
  *
  * @param <T>
@@ -63,7 +79,7 @@ public abstract class AbstractMTRecipeHandler<T extends Recipe> extends Abstract
      * {@link AbstractMTRecipeHandler#isMineTweakerSupportEnabled}) this function
      * will be called once during the static recipe loading phase or ingame via the
      * dynamic recipe loading functions.
-     * 
+     *
      * @return The computed recipes
      */
     protected abstract Collection<T> loadRecipes ();
@@ -116,7 +132,7 @@ public abstract class AbstractMTRecipeHandler<T extends Recipe> extends Abstract
      * The actual return value can depend on multiple variables, for example whether
      * the MineTweaker API is present, whether additional MineTweaker plugins are
      * present and so on. By default the support is disabled.
-     * 
+     *
      * @return If MT support is enabled
      */
     protected boolean isMineTweakerSupportEnabled ()

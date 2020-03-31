@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,21 +19,25 @@ package craftedMods.recipes.api;
 import java.lang.annotation.*;
 
 /**
- * An annotation marking several handlers of the API as registered. Registered handlers will be - if they're enabled - automatically loaded by the
- * provider. </br>
- * <b>Important:</b> Every registered handler needs a zero argument constructor to be instantiated.
- * 
+ * An annotation marking several handlers of the API as registered. Registered
+ * handlers will be - if they're enabled - automatically loaded by the provider.
+ * </br>
+ * <b>Important:</b> Every registered handler needs a zero argument constructor
+ * to be instantiated.
+ *
  * @author CraftedMods
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RegisteredHandler {
+public @interface RegisteredHandler
+{
 
-	/**
-	 * If true, a handler instance will be created and the handler will be loaded, if false, not
-	 * 
-	 * @return Whether the handler is enabled
-	 */
-	boolean isEnabled() default true;
+    /**
+     * If true, a handler instance will be created and the handler will be loaded,
+     * if false, not
+     *
+     * @return Whether the handler is enabled
+     */
+    boolean isEnabled() default true;
 
 }

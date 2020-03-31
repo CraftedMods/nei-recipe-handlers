@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,47 +24,58 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
  * A recipe containing the ingredients in a special order.
- * 
+ *
  * @author CraftedMods
  */
-public class ShapedRecipe extends AbstractRecipe {
+public class ShapedRecipe extends AbstractRecipe
+{
 
-	private final int width;
-	private final int height;
+    private final int width;
+    private final int height;
 
-	public ShapedRecipe(ShapedOreRecipe recipe) throws Exception {
-		this(ReflectionManager.getField(ShapedOreRecipe.class, Integer.class, recipe, 4).intValue(),
-				ReflectionManager.getField(ShapedOreRecipe.class, Integer.class, recipe, 5).intValue(), recipe.getInput(), recipe.getRecipeOutput());
-	}
+    public ShapedRecipe (ShapedOreRecipe recipe) throws Exception
+    {
+        this (ReflectionManager.getField (ShapedOreRecipe.class, Integer.class, recipe, 4).intValue (),
+            ReflectionManager.getField (ShapedOreRecipe.class, Integer.class, recipe, 5).intValue (),
+            recipe.getInput (), recipe.getRecipeOutput ());
+    }
 
-	public ShapedRecipe(ShapedRecipes recipe) {
-		this(recipe.recipeWidth, recipe.recipeHeight, recipe.recipeItems, recipe.getRecipeOutput());
-	}
+    public ShapedRecipe (ShapedRecipes recipe)
+    {
+        this (recipe.recipeWidth, recipe.recipeHeight, recipe.recipeItems, recipe.getRecipeOutput ());
+    }
 
-	public ShapedRecipe(int width, int height, Object[] ingredients, ItemStack result) {
-		this.width = width;
-		this.height = height;
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				Object ingred = ingredients[y * width + x];
-				this.ingredients.add(ingred != null ? this.createItemStackSet(RecipeHandlerUtils.getInstance().extractRecipeItems(ingred)) : null);
-			}
-		}
-		this.results.add(this.createItemStackSet(result));
-	}
+    public ShapedRecipe (int width, int height, Object[] ingredients, ItemStack result)
+    {
+        this.width = width;
+        this.height = height;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Object ingred = ingredients[y * width + x];
+                this.ingredients.add (ingred != null
+                    ? createItemStackSet (RecipeHandlerUtils.getInstance ().extractRecipeItems (ingred))
+                    : null);
+            }
+        }
+        results.add (createItemStackSet (result));
+    }
 
-	/**
-	 * @return The recipe width
-	 */
-	public int getWidth() {
-		return this.width;
-	}
+    /**
+     * @return The recipe width
+     */
+    public int getWidth ()
+    {
+        return width;
+    }
 
-	/**
-	 * @return The recipe height
-	 */
-	public int getHeight() {
-		return this.height;
-	}
+    /**
+     * @return The recipe height
+     */
+    public int getHeight ()
+    {
+        return height;
+    }
 
 }

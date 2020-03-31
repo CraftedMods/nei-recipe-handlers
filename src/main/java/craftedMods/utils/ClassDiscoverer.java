@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,69 +24,88 @@ import org.apache.logging.log4j.Logger;
 import cpw.mods.fml.common.Loader;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 
-public class ClassDiscoverer {
+public class ClassDiscoverer
+{
 
-	private final Logger logger;
+    private final Logger logger;
 
-	private Map<Class<? extends Annotation>, Set<Class<?>>> registeredClasses = new HashMap<>();
-	private Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses = new HashMap<>();
+    private Map<Class<? extends Annotation>, Set<Class<?>>> registeredClasses = new HashMap<> ();
+    private Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> discoveredClasses = new HashMap<> ();
 
-	private Thread discovererThread;
+    private Thread discovererThread;
 
-	private boolean canRegister = true;
+    private boolean canRegister = true;
 
-	public ClassDiscoverer(Logger logger) {
-		this.logger = logger;
-	}
+    public ClassDiscoverer (Logger logger)
+    {
+        this.logger = logger;
+    }
 
-	public boolean registerClassToDiscover(Class<? extends Annotation> annotationClass, Class<?> interfaceClass) {
-		if (this.canRegister) {
-			if (!this.registeredClasses.containsKey(annotationClass)) {
-				this.registeredClasses.put(annotationClass, new HashSet<>());
-			}
-			if (!this.discoveredClasses.containsKey(annotationClass)) {
-				this.discoveredClasses.put(annotationClass, new HashMap<>());
-			}
-			if (!this.discoveredClasses.get(annotationClass).containsKey(interfaceClass)) {
-				this.discoveredClasses.get(annotationClass).put(interfaceClass, new HashSet<>());
-			}
-			return this.registeredClasses.get(annotationClass).add(interfaceClass);
-		}
-		return false;
-	}
+    public boolean registerClassToDiscover (Class<? extends Annotation> annotationClass, Class<?> interfaceClass)
+    {
+        if (canRegister)
+        {
+            if (!registeredClasses.containsKey (annotationClass))
+            {
+                registeredClasses.put (annotationClass, new HashSet<> ());
+            }
+            if (!discoveredClasses.containsKey (annotationClass))
+            {
+                discoveredClasses.put (annotationClass, new HashMap<> ());
+            }
+            if (!discoveredClasses.get (annotationClass).containsKey (interfaceClass))
+            {
+                discoveredClasses.get (annotationClass).put (interfaceClass, new HashSet<> ());
+            }
+            return registeredClasses.get (annotationClass).add (interfaceClass);
+        }
+        return false;
+    }
 
-	public void discoverClassesAsync() {
-		this.canRegister = false;
-		this.discovererThread = new Thread(() -> {
-			long start = System.currentTimeMillis();
-			FastClasspathScanner scanner = new FastClasspathScanner();
-			for (Class<? extends Annotation> annotationClass : this.registeredClasses.keySet()) {
-				scanner.matchClassesWithAnnotation(annotationClass, clazz -> {
-					try {
-						Class<?> loadedClass = Loader.instance().getModClassLoader().loadClass(clazz.getName());
-						for (Class<?> interfaceClass : this.registeredClasses.get(annotationClass))
-							if (interfaceClass.isAssignableFrom(loadedClass)) {
-								this.discoveredClasses.get(annotationClass).get(interfaceClass).add(loadedClass);
-							}
+    public void discoverClassesAsync ()
+    {
+        canRegister = false;
+        discovererThread = new Thread ( () ->
+        {
+            long start = System.currentTimeMillis ();
+            FastClasspathScanner scanner = new FastClasspathScanner ();
+            for (Class<? extends Annotation> annotationClass : registeredClasses.keySet ())
+            {
+                scanner.matchClassesWithAnnotation (annotationClass, clazz ->
+                {
+                    try
+                    {
+                        Class<?> loadedClass = Loader.instance ().getModClassLoader ().loadClass (clazz.getName ());
+                        for (Class<?> interfaceClass : registeredClasses.get (annotationClass))
+                            if (interfaceClass.isAssignableFrom (loadedClass))
+                            {
+                                discoveredClasses.get (annotationClass).get (interfaceClass).add (loadedClass);
+                            }
 
-					} catch (Exception e) {
-						this.logger.error("Couldn't load class \"" + clazz.getName() + "\"", e);
-					}
-				});
-			}
-			scanner.scan(Runtime.getRuntime().availableProcessors());
-			this.logger.info("Scanned the classpath in " + (System.currentTimeMillis() - start) + " milliseconds");
-		});
-		this.discovererThread.start();
-	}
+                    }
+                    catch (Exception e)
+                    {
+                        logger.error ("Couldn't load class \"" + clazz.getName () + "\"", e);
+                    }
+                });
+            }
+            scanner.scan (Runtime.getRuntime ().availableProcessors ());
+            logger.info ("Scanned the classpath in " + (System.currentTimeMillis () - start) + " milliseconds");
+        });
+        discovererThread.start ();
+    }
 
-	public Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> getDiscoveredClasses(long timeout) {
-		try {
-			this.discovererThread.join(timeout);
-		} catch (InterruptedException e) {
-			this.logger.error("The class discoverer thread was interrupted", e);
-		}
-		return this.discoveredClasses;
-	}
+    public Map<Class<? extends Annotation>, Map<Class<?>, Set<Class<?>>>> getDiscoveredClasses (long timeout)
+    {
+        try
+        {
+            discovererThread.join (timeout);
+        }
+        catch (InterruptedException e)
+        {
+            logger.error ("The class discoverer thread was interrupted", e);
+        }
+        return discoveredClasses;
+    }
 
 }

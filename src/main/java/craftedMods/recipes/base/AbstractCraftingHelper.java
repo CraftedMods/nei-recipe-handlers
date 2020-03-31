@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,13 @@ import craftedMods.recipes.api.*;
 import craftedMods.recipes.api.utils.RecipeHandlerUtils;
 import net.minecraft.item.ItemStack;
 
-public abstract class AbstractCraftingHelper<T extends Recipe> implements RecipeHandlerCraftingHelper<T> {
+public abstract class AbstractCraftingHelper<T extends Recipe> implements RecipeHandlerCraftingHelper<T>
+{
 
-	@Override
-	public boolean matches(ItemStack stack1, ItemStack stack2) {
-		return RecipeHandlerUtils.getInstance().areStacksSameTypeForCrafting(stack1, stack2);
-	}
+    @Override
+    public boolean matches (ItemStack stack1, ItemStack stack2)
+    {
+        return RecipeHandlerUtils.getInstance ().areStacksSameTypeForCrafting (stack1, stack2);
+    }
 
 }

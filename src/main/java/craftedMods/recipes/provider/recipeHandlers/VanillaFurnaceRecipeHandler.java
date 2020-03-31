@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class VanillaFurnaceRecipeHandler extends AbstractMTRecipeHandler<Furnace
     public void onPreLoad (RecipeHandlerConfiguration config, Logger logger)
     {
         super.onPreLoad (config, logger);
-        this.removeRecipeHandler ("codechicken.nei.recipe.FurnaceRecipeHandler");
+        removeRecipeHandler ("codechicken.nei.recipe.FurnaceRecipeHandler");
     }
 
     private void removeRecipeHandler (String recipeHandlerClass)
@@ -63,10 +63,11 @@ public class VanillaFurnaceRecipeHandler extends AbstractMTRecipeHandler<Furnace
         }
         catch (Exception e)
         {
-            this.logger.error (String.format ("Couldn't remove the native recipe handler \"%s\"", recipeHandlerClass));
+            logger.error (String.format ("Couldn't remove the native recipe handler \"%s\"", recipeHandlerClass));
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     protected Collection<FurnaceRecipe> loadRecipes ()
     {
@@ -85,13 +86,13 @@ public class VanillaFurnaceRecipeHandler extends AbstractMTRecipeHandler<Furnace
         switch (role)
         {
             case INGREDIENT:
-                ret.add (this.createRecipeItemSlot (51, 6));
+                ret.add (createRecipeItemSlot (51, 6));
                 break;
             case OTHER:
-                ret.add (this.createRecipeItemSlot (51, 42));
+                ret.add (createRecipeItemSlot (51, 42));
                 break;
             case RESULT:
-                ret.add (this.createRecipeItemSlot (111, 24));
+                ret.add (createRecipeItemSlot (111, 24));
                 break;
         }
         return ret;
@@ -101,13 +102,13 @@ public class VanillaFurnaceRecipeHandler extends AbstractMTRecipeHandler<Furnace
     @SuppressWarnings("unchecked")
     public VanillaFurnaceRecipeHandlerRenderer getRenderer ()
     {
-        return this.renderer;
+        return renderer;
     }
 
     @Override
     public RecipeHandlerRecipeViewer<FurnaceRecipe> getRecipeViewer ()
     {
-        return this.recipeViewer;
+        return recipeViewer;
     }
 
     @Override
@@ -155,21 +156,21 @@ public class VanillaFurnaceRecipeHandler extends AbstractMTRecipeHandler<Furnace
         public VanillaFurnaceRecipeHandlerRecipeViewer (VanillaFurnaceRecipeHandler handler)
         {
             super (handler);
-            this.supportedGuiClasses.addAll (AbstractRecipeViewer.RECIPE_HANDLER_GUIS);
-            this.supportedGuiClasses.add (GuiFurnace.class);
+            supportedGuiClasses.addAll (AbstractRecipeViewer.RECIPE_HANDLER_GUIS);
+            supportedGuiClasses.add (GuiFurnace.class);
         }
 
         @Override
         public Collection<Class<? extends GuiContainer>> getSupportedGUIClasses ()
         {
-            return this.supportedGuiClasses;
+            return supportedGuiClasses;
         }
 
         @Override
         public Collection<FurnaceRecipe> getAllRecipes ()
         {
-            return this.handler.isMineTweakerSupportEnabled () ? this.handler.loadRecipes ()
-                : this.handler.getStaticRecipes ();
+            return handler.isMineTweakerSupportEnabled () ? handler.loadRecipes ()
+                : handler.getStaticRecipes ();
         }
 
         @Override

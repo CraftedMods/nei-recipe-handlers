@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 
 /**
- * A default implementation of some aspects of the RecipeHandler interface. Normally you should extend this class if you want to create a new recipe
+ * A default implementation of some aspects of the RecipeHandler interface.
+ * Normally you should extend this class if you want to create a new recipe
  * handler instead of implementing the interface directly.
- * 
+ *
  * @author CraftedMods
- * @param <T> The recipe type
+ * @param <T>
+ *            The recipe type
  */
-public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeHandler<T> {
+public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeHandler<T>
+{
 
     private final String unlocalizedName;
     protected final Collection<T> staticRecipes = new ArrayList<> ();
@@ -42,7 +45,7 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
     protected RecipeHandlerConfiguration config;
     protected RecipeHandlerResourceLoader resourceLoader;
     protected Map<ResourceLocation, Supplier<InputStream>> loadedResources = new HashMap<> ();
-    
+
     protected int order;
 
     protected AbstractRecipeHandler (String unlocalizedName)
@@ -50,111 +53,132 @@ public abstract class AbstractRecipeHandler<T extends Recipe> implements RecipeH
         this.unlocalizedName = unlocalizedName;
     }
 
-	@Override
-	public String getUnlocalizedName() {
-		return this.unlocalizedName;
-	}
+    @Override
+    public String getUnlocalizedName ()
+    {
+        return this.unlocalizedName;
+    }
 
-	@Override
-	public String getDisplayName() {
-		return StatCollector.translateToLocal("neiRecipeHandlers.recipeHandler." + this.getUnlocalizedName() + ".name");
-	}
+    @Override
+    public String getDisplayName ()
+    {
+        return StatCollector
+            .translateToLocal ("neiRecipeHandlers.recipeHandler." + this.getUnlocalizedName () + ".name");
+    }
 
-	@Override
-	public boolean areStaticRecipesLoaded() {
-		return this.areStaticRecipesLoaded;
-	}
+    @Override
+    public boolean areStaticRecipesLoaded ()
+    {
+        return this.areStaticRecipesLoaded;
+    }
 
-	@Override
-	public Collection<T> getStaticRecipes() {
-		return this.staticRecipes;
-	}
+    @Override
+    public Collection<T> getStaticRecipes ()
+    {
+        return this.staticRecipes;
+    }
 
-	@Override
-	public Collection<T> getDynamicCraftingRecipes(ItemStack result) {
-		return null;
-	}
+    @Override
+    public Collection<T> getDynamicCraftingRecipes (ItemStack result)
+    {
+        return null;
+    }
 
-	@Override
-	public Collection<T> getDynamicUsageRecipes(ItemStack ingredient) {
-		return null;
-	}
+    @Override
+    public Collection<T> getDynamicUsageRecipes (ItemStack ingredient)
+    {
+        return null;
+    }
 
-	@Override
-	public void onPreLoad(RecipeHandlerConfiguration config, Logger logger) {
-		this.config = config;
-		this.logger = logger;
+    @Override
+    public void onPreLoad (RecipeHandlerConfiguration config, Logger logger)
+    {
+        this.config = config;
+        this.logger = logger;
 
-		this.order = this.config.getInt("Order", this.getDefaultOrder(), Integer.MIN_VALUE, Integer.MAX_VALUE,
-				"The order number of the recipe handler. Higher values mean that the handler will be displayed after handlers with a lower order number. Negative values are also possible.");
-	}
+        this.order = this.config.getInt ("Order", this.getDefaultOrder (), Integer.MIN_VALUE, Integer.MAX_VALUE,
+            "The order number of the recipe handler. Higher values mean that the handler will be displayed after handlers with a lower order number. Negative values are also possible.");
+    }
 
-	@Override
+    @Override
     public Collection<T> loadSimpleStaticRecipes ()
     {
         return null;
     }
 
-	@Override
-	public T loadComplicatedStaticRecipe(ItemStack... stacks) {
-		return null;
-	}
+    @Override
+    public T loadComplicatedStaticRecipe (ItemStack... stacks)
+    {
+        return null;
+    }
 
-	@Override
-	public void onPostLoad(Collection<T> staticRecipes) {
-		this.staticRecipes.addAll(staticRecipes);
-		this.areStaticRecipesLoaded = true;
-	}
+    @Override
+    public void onPostLoad (Collection<T> staticRecipes)
+    {
+        this.staticRecipes.addAll (staticRecipes);
+        this.areStaticRecipesLoaded = true;
+    }
 
-	protected RecipeItemSlot createRecipeItemSlot(int x, int y) {
-		return new RecipeItemSlotImpl(x, y);
-	}
+    protected RecipeItemSlot createRecipeItemSlot (int x, int y)
+    {
+        return new RecipeItemSlotImpl (x, y);
+    }
 
-	@Override
-	public void onUpdate(int cycleticks) {}
+    @Override
+    public void onUpdate (int cycleticks)
+    {
+    }
 
-	@Override
-	public RecipeHandlerCacheManager<T> getCacheManager() {
-		return null;
-	}
+    @Override
+    public RecipeHandlerCacheManager<T> getCacheManager ()
+    {
+        return null;
+    }
 
-	@Override
-	public int getRecipesPerPage() {
-		return 2;
-	}
+    @Override
+    public int getRecipesPerPage ()
+    {
+        return 2;
+    }
 
-	@Override
-	public <V extends RecipeHandlerRenderer<W, T>, W extends RecipeHandler<T>> V getRenderer() {
-		return null;
-	}
+    @Override
+    public <V extends RecipeHandlerRenderer<W, T>, W extends RecipeHandler<T>> V getRenderer ()
+    {
+        return null;
+    }
 
-	@Override
-	public int getComplicatedStaticRecipeDepth() {
-		return 0;
-	}
+    @Override
+    public int getComplicatedStaticRecipeDepth ()
+    {
+        return 0;
+    }
 
-	@Override
-	public RecipeHandlerCraftingHelper<T> getCraftingHelper() {
-		return null;
-	}
+    @Override
+    public RecipeHandlerCraftingHelper<T> getCraftingHelper ()
+    {
+        return null;
+    }
 
-	@Override
-	public RecipeHandlerRecipeViewer<T> getRecipeViewer() {
-		return null;
-	}
+    @Override
+    public RecipeHandlerRecipeViewer<T> getRecipeViewer ()
+    {
+        return null;
+    }
 
-	@Override
-	public int getOrder() {
-		return order;
-	}
+    @Override
+    public int getOrder ()
+    {
+        return order;
+    }
 
-	/**
-	 * Returns the default order of the recipe handler.
-	 * 
-	 * @return The default order
-	 */
-	public int getDefaultOrder() {
-		return 10000;
-	}
+    /**
+     * Returns the default order of the recipe handler.
+     *
+     * @return The default order
+     */
+    public int getDefaultOrder ()
+    {
+        return 10000;
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,19 +22,22 @@ import net.minecraft.item.ItemStack;
 
 /**
  * A handler which overrides the display name of an item stack in NEI.</br>
- * This is useful for items like portal block items, which usually don't have a localized name, but are useful for users and thus won't be hidden.
- * With this handler, you can give them a human readable name. </br>
- * To be loaded, the handler needs to be annotated with {@link craftedMods.recipes.api.RegisteredHandler}
- * 
+ * This is useful for items like portal block items, which usually don't have a
+ * localized name, but are useful for users and thus won't be hidden. With this
+ * handler, you can give them a human readable name. </br>
+ * To be loaded, the handler needs to be annotated with
+ * {@link craftedMods.recipes.api.RegisteredHandler}
+ *
  * @author CraftedMods
  */
-public interface ItemOverrideHandler {
+public interface ItemOverrideHandler
+{
 
-	/**
-	 * A map containing the override names of specific item stacks
-	 * 
-	 * @return The override name map
-	 */
-	public Map<ItemStack, String> getItemOverrideNames();
+    /**
+     * A map containing the override names of specific item stacks
+     *
+     * @return The override name map
+     */
+    public Map<ItemStack, String> getItemOverrideNames ();
 
 }

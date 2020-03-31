@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 CraftedMods (see https://github.com/CraftedMods)
+ * Copyright (C) 2020 CraftedMods (see https://github.com/CraftedMods)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,23 +23,27 @@ import net.minecraft.item.ItemStack;
 
 /**
  * A recipe containing all fuel items as stacks with the role "OTHER".
- * 
+ *
  * @author CraftedMods
  */
-public class FurnaceRecipe extends ShapelessRecipe {
+public class FurnaceRecipe extends ShapelessRecipe
+{
 
-	public FurnaceRecipe(Collection<ItemStack> ingredients, ItemStack result) {
-		super(ingredients, result);
-		this.addFuels();
-	}
+    public FurnaceRecipe (Collection<ItemStack> ingredients, ItemStack result)
+    {
+        super (ingredients, result);
+        addFuels ();
+    }
 
-	public FurnaceRecipe(ItemStack ingredient, ItemStack result) {
-		super(ingredient, result);
-		this.addFuels();
-	}
+    public FurnaceRecipe (ItemStack ingredient, ItemStack result)
+    {
+        super (ingredient, result);
+        addFuels ();
+    }
 
-	protected void addFuels() {
-		this.others.add(RecipeHandlerUtils.getInstance().getFuels());
-	}
+    protected void addFuels ()
+    {
+        others.add (RecipeHandlerUtils.getInstance ().getFuels ());
+    }
 
 }
